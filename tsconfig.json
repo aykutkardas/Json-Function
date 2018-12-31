@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "lib": ["dom", "es6", "es5"],
+    "resolveJsonModule": true
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["./test/**/*.spec.ts"],
+  "compileOnSave": false
+}
