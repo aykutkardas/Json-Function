@@ -78,7 +78,7 @@ Output
   {
     title: "fugiat veniam minus",
     completed: false
-  }
+    }
 ]
 ```
 
@@ -146,4 +146,15 @@ Limit(data, 2, 2);
 import { OrderBy } from 'json-function';
 
 OrderBy(data, "title", "DESC");
+```
+
+## Schema
+**Size** *0.789 kb*
+```js
+import { Schema } from 'json-function';
+
+Schema(data, {
+  "user.firstname": "firstname",
+  "user.lastname": "lastname"
+});
 ```
