@@ -1,4 +1,4 @@
-# Active Record
+# Json Function
 **Full Size** *~5.292 kb*
 
 ## Install
