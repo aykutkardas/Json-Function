@@ -1,11 +1,21 @@
-var limit = function (data, limit, start) {
-    if (data === void 0) { data = []; }
-    if (limit === void 0) { limit = 10; }
-    if (start === void 0) { start = 0; }
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var limit = function limit(data, _limit, start) {
+    if (data === void 0) {
+        data = [];
+    }
+    if (_limit === void 0) {
+        _limit = 10;
+    }
+    if (start === void 0) {
+        start = 0;
+    }
     if (!Array.isArray(data)) {
         return [];
     }
-    return data.slice(start, limit + start);
+    return data.slice(start, _limit + start);
 };
-export default limit;
-//# sourceMappingURL=limit.js.map
+exports.default = limit;

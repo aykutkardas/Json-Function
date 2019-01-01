@@ -1,14 +1,22 @@
-var where = function (data, queries) {
-    if (data === void 0) { data = []; }
-    if (queries === void 0) { queries = []; }
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var where = function where(data, queries) {
+    if (data === void 0) {
+        data = [];
+    }
+    if (queries === void 0) {
+        queries = [];
+    }
     var queriesArr;
     var matchingItems = [];
     var result = [];
     var indexes = [];
     if (!Array.isArray(queries)) {
         queriesArr = [queries];
-    }
-    else {
+    } else {
         queriesArr = queries;
     }
     queriesArr.forEach(function (query) {
@@ -27,5 +35,4 @@ var where = function (data, queries) {
     });
     return result;
 };
-export default where;
-//# sourceMappingURL=where.js.map
+exports.default = where;

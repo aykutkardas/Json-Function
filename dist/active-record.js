@@ -1,5 +1,12 @@
-import { OrderBy, Where, Limit, Select } from "./";
-var ActiveRecord = /** @class */ (function () {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _ = require("./");
+
+var ActiveRecord = /** @class */function () {
     function ActiveRecord() {
         this.data = [];
         this.option = {
@@ -20,7 +27,9 @@ var ActiveRecord = /** @class */ (function () {
         return this;
     };
     ActiveRecord.prototype.orderBy = function (fieldName, order) {
-        if (order === void 0) { order = "ASC"; }
+        if (order === void 0) {
+            order = "ASC";
+        }
         this.option.orderBy = [fieldName, order];
         return this;
     };
@@ -29,8 +38,12 @@ var ActiveRecord = /** @class */ (function () {
         return this;
     };
     ActiveRecord.prototype.limit = function (limit, start) {
-        if (limit === void 0) { limit = 10; }
-        if (start === void 0) { start = 0; }
+        if (limit === void 0) {
+            limit = 10;
+        }
+        if (start === void 0) {
+            start = 0;
+        }
         this.option.limit = [limit, start];
         return this;
     };
@@ -41,20 +54,25 @@ var ActiveRecord = /** @class */ (function () {
     ActiveRecord.prototype.get = function (data, config) {
         this.data = data;
         var option = this.option;
-        var orderBy = option.orderBy, where = option.where, limit = option.limit, select = option.select;
+        var orderBy = option.orderBy,
+            where = option.where,
+            limit = option.limit,
+            select = option.select;
         if (orderBy) {
-            var fieldName = orderBy[0], order = orderBy[1];
-            this.data = OrderBy(this.data, fieldName, order);
+            var fieldName = orderBy[0],
+                order = orderBy[1];
+            this.data = (0, _.OrderBy)(this.data, fieldName, order);
         }
         if (where) {
-            this.data = Where(this.data, where);
+            this.data = (0, _.Where)(this.data, where);
         }
         if (limit) {
-            var itemLimit = limit[0], start = limit[1];
-            this.data = Limit(this.data, itemLimit, start);
+            var itemLimit = limit[0],
+                start = limit[1];
+            this.data = (0, _.Limit)(this.data, itemLimit, start);
         }
         if (select) {
-            this.data = Select(this.data, select);
+            this.data = (0, _.Select)(this.data, select);
         }
         var result = this.data.slice();
         if (config) {
@@ -65,6 +83,5 @@ var ActiveRecord = /** @class */ (function () {
         return result;
     };
     return ActiveRecord;
-}());
-export default new ActiveRecord();
-//# sourceMappingURL=active-record.js.map
+}();
+exports.default = new ActiveRecord();

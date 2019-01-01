@@ -1,11 +1,19 @@
-var select = function (data, columns) {
-    if (data === void 0) { data = []; }
-    if (columns === void 0) { columns = []; }
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var select = function select(data, columns) {
+    if (data === void 0) {
+        data = [];
+    }
+    if (columns === void 0) {
+        columns = [];
+    }
     var columnsArr;
     if (!Array.isArray(columns)) {
         columnsArr = typeof columns === "string" ? [columns] : [];
-    }
-    else {
+    } else {
         columnsArr = columns;
     }
     var result = [];
@@ -26,5 +34,4 @@ var select = function (data, columns) {
     });
     return result;
 };
-export default select;
-//# sourceMappingURL=select.js.map
+exports.default = select;
