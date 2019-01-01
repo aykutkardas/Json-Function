@@ -21,9 +21,9 @@ var _orderBy = require("./orderBy");
 
 var _orderBy2 = _interopRequireDefault(_orderBy);
 
-var _activeRecord = require("./active-record");
+var _jsonFunction = require("./json-function");
 
-var _activeRecord2 = _interopRequireDefault(_activeRecord);
+var _jsonFunction2 = _interopRequireDefault(_jsonFunction);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31,4 +31,4 @@ exports.Limit = _limit2.default;
 exports.Select = _select2.default;
 exports.Where = _where2.default;
 exports.OrderBy = _orderBy2.default;
-exports.default = _activeRecord2.default;
+exports.default = _jsonFunction2.default;

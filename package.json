@@ -1,5 +1,5 @@
 {
-  "name": "active-record",
+  "name": "json-function",
   "version": "1.0.0",
   "description": "It allows you to use methods such as where, limit, select, orderBy on JSON data.",
   "main": "dist/index.js",
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aykutkardas/Active-Record.git"
+    "url": "git+https://github.com/aykutkardas/json-function.git"
   },
   "keywords": [
     "json",
@@ -39,7 +39,7 @@
     "query"
   ],
   "bugs": {
-    "url": "https://github.com/aykutkardas/Active-Record/issues"
+    "url": "https://github.com/aykutkardas/json-function/issues"
   },
-  "homepage": "https://github.com/aykutkardas/Active-Record#readme"
+  "homepage": "https://github.com/aykutkardas/json-function#readme"
 }

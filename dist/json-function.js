@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _ = require("./");
 
-var ActiveRecord = /** @class */function () {
-    function ActiveRecord() {
+var JsonFunction = /** @class */function () {
+    function JsonFunction() {
         this.data = [];
         this.option = {
             orderBy: null,
@@ -16,7 +16,7 @@ var ActiveRecord = /** @class */function () {
             select: null
         };
     }
-    ActiveRecord.prototype.reset = function () {
+    JsonFunction.prototype.reset = function () {
         this.option = {
             orderBy: null,
             where: null,
@@ -26,18 +26,18 @@ var ActiveRecord = /** @class */function () {
         this.data = [];
         return this;
     };
-    ActiveRecord.prototype.orderBy = function (fieldName, order) {
+    JsonFunction.prototype.orderBy = function (fieldName, order) {
         if (order === void 0) {
             order = "ASC";
         }
         this.option.orderBy = [fieldName, order];
         return this;
     };
-    ActiveRecord.prototype.where = function (queries) {
+    JsonFunction.prototype.where = function (queries) {
         this.option.where = queries;
         return this;
     };
-    ActiveRecord.prototype.limit = function (limit, start) {
+    JsonFunction.prototype.limit = function (limit, start) {
         if (limit === void 0) {
             limit = 10;
         }
@@ -47,11 +47,11 @@ var ActiveRecord = /** @class */function () {
         this.option.limit = [limit, start];
         return this;
     };
-    ActiveRecord.prototype.select = function (fields) {
+    JsonFunction.prototype.select = function (fields) {
         this.option.select = fields;
         return this;
     };
-    ActiveRecord.prototype.get = function (data, config) {
+    JsonFunction.prototype.get = function (data, config) {
         this.data = data;
         var option = this.option;
         var orderBy = option.orderBy,
@@ -82,6 +82,6 @@ var ActiveRecord = /** @class */function () {
         }
         return result;
     };
-    return ActiveRecord;
+    return JsonFunction;
 }();
-exports.default = new ActiveRecord();
+exports.default = new JsonFunction();

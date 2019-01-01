@@ -1,4 +1,4 @@
-import { OrderBy, Where, Limit, Select } from "./";
+import { OrderBy, Where, Limit, Select } from ".";
 import select from "./select";
 
 type Option = {
@@ -12,7 +12,7 @@ type Config = {
   resetRecord: boolean;
 };
 
-class ActiveRecord {
+class JsonFunction {
   data: Object[] = [];
   option: Option = {
     orderBy: null,
@@ -90,4 +90,4 @@ class ActiveRecord {
   }
 }
 
-export default new ActiveRecord();
+export default new JsonFunction();

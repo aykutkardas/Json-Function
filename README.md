@@ -4,10 +4,10 @@
 ## Install
 
 ```
-yarn add active-record
+yarn add json-function
 ```
 ```
-npm install active-record
+npm install json-function
 ```
 
 ## Usage
@@ -44,9 +44,9 @@ const data = [
 ```
 Chaining
 ```js
-import ActiveRecord from 'active-record';
+import JsonFunction from 'json-function';
 
-const result = ActiveRecord
+const result = JsonFunction
       .where({ completed: false })
       .select(["title", "completed"])
       .orderBy("title", "DESC")
@@ -57,13 +57,13 @@ const result = ActiveRecord
 or Standart
 
 ```js
-import ActiveRecord from 'active-record';
+import JsonFunction from 'json-function';
 
-ActiveRecord.where({ completed: false });
-ActiveRecord.select(["title", "completed"]);
-ActiveRecord.orderBy("title", "DESC");
-ActiveRecord.limit(2);
-const result = ActiveRecord.get(data);
+JsonFunction.where({ completed: false });
+JsonFunction.select(["title", "completed"]);
+JsonFunction.orderBy("title", "DESC");
+JsonFunction.limit(2);
+const result = JsonFunction.get(data);
 ```
 
 Output
@@ -83,17 +83,17 @@ Output
 ## Config
 ### resetRecord
 ```js
-ActiveRecord.limit(2).get(data);
-console.log(ActiveRecord.option.limit); // null
-console.log(ActiveRecord.data); // []
+JsonFunction.limit(2).get(data);
+console.log(JsonFunction.option.limit); // null
+console.log(JsonFunction.data); // []
 ```
 ```js
-ActiveRecord.limit(2).get(data, { resetRecord: false });
-console.log(ActiveRecord.option.limit); // [2, 0]
-console.log(ActiveRecord.data); // [{..}, {..}]
+JsonFunction.limit(2).get(data, { resetRecord: false });
+console.log(JsonFunction.option.limit); // [2, 0]
+console.log(JsonFunction.data); // [{..}, {..}]
 
 // Manual Reset Method
-ActiveRecord.reset();
+JsonFunction.reset();
 ```
 
 # Methods
@@ -102,7 +102,7 @@ Instead of an entire "class", you can use only the methods you need.
 ## Where
 **Size** *1.004 kb*
 ```js
-import { Where } from 'active-record';
+import { Where } from 'json-function';
 
 // Single
 // (completed === false)
@@ -117,7 +117,7 @@ Where(data, [{completed: false}, {userId: 2}]);
 ## Select
 **Size** *0,964 kb*
 ```js
-import { Select } from 'active-record';
+import { Select } from 'json-function';
 
 // Single
 Select(data, "title");
@@ -129,7 +129,7 @@ Select(data, ["title", "completed"]);
 ## Limit
 **Size** *0.423 kb*
 ```js
-import { Limit } from 'active-record';
+import { Limit } from 'json-function';
 
 // Limit
 Limit(data, 2);
@@ -141,7 +141,7 @@ Limit(data, 2, 2);
 ## OrderBy
 **Size** *0.606 kb*
 ```js
-import { OrderBy } from 'active-record';
+import { OrderBy } from 'json-function';
 
 OrderBy(data, "title", "DESC");
 ```
