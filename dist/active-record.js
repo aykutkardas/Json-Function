@@ -76,7 +76,7 @@ var ActiveRecord = /** @class */function () {
         }
         var result = this.data.slice();
         if (config) {
-            if (config.resetRecord === true) {
+            if (config.resetRecord !== false) {
                 this.reset();
             }
         }

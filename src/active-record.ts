@@ -81,7 +81,7 @@ class ActiveRecord {
     const result = [...this.data];
 
     if (config) {
-      if (config.resetRecord === true) {
+      if (config.resetRecord !== false) {
         this.reset();
       }
     }

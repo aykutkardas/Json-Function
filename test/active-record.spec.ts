@@ -70,16 +70,25 @@ describe("ActiveRecord Class", () => {
     ActiveRecord.select(["title", "completed"]);
     ActiveRecord.orderBy("title", "DESC");
     ActiveRecord.limit(2);
-    ActiveRecord.get(data, { resetRecord: true });
+    ActiveRecord.get(data, { resetRecord: false });
 
     const option = ActiveRecord.option;
     const classData = ActiveRecord.data;
     expect(option).to.deep.equal({
-      orderBy: null,
-      where: null,
-      limit: null,
-      select: null
+      orderBy: ["title", "DESC"],
+      where: { completed: false },
+      limit: [2, 0],
+      select: ["title", "completed"]
     });
-    expect(classData).to.deep.equal([]);
+    expect(classData).to.deep.equal([
+      {
+        title: "quis ut nam facilis et officia qui",
+        completed: false
+      },
+      {
+        title: "fugiat veniam minus",
+        completed: false
+      }
+    ]);
   });
 });
