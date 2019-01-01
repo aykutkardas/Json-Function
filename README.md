@@ -1,5 +1,5 @@
 # Json Function
-**Full Size** *~5.292 kb*
+**Full Size** *~2.276 kb*
 
 ## Install
 
@@ -100,7 +100,7 @@ JsonFunction.reset();
 Instead of an entire "class", you can use only the methods you need.
 
 ## Where
-**Size** *1.004 kb*
+**Size** *0.369 kb*
 ```js
 import { Where } from 'json-function';
 
@@ -115,7 +115,7 @@ Where(data, [{completed: false}, {userId: 2}]);
 
 
 ## Select
-**Size** *0,964 kb*
+**Size** *0,360 kb*
 ```js
 import { Select } from 'json-function';
 
@@ -127,7 +127,7 @@ Select(data, ["title", "completed"]);
 ```
 
 ## Limit
-**Size** *0.423 kb*
+**Size** *0.215 kb*
 ```js
 import { Limit } from 'json-function';
 
@@ -139,7 +139,7 @@ Limit(data, 2, 2);
 ```
 
 ## OrderBy
-**Size** *0.606 kb*
+**Size** *0.282 kb*
 ```js
 import { OrderBy } from 'json-function';
 
