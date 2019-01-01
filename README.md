@@ -1,4 +1,6 @@
 # Json Function
+[![Build Status](https://travis-ci.com/aykutkardas/Json-Function.svg?branch=master)](https://travis-ci.com/aykutkardas/Json-Function)
+
 **Full Size** *~2.276 kb*
 
 ## Install
