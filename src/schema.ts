@@ -1,68 +1,68 @@
 type SchemaFunction = (data: Object[], schema: Object) => Object[];
 
-const schema: SchemaFunction = (data = [], schema = {}) => {
-  const indexes: number[] = [];
-  let deleteFields: string[] = [];
+type RecursiveFunction = (
+  schema: Object,
+  item: Object,
+  fields: string[]
+) => Object;
 
-  data.map((item, index) => {
-    Object.keys(schema).forEach((oldFieldName: string) => {
+type GetObjDeepPropFunction = (
+  obj: Object,
+  props: string,
+  defaultValue?: any
+) => any;
 
-      const newFieldNameArr: string[] = schema[oldFieldName].split(".").reverse();
-      const oldFieldNameArr: string[] = oldFieldName.split(".");
+const getObjDeepProp: GetObjDeepPropFunction = (obj, props, defaultValue) => {
+  if (!obj) return false;
+  if (typeof obj !== "object") return false;
+  if (!props) return obj;
+  if (typeof props !== "string") return false;
 
-      
-      let [ parentOldFieldName ] = oldFieldNameArr;
-      
-      let activeValue: any;
-      let activeStep = item;
-      
-      oldFieldNameArr.forEach((activeOldFieldName) => {
-        if (activeStep) {
-          activeStep = activeStep[activeOldFieldName];
-          activeValue = activeStep;
-        }
-      });
+  const propsArr = props.split(".");
+  let rootObj: any = obj;
 
-      let activeName: string;
-      let temp: Object = {};
-      
-      newFieldNameArr.forEach((activeNewFieldName: string, index: number) => {
-      
-        let previousNewFieldName = newFieldNameArr[index -1];
-        
-        if (previousNewFieldName) {
-          temp[activeNewFieldName] = {...temp};
-          delete temp[previousNewFieldName];
-        } else {
-          temp[activeNewFieldName] = activeValue;
-        }
-
-        activeName = activeNewFieldName;
-      
-      });
-      
-      if (item[activeName]) {
-        item[activeName] = {...item[activeName], ...temp[activeName]};
-      } else {
-        item[activeName] = temp[activeName];
-      }
-      
-      deleteFields.push(parentOldFieldName);
-    });
-    
-    deleteFields.forEach(fieldName => {
-      delete item[fieldName];
-    })
-
-
-    if (indexes.indexOf(index) === -1) {
-      indexes.push(index);
-      return item;
+  propsArr.forEach(prop => {
+    if (
+      typeof rootObj[prop] !== "undefined" ||
+      rootObj[prop] !== null ||
+      !isNaN(rootObj[prop])
+    ) {
+      rootObj = rootObj[prop];
+    } else {
+      rootObj = false;
     }
-
   });
 
-  return data;
+  return rootObj !== false ? rootObj : defaultValue ? defaultValue : false;
+};
+
+const recursive: RecursiveFunction = (schema, item, fields) => {
+  Object.keys(schema).forEach(fieldName => {
+    if (
+      typeof schema[fieldName] === "string" &&
+      fields.indexOf(fieldName) === -1
+    ) {
+      schema[fieldName] = getObjDeepProp(item, schema[fieldName]);
+      fields.push(fieldName);
+    } else if (schema[fieldName] instanceof Object) {
+      recursive(schema[fieldName], item, fields);
+    }
+  });
+
+  fields.length = 0;
+  return schema;
+};
+
+const schema: SchemaFunction = (data = [], schema = {}) => {
+  const result: Object[] = [];
+  const fields: string[] = [];
+
+  data.forEach((item, index) => {
+    let temp = JSON.stringify(schema);
+    result.push(recursive(JSON.parse(temp), item, fields));
+  });
+
+  return result;
 };
 
 export default schema;
