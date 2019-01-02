@@ -35,15 +35,19 @@ describe("JsonFunction Class", () => {
       .select(["title", "completed"])
       .orderBy("title", "DESC")
       .limit(2)
+      .schema({
+        todo: {
+          title: "title",
+          completed: "completed"
+        }
+      })
       .get(data);
     expect(result).to.deep.equal([
       {
-        title: "quis ut nam facilis et officia qui",
-        completed: false
+        todo: { title: "quis ut nam facilis et officia qui", completed: false }
       },
       {
-        title: "fugiat veniam minus",
-        completed: false
+        todo: { title: "fugiat veniam minus", completed: false }
       }
     ]);
   });
@@ -52,15 +56,19 @@ describe("JsonFunction Class", () => {
     JsonFunction.select(["title", "completed"]);
     JsonFunction.orderBy("title", "DESC");
     JsonFunction.limit(2);
+    JsonFunction.schema({
+      todo: {
+        title: "title",
+        completed: "completed"
+      }
+    });
     const result = JsonFunction.get(data);
     expect(result).to.deep.equal([
       {
-        title: "quis ut nam facilis et officia qui",
-        completed: false
+        todo: { title: "quis ut nam facilis et officia qui", completed: false }
       },
       {
-        title: "fugiat veniam minus",
-        completed: false
+        todo: { title: "fugiat veniam minus", completed: false }
       }
     ]);
   });
@@ -78,7 +86,8 @@ describe("JsonFunction Class", () => {
       orderBy: ["title", "DESC"],
       where: { completed: false },
       limit: [2, 0],
-      select: ["title", "completed"]
+      select: ["title", "completed"],
+      schema: null
     });
     expect(classData).to.deep.equal([
       {

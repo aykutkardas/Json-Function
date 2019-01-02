@@ -1,15 +1,16 @@
-import { OrderBy, Where, Limit, Select } from ".";
-import select from "./select";
+import { OrderBy, Where, Limit, Select, Schema } from ".";
 
 type Option = {
   orderBy: string[];
   where: object | object[];
   limit: number[];
   select: string | string[];
+  schema: Object;
 };
 
 type Config = {
-  resetRecord: boolean;
+  resetRecord?: boolean;
+  [key: string]: any;
 };
 
 class JsonFunction {
@@ -18,7 +19,12 @@ class JsonFunction {
     orderBy: null,
     where: null,
     limit: null,
-    select: null
+    select: null,
+    schema: null
+  };
+
+  config: Config = {
+    resetRecord: true
   };
 
   reset() {
@@ -26,7 +32,8 @@ class JsonFunction {
       orderBy: null,
       where: null,
       limit: null,
-      select: null
+      select: null,
+      schema: null
     };
 
     this.data = [];
@@ -49,16 +56,21 @@ class JsonFunction {
     return this;
   }
 
+  schema(schema: Object) {
+    this.option.schema = schema;
+    return this;
+  }
+
   select(fields: string | string[]) {
     this.option.select = fields;
     return this;
   }
 
-  get(data: Object[], config?: Config) {
+  get(data: Object[], config: Config = {}) {
     this.data = data;
 
     const { option } = this;
-    const { orderBy, where, limit, select } = option;
+    const { orderBy, where, limit, select, schema } = option;
 
     if (orderBy) {
       const [fieldName, order] = orderBy;
@@ -78,12 +90,15 @@ class JsonFunction {
       this.data = Select(this.data, select);
     }
 
+    if (schema) {
+      this.data = Schema(this.data, schema);
+    }
+
     const result = [...this.data];
 
-    if (config) {
-      if (config.resetRecord !== false) {
-        this.reset();
-      }
+    const configs = { ...this.config, ...config };
+    if (configs.resetRecord !== false) {
+      this.reset();
     }
 
     return result;
