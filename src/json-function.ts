@@ -15,6 +15,8 @@ type Config = {
 
 class JsonFunction {
   data: Object[] = [];
+  process: string[] = [];
+
   option: Option = {
     orderBy: null,
     where: null,
@@ -37,62 +39,76 @@ class JsonFunction {
     };
 
     this.data = [];
+    this.process = [];
 
     return this;
+  }
+
+  processManager() {
+    this.process.forEach(process => {
+      const { option } = this;
+      const { orderBy, where, limit, select, schema } = option;
+
+      switch (process) {
+        case "orderBy":
+          const [fieldName, order] = orderBy;
+          this.data = OrderBy(this.data, fieldName, order);
+          break;
+
+        case "where":
+          this.data = Where(this.data, where);
+          break;
+
+        case "limit":
+          const [itemLimit, start] = limit;
+          this.data = Limit(this.data, itemLimit, start);
+          break;
+
+        case "select":
+          this.data = Select(this.data, select);
+          break;
+
+        case "schema":
+          this.data = Schema(this.data, schema);
+          break;
+      }
+    });
   }
 
   orderBy(fieldName: string, order: string = "ASC") {
     this.option.orderBy = [fieldName, order];
+    this.process.push("orderBy");
     return this;
   }
-
+  
   where(queries: Object | Object[]) {
     this.option.where = queries;
+    this.process.push("where");
     return this;
   }
-
+  
   limit(limit: number = 10, start: number = 0) {
     this.option.limit = [limit, start];
+    this.process.push("limit");
     return this;
   }
-
+  
   schema(schema: Object) {
     this.option.schema = schema;
+    this.process.push("schema");
     return this;
   }
-
+  
   select(fields: string | string[]) {
     this.option.select = fields;
+    this.process.push("select");
     return this;
   }
 
   get(data: Object[], config: Config = {}) {
     this.data = data;
 
-    const { option } = this;
-    const { orderBy, where, limit, select, schema } = option;
-
-    if (orderBy) {
-      const [fieldName, order] = orderBy;
-      this.data = OrderBy(this.data, fieldName, order);
-    }
-
-    if (where) {
-      this.data = Where(this.data, where);
-    }
-
-    if (limit) {
-      const [itemLimit, start] = limit;
-      this.data = Limit(this.data, itemLimit, start);
-    }
-
-    if (select) {
-      this.data = Select(this.data, select);
-    }
-
-    if (schema) {
-      this.data = Schema(this.data, schema);
-    }
+    this.processManager();
 
     const result = [...this.data];
 
