@@ -1,13 +1,15 @@
 # Json Function
+
 [![Build Status](https://travis-ci.com/aykutkardas/Json-Function.svg?branch=master)](https://travis-ci.com/aykutkardas/Json-Function)
 
-**Full Size** *~2.276 kb*
+**Full Size** _~2.276 kb_
 
 ## Install
 
 ```
 yarn add json-function
 ```
+
 ```
 npm install json-function
 ```
@@ -15,7 +17,9 @@ npm install json-function
 ## Usage
 
 ### Full class
+
 Example data
+
 ```js
 const data = [
   {
@@ -44,22 +48,23 @@ const data = [
   }
 ];
 ```
-Chaining
-```js
-import JsonFunction from 'json-function';
 
-const result = JsonFunction
-      .where({ completed: false })
-      .select(["title", "completed"])
-      .orderBy("title", "DESC")
-      .limit(2)
-      .get(data);
+Chaining
+
+```js
+import JsonFunction from "json-function";
+
+const result = JsonFunction.where({ completed: false })
+  .select(["title", "completed"])
+  .orderBy("title", "DESC")
+  .limit(2)
+  .get(data);
 ```
 
 or Standart
 
 ```js
-import JsonFunction from 'json-function';
+import JsonFunction from "json-function";
 
 JsonFunction.where({ completed: false });
 JsonFunction.select(["title", "completed"]);
@@ -69,6 +74,7 @@ const result = JsonFunction.get(data);
 ```
 
 Output
+
 ```js
 [
   {
@@ -78,17 +84,20 @@ Output
   {
     title: "fugiat veniam minus",
     completed: false
-    }
-]
+  }
+];
 ```
 
 ## Config
+
 ### resetRecord
+
 ```js
 JsonFunction.limit(2).get(data);
 console.log(JsonFunction.option.limit); // null
 console.log(JsonFunction.data); // []
 ```
+
 ```js
 JsonFunction.limit(2).get(data, { resetRecord: false });
 console.log(JsonFunction.option.limit); // [2, 0]
@@ -99,12 +108,15 @@ JsonFunction.reset();
 ```
 
 # Methods
+
 Instead of an entire "class", you can use only the methods you need.
 
 ## Where
-**Size** *0.369 kb*
+
+**Size** _0.369 kb_
+
 ```js
-import { Where } from 'json-function';
+import { Where } from "json-function";
 
 // Single
 // (completed === false)
@@ -112,49 +124,106 @@ Where(data, { completed: false });
 
 // Multiple (or)
 // (completed === false || userId === 2)
-Where(data, [{completed: false}, {userId: 2}]); 
+Where(data, [{ completed: false }, { userId: 2 }]);
 ```
 
-
 ## Select
-**Size** *0,360 kb*
+
+**Size** _0,360 kb_
+
 ```js
-import { Select } from 'json-function';
+import { Select } from "json-function";
 
 // Single
 Select(data, "title");
 
 // Multiple
-Select(data, ["title", "completed"]); 
+Select(data, ["title", "completed"]);
 ```
 
 ## Limit
-**Size** *0.215 kb*
+
+**Size** _0.215 kb_
+
 ```js
-import { Limit } from 'json-function';
+import { Limit } from "json-function";
 
 // Limit
 Limit(data, 2);
 
 // Limit and Start
-Limit(data, 2, 2); 
+Limit(data, 2, 2);
 ```
 
 ## OrderBy
-**Size** *0.282 kb*
+
+**Size** _0.282 kb_
+
 ```js
-import { OrderBy } from 'json-function';
+import { OrderBy } from "json-function";
 
 OrderBy(data, "title", "DESC");
 ```
 
 ## Schema
-**Size** *0.789 kb*
+
+**Size** _0.976 kb_
+
+Example data
+
 ```js
-import { Schema } from 'json-function';
+const data = [
+  {
+    id: 0,
+    user: {
+      firstname: "John",
+      lastname: "Doe"
+    },
+    title: "Book Name"
+  },
+  {
+    id: 1,
+    user: {
+      firstname: "Johnny",
+      lastname: "Doe"
+    },
+    title: "Book Name 2"
+  }
+];
+```
+
+```js
+import { Schema } from "json-function";
 
 Schema(data, {
-  "user.firstname": "firstname",
-  "user.lastname": "lastname"
+  book: {
+    id: "id",
+    title: "title"
+  },
+  firstname: "user.firstname",
+  lastname: "user.lastname"
 });
+```
+
+Output
+
+```js
+[
+  {
+    firstname: "John",
+    lastname: "Doe",
+    book: {
+      id: 0,
+      title: "Book Name"
+    }
+  },
+  {
+    firstname: "Johnny",
+    lastname: "Doe",
+    book: {
+      id: 1,
+      title: "Book Name 2"
+    }
+  }
+];
 ```
