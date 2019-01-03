@@ -2,13 +2,9 @@
 
 [![Build Status](https://travis-ci.com/aykutkardas/Json-Function.svg?branch=master)](https://travis-ci.com/aykutkardas/Json-Function)
 
-**Full Size** _~2.276 kb_
+**Full Size** _~4 kb_
 
 ## Install
-
-```
-yarn add json-function
-```
 
 ```
 npm install json-function
