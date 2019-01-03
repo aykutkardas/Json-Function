@@ -45,10 +45,10 @@ class JsonFunction {
   }
 
   processManager() {
-    this.process.forEach(process => {
-      const { option } = this;
-      const { orderBy, where, limit, select, schema } = option;
+    const { option } = this;
+    const { orderBy, where, limit, select, schema } = option;
 
+    this.process.forEach(process => {
       switch (process) {
         case "orderBy":
           const [fieldName, order] = orderBy;
@@ -80,25 +80,25 @@ class JsonFunction {
     this.process.push("orderBy");
     return this;
   }
-  
+
   where(queries: Object | Object[]) {
     this.option.where = queries;
     this.process.push("where");
     return this;
   }
-  
+
   limit(limit: number = 10, start: number = 0) {
     this.option.limit = [limit, start];
     this.process.push("limit");
     return this;
   }
-  
+
   schema(schema: Object) {
     this.option.schema = schema;
     this.process.push("schema");
     return this;
   }
-  
+
   select(fields: string | string[]) {
     this.option.select = fields;
     this.process.push("select");
