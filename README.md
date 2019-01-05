@@ -224,3 +224,52 @@ Output
   }
 ];
 ```
+
+## Schema Tool
+Use "callback" for advanced conversions.
+
+```js
+Schema(data, (sc) => ({
+  id: 'id',
+  fullName: sc.join('user.firstname', 'user.lastname')
+}));
+```
+
+Output
+
+```js
+[
+  {
+    id: 0,
+    fullName: "John Doe"
+  },
+  {
+    id: 1,
+    fullName: "Johnny Doe"
+  }
+];
+```
+
+Custom seperator
+
+```js
+Schema(data, (sc) => ({
+  id: 'id',
+  fullName: sc.join('user.firstname', 'user.lastname').with('_')
+}));
+```
+
+Output
+
+```js
+[
+  {
+    id: 0,
+    fullName: "John_Doe"
+  },
+  {
+    id: 1,
+    fullName: "Johnny_Doe"
+  }
+];
+```
