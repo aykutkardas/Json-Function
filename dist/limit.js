@@ -1,1 +1,1 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var limit=function(a,b,c){return void 0===a&&(a=[]),void 0===b&&(b=10),void 0===c&&(c=0),Array.isArray(a)?a.slice(c,b+c):[]};exports.default=limit;
+'use strict';Object.defineProperty(exports,'__esModule',{value:!0});var _typeCheck=require('./type-check'),limit=function(a,b,c){return(0,_typeCheck.isArray)(a)?((0,_typeCheck.isNumber)(b)||(b=10),(0,_typeCheck.isNumber)(c)||(c=0),a.slice(c,b+c)):[]};exports.default=limit;
