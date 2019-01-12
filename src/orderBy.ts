@@ -1,10 +1,26 @@
+import { isArray, isString, isOneOf } from './type-check';
+
 type OrderByFunction = (
   data: Object[],
   fieldName: string,
   order?: string
 ) => Object[];
 
-const orderBy: OrderByFunction = (data = [], fieldName = "", order = "ASC") => {
+const orderBy: OrderByFunction = (data, fieldName, order = "ASC") => {
+  if (!isArray(data)) {
+    return [];
+  }
+
+  if (!isString(fieldName)) {
+    return data;
+  }
+
+  order = order.toUpperCase();
+
+  if (!isOneOf(order, ["ASC", "DESC"])) {
+    return data;
+  }
+
   return data.sort((a, b) => {
     if (order === "DESC") {
       return b[fieldName] > a[fieldName]
