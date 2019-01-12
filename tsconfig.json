@@ -6,7 +6,7 @@
     "moduleResolution": "node",
     "sourceMap": false,
     "experimentalDecorators": true,
-    "lib": ["dom", "es6", "es5"],
+    "lib": ["dom", "es6", "es5", "es2017"],
     "resolveJsonModule": true
   },
   "include": ["./src/**/*"],
