@@ -1,35 +1,33 @@
-type SelectFunction = (data: Object[], columns: string | string[]) => Object[];
+import { isArray, isString, isDefined } from "./type-check";
 
-const select: SelectFunction = (data = [], columns = []) => {
-  let columnsArr: string[];
+type SelectFunction = (data: Object[], columns) => Object[];
 
-  if (!Array.isArray(columns)) {
-    columnsArr = typeof columns === "string" ? [columns] : [];
-  } else {
-    columnsArr = columns;
+const select: SelectFunction = (data, columns) => {
+  if (!isArray(data)) {
+    return [];
   }
 
-  const result: Object[] = [];
+  let columnsArr: string[] = [];
 
-  data.forEach((item: Object) => {
-    const newItem: Object = {};
-    let foundedColumnCounter = 0;
+  if (isString(columns)) {
+    columnsArr = [columns];
+  } else if (isArray(columns)) {
+    columnsArr = columns;
+  } else {
+    return data;
+  }
 
-    columnsArr.forEach((column: string) => {
-      Object.keys(item).forEach((itemColumn: string) => {
-        if (column === itemColumn) {
-          newItem[column] = item[column];
-          foundedColumnCounter++;
-        }
-      });
+  data = data.map(item => {
+    const newItem = {};
+    columnsArr.forEach(column => {
+      if (isDefined(item[column])) {
+        newItem[column] = item[column];
+      }
     });
-
-    if (foundedColumnCounter > 0) {
-      result.push(newItem);
-    }
+    return newItem;
   });
-
-  return result;
+  
+  return data;
 };
 
 export default select;
