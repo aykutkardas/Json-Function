@@ -110,7 +110,7 @@ Instead of an entire "class", you can use only the methods you need.
 
 ## Where
 
-**Size** _0.369 kb_
+**Size** _~0.505 kb_
 
 ```js
 import { Where } from "json-function";
@@ -126,7 +126,7 @@ Where(data, [{ completed: false }, { userId: 2 }]);
 
 ## Select
 
-**Size** _0,360 kb_
+**Size** _~0,402 kb_
 
 ```js
 import { Select } from "json-function";
@@ -140,7 +140,7 @@ Select(data, ["title", "completed"]);
 
 ## Limit
 
-**Size** _0.215 kb_
+**Size** _~0.273 kb_
 
 ```js
 import { Limit } from "json-function";
@@ -154,7 +154,7 @@ Limit(data, 2, 2);
 
 ## OrderBy
 
-**Size** _0.282 kb_
+**Size** _~0.488 kb_
 
 ```js
 import { OrderBy } from "json-function";
@@ -164,7 +164,7 @@ OrderBy(data, "title", "DESC");
 
 ## Schema
 
-**Size** _0.976 kb_
+**Size** _~0.617 kb_
 
 Example data
 
