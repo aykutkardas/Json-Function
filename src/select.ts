@@ -1,18 +1,18 @@
 import { isArray, isString, isDefined } from "./type-check";
 
-type SelectFunction = (data: Object[], columns) => Object[];
+type SelectFunction = (data: Object[], columns: string | string[]) => Object[];
 
 const select: SelectFunction = (data, columns) => {
   if (!isArray(data)) {
     return [];
   }
 
-  let columnsArr: string[] = [];
+  let columnsArr: string[];
 
   if (isString(columns)) {
-    columnsArr = [columns];
+    columnsArr = [<string>columns];
   } else if (isArray(columns)) {
-    columnsArr = columns;
+    columnsArr = <string[]>columns;
   } else {
     return data;
   }
@@ -26,7 +26,7 @@ const select: SelectFunction = (data, columns) => {
     });
     return newItem;
   });
-  
+
   return data;
 };
 
