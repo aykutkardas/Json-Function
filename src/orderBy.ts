@@ -1,4 +1,4 @@
-import { isArray, isString, isOneOf } from './type-check';
+import { isArray, isString, isOneOf } from "./type-check";
 
 type OrderByFunction = (
   data: Object[],
@@ -15,27 +15,27 @@ const orderBy: OrderByFunction = (data, fieldName, order = "ASC") => {
     return data;
   }
 
+  if (!isString(order)) {
+    order = "ASC";
+  }
+
   order = order.toUpperCase();
 
   if (!isOneOf(order, ["ASC", "DESC"])) {
     return data;
   }
 
-  return data.sort((a, b) => {
-    if (order === "DESC") {
-      return b[fieldName] > a[fieldName]
-        ? 1
-        : a[fieldName] > b[fieldName]
-        ? -1
-        : 0;
-    }
+  if (order === "DESC") {
+    return data.sort((a, b) =>
+      b[fieldName] > a[fieldName] ? 1 : a[fieldName] > b[fieldName] ? -1 : 0
+    );
+  }
 
-    return a[fieldName] > b[fieldName]
-      ? 1
-      : b[fieldName] > a[fieldName]
-      ? -1
-      : 0;
-  });
+  if (order === "ASC") {
+    return data.sort((a, b) =>
+      a[fieldName] > b[fieldName] ? 1 : b[fieldName] > a[fieldName] ? -1 : 0
+    );
+  }
 };
 
 export default orderBy;
