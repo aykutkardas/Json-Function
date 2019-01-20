@@ -9,7 +9,7 @@
     "build": "tsc && babel --presets es2015 -d dist/ dist"
   },
   "author": "Aykut Kardaş",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "directories": {
     "test": "test"
   },
