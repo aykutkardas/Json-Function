@@ -29,13 +29,34 @@ const data = [
   }
 ];
 
+const data2 = [
+  {
+    id: 1,
+    firstName: "John"
+  },
+  {
+    id: 2,
+    firstName: "Mike"
+  },
+  {
+    id: 3,
+    firstName: "David"
+  },
+  {
+    id: 4,
+    firstName: "Noah"
+  }
+];
+
 describe("JsonFunction Class", () => {
   it("Method Chaining Test.", () => {
     const result = JsonFunction.where({ completed: false })
-      .select(["title", "completed"])
       .orderBy("title", "DESC")
       .limit(2)
+      .innerJoin(data2, "id", "id")
+      .select(["firstName", "title", "completed"])
       .schema({
+        firstName: "firstName",
         todo: {
           title: "title",
           completed: "completed"
@@ -44,9 +65,11 @@ describe("JsonFunction Class", () => {
       .get(data);
     expect(result).to.deep.equal([
       {
+        firstName: "Mike",
         todo: { title: "quis ut nam facilis et officia qui", completed: false }
       },
       {
+        firstName: "David",
         todo: { title: "fugiat veniam minus", completed: false }
       }
     ]);
@@ -87,7 +110,8 @@ describe("JsonFunction Class", () => {
       where: { completed: false },
       limit: [2, 0],
       select: ["title", "completed"],
-      schema: null
+      schema: null,
+      innerJoin: null
     });
     expect(classData).to.deep.equal([
       {

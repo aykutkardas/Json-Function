@@ -26,11 +26,11 @@ const data = [
 const data2 = [
   {
     id: 1,
-    firsName: "John"
+    firstName: "John"
   },
   {
     id: 2,
-    firsName: "Mike"
+    firstName: "Mike"
   }
 ];
 
@@ -40,7 +40,7 @@ describe("InnerJoin Functions", () => {
     expect(result).to.deep.equal([
       {
         userId: 1,
-        firsName: "John",
+        firstName: "John",
         id: 1,
         title: "delectus aut autem",
         completed: false,
@@ -50,7 +50,7 @@ describe("InnerJoin Functions", () => {
       },
       {
         userId: 2,
-        firsName: "Mike",
+        firstName: "Mike",
         id: 2,
         title: "quis ut nam facilis et officia qui",
         completed: false,

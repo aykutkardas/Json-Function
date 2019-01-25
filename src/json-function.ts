@@ -1,4 +1,4 @@
-import { OrderBy, Where, Limit, Select, Schema } from ".";
+import { OrderBy, Where, Limit, Select, Schema, InnerJoin } from ".";
 
 type Option = {
   orderBy: string[];
@@ -6,6 +6,7 @@ type Option = {
   limit: number[];
   select: string | string[];
   schema: Object;
+  innerJoin: [Object[], string, string];
 };
 
 type Config = {
@@ -22,7 +23,8 @@ class JsonFunction {
     where: null,
     limit: null,
     select: null,
-    schema: null
+    schema: null,
+    innerJoin: null,
   };
 
   config: Config = {
@@ -35,7 +37,8 @@ class JsonFunction {
       where: null,
       limit: null,
       select: null,
-      schema: null
+      schema: null,
+      innerJoin: null,
     };
 
     this.data = [];
@@ -46,7 +49,7 @@ class JsonFunction {
 
   processManager() {
     const { option } = this;
-    const { orderBy, where, limit, select, schema } = option;
+    const { orderBy, where, limit, select, schema, innerJoin } = option;
 
     this.process.forEach(process => {
       switch (process) {
@@ -70,6 +73,12 @@ class JsonFunction {
 
         case "schema":
           this.data = Schema(this.data, schema);
+          break;
+
+        case "innerJoin":
+          const [otherData, dataFieldName, otherDataFieldName] = innerJoin;
+          console.log(otherData, dataFieldName, otherDataFieldName);
+          this.data = InnerJoin(this.data, otherData, dataFieldName, otherDataFieldName);
           break;
       }
     });
@@ -102,6 +111,12 @@ class JsonFunction {
   select(fields: string | string[]) {
     this.option.select = fields;
     this.process.push("select");
+    return this;
+  }
+
+  innerJoin(otherData: Object[], dataFieldName: string, otherFiledName: string) {
+    this.option.innerJoin = [otherData, dataFieldName, otherFiledName];
+    this.process.push("innerJoin");
     return this;
   }
 
