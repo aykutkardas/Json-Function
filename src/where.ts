@@ -1,8 +1,15 @@
 import { isArray, isObject, isArrayOfObject } from "./type-check";
+import getObjDeepProp from "./schema-tool/get-obj-deep-prop";
 
-type WhereFunction = (data: Object[], queries: Object | Object[]) => Object[];
+type WhereFunction = (
+  data: Object[],
+  queries: Object | Object[],
+  options?: {
+    deep?: boolean;
+  }
+) => Object[];
 
-const where: WhereFunction = (data, queries) => {
+const where: WhereFunction = (data, queries, options) => {
   if (!isArray(data)) {
     return [];
   }
@@ -23,9 +30,11 @@ const where: WhereFunction = (data, queries) => {
   queriesArr.forEach(query => {
     Object.keys(query).forEach(fieldName => {
       matchingItems = data.filter((item, index) => {
-        if (item[fieldName] === query[fieldName]) {
-          return true;
+        let value = item[fieldName];
+        if (options && options.deep) {
+          value = getObjDeepProp(item, fieldName);
         }
+        return value === query[fieldName];
       });
     });
 
