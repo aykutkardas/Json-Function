@@ -1,4 +1,4 @@
-import { isArrayOfObject, isObject } from "./type-check";
+import { isArrayOfObject, isObject, isString } from "./type-check";
 import getObjDeepProp from "./utils/get-obj-deep-prop";
 import { Where } from "./";
 
@@ -20,6 +20,10 @@ const innerJoin: InnerJoinFunction = (
   }
 
   if (!isArrayOfObject(otherData)) {
+    return data;
+  }
+
+  if (!isString(dataFieldName) || !isString(otherDataFieldName)) {
     return data;
   }
 
