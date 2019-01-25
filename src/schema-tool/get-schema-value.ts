@@ -1,5 +1,5 @@
 import { SchemaToolObject } from "./";
-import getObjDeepProp from "./get-obj-deep-prop";
+import getObjDeepProp from "../utils/get-obj-deep-prop";
 
 type RecursiveFunction = (
   schema: Object,

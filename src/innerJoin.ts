@@ -1,5 +1,5 @@
 import { isArrayOfObject, isObject } from "./type-check";
-import getObjDeepProp from "./schema-tool/get-obj-deep-prop";
+import getObjDeepProp from "./utils/get-obj-deep-prop";
 import { Where } from "./";
 
 type InnerJoinFunction = (
