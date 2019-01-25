@@ -35,7 +35,7 @@ const data2 = [
 ];
 
 describe("InnerJoin Functions", () => {
-  it("Get-Object-Deep-Prop function not found.", () => {
+  it("A successful match test.", () => {
     const result = InnerJoin(data, data2, "userId", "id");
     expect(result).to.deep.equal([
       {
@@ -59,5 +59,9 @@ describe("InnerJoin Functions", () => {
         }
       }
     ]);
+  });
+  it("An unsuccessful match test.", () => {
+    const result = InnerJoin(data, data2, "userId", "userId");
+    expect(result).to.deep.equal(data);
   });
 });
