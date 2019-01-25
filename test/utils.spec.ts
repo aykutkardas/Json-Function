@@ -1,4 +1,4 @@
-import getObjDeepProp from "../src/schema-tool/get-obj-deep-prop";
+import getObjDeepProp from "../src/utils/get-obj-deep-prop";
 import { expect } from "chai";
 import "mocha";
 
