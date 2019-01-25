@@ -1,6 +1,6 @@
 import { isArrayOfObject, isObject, isString } from "./type-check";
 import getObjDeepProp from "./utils/get-obj-deep-prop";
-import { Where } from "./";
+import { where } from "./";
 
 type InnerJoinFunction = (
   data: Object[],
@@ -28,7 +28,7 @@ const innerJoin: InnerJoinFunction = (
   }
 
   data = data.map(item => {
-    const [otherDataItem] = Where(
+    const [otherDataItem] = where(
       otherData,
       { [otherDataFieldName]: getObjDeepProp(item, dataFieldName) },
       { deep: true }

@@ -1,4 +1,4 @@
-import { InnerJoin } from "../src";
+import { innerJoin } from "../src";
 import { expect } from "chai";
 import "mocha";
 
@@ -34,9 +34,9 @@ const data2 = [
   }
 ];
 
-describe("InnerJoin Functions", () => {
+describe("innerJoin Functions", () => {
   it("A successful match test.", () => {
-    const result = InnerJoin(data, data2, "userId", "id");
+    const result = innerJoin(data, data2, "userId", "id");
     expect(result).to.deep.equal([
       {
         userId: 1,
@@ -61,7 +61,7 @@ describe("InnerJoin Functions", () => {
     ]);
   });
   it("An unsuccessful match test.", () => {
-    const result = InnerJoin(data, data2, "userId", "userId");
+    const result = innerJoin(data, data2, "userId", "userId");
     expect(result).to.deep.equal(data);
   });
 });

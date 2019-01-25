@@ -108,61 +108,61 @@ JsonFunction.reset();
 
 Instead of an entire "class", you can use only the methods you need.
 
-## Where
+## where
 
 **Size** _~0.505 kb_
 
 ```js
-import { Where } from "json-function";
+import { where } from "json-function";
 
 // Single
 // (completed === false)
-Where(data, { completed: false });
+where(data, { completed: false });
 
 // Multiple (or)
 // (completed === false || userId === 2)
-Where(data, [{ completed: false }, { userId: 2 }]);
+where(data, [{ completed: false }, { userId: 2 }]);
 ```
 
-## Select
+## select
 
 **Size** _~0,402 kb_
 
 ```js
-import { Select } from "json-function";
+import { select } from "json-function";
 
 // Single
-Select(data, "title");
+select(data, "title");
 
 // Multiple
-Select(data, ["title", "completed"]);
+select(data, ["title", "completed"]);
 ```
 
-## Limit
+## limit
 
 **Size** _~0.273 kb_
 
 ```js
-import { Limit } from "json-function";
+import { limit } from "json-function";
 
-// Limit
-Limit(data, 2);
+// limit
+limit(data, 2);
 
-// Limit and Start
-Limit(data, 2, 2);
+// limit and Start
+limit(data, 2, 2);
 ```
 
-## OrderBy
+## orderBy
 
 **Size** _~0.488 kb_
 
 ```js
-import { OrderBy } from "json-function";
+import { orderBy } from "json-function";
 
-OrderBy(data, "title", "DESC");
+orderBy(data, "title", "DESC");
 ```
 
-## Schema
+## schema
 
 **Size** _~0.617 kb_
 
@@ -190,9 +190,9 @@ const data = [
 ```
 
 ```js
-import { Schema } from "json-function";
+import { schema } from "json-function";
 
-Schema(data, {
+schema(data, {
   book: {
     id: "id",
     title: "title"
@@ -229,7 +229,7 @@ Output
 Use "callback" for advanced conversions.
 
 ```js
-Schema(data, (sc) => ({
+schema(data, (sc) => ({
   id: 'id',
   fullName: sc.join('user.firstname', 'user.lastname')
 }));
@@ -253,7 +253,7 @@ Output
 Custom seperator
 
 ```js
-Schema(data, (sc) => ({
+schema(data, (sc) => ({
   id: 'id',
   fullName: sc.join('user.firstname', 'user.lastname').with('_')
 }));

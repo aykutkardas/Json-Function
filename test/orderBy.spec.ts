@@ -1,4 +1,4 @@
-import { OrderBy as orderBy } from "../src";
+import { orderBy } from "../src";
 import { expect } from "chai";
 import "mocha";
 

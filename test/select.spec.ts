@@ -1,4 +1,4 @@
-import { Select as select } from "../src";
+import { select } from "../src";
 import { expect } from "chai";
 import "mocha";
 

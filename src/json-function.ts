@@ -1,4 +1,11 @@
-import { OrderBy, Where, Limit, Select, Schema, InnerJoin } from ".";
+import {
+  orderBy as OrderBy,
+  where as Where,
+  limit as Limit,
+  select as Select,
+  schema as Schema,
+  innerJoin as InnerJoin
+} from ".";
 
 type Option = {
   orderBy: string[];
@@ -24,7 +31,7 @@ class JsonFunction {
     limit: null,
     select: null,
     schema: null,
-    innerJoin: null,
+    innerJoin: null
   };
 
   config: Config = {
@@ -38,7 +45,7 @@ class JsonFunction {
       limit: null,
       select: null,
       schema: null,
-      innerJoin: null,
+      innerJoin: null
     };
 
     this.data = [];
@@ -77,8 +84,12 @@ class JsonFunction {
 
         case "innerJoin":
           const [otherData, dataFieldName, otherDataFieldName] = innerJoin;
-          console.log(otherData, dataFieldName, otherDataFieldName);
-          this.data = InnerJoin(this.data, otherData, dataFieldName, otherDataFieldName);
+          this.data = InnerJoin(
+            this.data,
+            otherData,
+            dataFieldName,
+            otherDataFieldName
+          );
           break;
       }
     });
@@ -114,7 +125,11 @@ class JsonFunction {
     return this;
   }
 
-  innerJoin(otherData: Object[], dataFieldName: string, otherFiledName: string) {
+  innerJoin(
+    otherData: Object[],
+    dataFieldName: string,
+    otherFiledName: string
+  ) {
     this.option.innerJoin = [otherData, dataFieldName, otherFiledName];
     this.process.push("innerJoin");
     return this;

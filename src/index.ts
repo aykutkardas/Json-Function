@@ -1,11 +1,11 @@
-import Limit from "./limit";
-import Select from "./select";
-import Where from "./where";
-import OrderBy from "./orderBy";
-import Schema from "./schema";
-import InnerJoin from "./innerJoin";
-import JsonFunction from "./json-function";
+import limit from "./limit";
+import select from "./select";
+import where from "./where";
+import orderBy from "./orderBy";
+import schema from "./schema";
+import innerJoin from "./innerJoin";
+import jsonFunction from "./json-function";
 
-export { Limit, Select, Where, OrderBy, Schema, InnerJoin };
+export { limit, select, where, orderBy, schema, innerJoin };
 
-export default JsonFunction;
+export default jsonFunction;

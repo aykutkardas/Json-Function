@@ -1,4 +1,4 @@
-import { Where as where } from "../src";
+import { where } from "../src";
 import { expect } from "chai";
 import "mocha";
 
