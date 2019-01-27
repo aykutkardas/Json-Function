@@ -124,4 +124,48 @@ describe("JsonFunction Class", () => {
       }
     ]);
   });
+  
+  it("setQuery and getQuery test", () => {
+
+    const unCompleteTodoQuery = JsonFunction
+      .orderBy("title", "DESC")
+      .where({ completed: false })
+      .limit(2)
+      .select(["title", "completed"])
+      .getQuery();
+
+    const result = JsonFunction.setQuery(unCompleteTodoQuery).get(data);
+    
+    const result2 = JsonFunction.get(data, { query: unCompleteTodoQuery });
+
+    expect(unCompleteTodoQuery).to.deep.equal({
+      orderBy: ["title", "DESC"],
+      where: { completed: false },
+      limit: [2, 0],
+      select: ["title", "completed"],
+      schema: null,
+      innerJoin: null
+    });
+    expect(result).to.deep.equal([
+      {
+        title: "quis ut nam facilis et officia qui",
+        completed: false
+      },
+      {
+        title: "fugiat veniam minus",
+        completed: false
+      }
+    ]);
+    expect(result2).to.deep.equal([
+      {
+        title: "quis ut nam facilis et officia qui",
+        completed: false
+      },
+      {
+        title: "fugiat veniam minus",
+        completed: false
+      }
+    ]);
+  });
+
 });

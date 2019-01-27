@@ -7,6 +7,8 @@ import {
   innerJoin as InnerJoin
 } from ".";
 
+import { isObject } from "./type-check";
+
 type Option = {
   orderBy: string[];
   where: object | object[];
@@ -18,6 +20,7 @@ type Option = {
 
 type Config = {
   resetRecord?: boolean;
+  query?: Option;
   [key: string]: any;
 };
 
@@ -138,16 +141,41 @@ class JsonFunction {
   get(data: Object[], config: Config = {}) {
     this.data = data;
 
+    const configs = { ...this.config, ...config };
+
+    if (config.query) {
+      this.setQuery(config.query);
+    }
+
     this.processManager();
 
     const result = [...this.data];
 
-    const configs = { ...this.config, ...config };
     if (configs.resetRecord !== false) {
       this.reset();
     }
 
     return result;
+  }
+
+  getQuery() {
+    return this.option;
+  }
+
+  setQuery(query: Option) {
+    if (!isObject(query)) {
+      return this;
+    }
+
+    this.option = query;
+
+    Object.keys(query).forEach(process => {
+      if (query[process]) {
+        this.process.push(process);
+      }
+    });
+
+    return this;
   }
 }
 

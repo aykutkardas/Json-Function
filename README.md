@@ -43,6 +43,23 @@ JsonFunction.limit(2);
 const result = JsonFunction.get(data);
 ```
 
+or create a query and use it at any time.
+```js
+const queryTwoIncompleteTasks = JsonFunction
+  .where({ completed: false })
+  .select(["title", "completed"])
+  .limit(2)
+  .getQuery();
+  
+```
+
+Query usage
+```js
+JsonFunction.setQuery(queryTwoIncompleteTasks).get(data);
+// or
+JsonFunction.get(data, { query: queryTwoIncompleteTasks });
+```
+
 
 # Methods
 
