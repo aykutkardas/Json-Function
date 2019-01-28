@@ -159,7 +159,9 @@ class JsonFunction {
   }
 
   getQuery() {
-    return this.option;
+    const option = { ...this.option };
+    this.reset();
+    return option;
   }
 
   setQuery(query: Option) {
