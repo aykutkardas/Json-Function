@@ -1,5 +1,6 @@
 import { SchemaToolObject } from "./";
 import getObjDeepProp from "../utils/get-obj-deep-prop";
+import { isString, isObject } from '../type-check';
 
 type RecursiveFunction = (
   schema: Object,
@@ -14,7 +15,7 @@ const recursive: RecursiveFunction = (schema, item, fields) => {
   Object.keys(schema).forEach(fieldName => {
     const activeField = schema[fieldName];
 
-    if (typeof activeField === "string" && fields.indexOf(fieldName) === -1) {
+    if (isString(activeField) && fields.indexOf(fieldName) === -1) {
 
       schema[fieldName] = getObjDeepProp(item, activeField);
       fields.push(fieldName);
@@ -31,7 +32,7 @@ const recursive: RecursiveFunction = (schema, item, fields) => {
         schema[fieldName] = values.join(seperator);
       }
 
-    } else if (activeField instanceof Object) {
+    } else if (isObject(activeField)) {
       recursive(activeField, item, fields);
     }
   });

@@ -31,11 +31,9 @@ const orderBy: OrderByFunction = (data, fieldName, order = "ASC") => {
     );
   }
 
-  if (order === "ASC") {
-    return data.sort((a, b) =>
-      a[fieldName] > b[fieldName] ? 1 : b[fieldName] > a[fieldName] ? -1 : 0
-    );
-  }
+  return data.sort((a, b) =>
+    a[fieldName] > b[fieldName] ? 1 : b[fieldName] > a[fieldName] ? -1 : 0
+  );
 };
 
 export default orderBy;

@@ -1,3 +1,5 @@
+import { isObject, isString } from "../type-check";
+
 type GetObjDeepPropFunction = (
   obj: Object,
   props: string,
@@ -5,10 +7,13 @@ type GetObjDeepPropFunction = (
 ) => any;
 
 const getObjDeepProp: GetObjDeepPropFunction = (obj, props, defaultValue) => {
-  if (!obj) return false;
-  if (typeof obj !== "object") return false;
-  if (!props) return obj;
-  if (typeof props !== "string") return false;
+  if (!isObject(obj)) {
+    return false;
+  }
+
+  if (!isString(props)) {
+    return obj;
+  }
 
   const propsArr = props.split(".");
   let rootObj: any = obj;
