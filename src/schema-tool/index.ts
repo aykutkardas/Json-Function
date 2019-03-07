@@ -1,4 +1,7 @@
+import { schema } from "..";
+
 type JoinMethod = (...args: string[]) => SchemaToolObject;
+type CustomMethod = (fn: Function, ...args: string[]) => SchemaToolObject;
 type WithMethod = (seperator: string) => SchemaToolObject;
 
 export interface SchemaToolObject {
@@ -6,9 +9,11 @@ export interface SchemaToolObject {
     job?: string;
     values?: string[];
     seperator?: string;
+    custom?: Function;
   };
   join: JoinMethod;
   with: WithMethod;
+  custom: CustomMethod;
 }
 
 class SchemaTool {
@@ -16,6 +21,7 @@ class SchemaTool {
     job?: string;
     values?: string[];
     seperator?: string;
+    custom?: Function;
   };
 
   constructor() {
@@ -30,6 +36,13 @@ class SchemaTool {
 
   with(seperator: string) {
     this.__schema__.seperator = seperator;
+    return this;
+  }
+
+  custom(fn: Function, ...args: string[]) {
+    this.__schema__.values = args;
+    this.__schema__.job = "custom";
+    this.__schema__.custom = fn;
     return this;
   }
 }

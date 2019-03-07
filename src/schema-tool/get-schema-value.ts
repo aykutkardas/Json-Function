@@ -32,6 +32,13 @@ const recursive: RecursiveFunction = (schema, item, fields) => {
         schema[fieldName] = values.join(seperator);
       }
 
+      if (job === "custom") {
+        const { custom } = __schema__;
+        if (typeof custom === 'function') {
+          schema[fieldName] = custom(...values);
+        }
+      }
+
     } else if (isObject(activeField)) {
       recursive(activeField, item, fields);
     }

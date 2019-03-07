@@ -106,4 +106,32 @@ describe('Schema Tools Function', () => {
       },
     ]);
   });
+  it('.custom() method.', () => {
+    const result = schema(data, (sc) => ({
+      fullName: sc.custom((firstname: string, lastname: string) => {
+        return firstname.toUpperCase() + ' ' + lastname.toUpperCase();
+      }, 'user.firstname', 'user.lastname'),
+      book: {
+        id: 'id',
+        title: 'title',
+      },
+    }));
+
+    expect(result).to.deep.equal([
+      {
+        fullName: 'JOHN DOE',
+        book: {
+          id: 0,
+          title: 'Book Name',
+        },
+      },
+      {
+        fullName: 'JOHNNY DOE',
+        book: {
+          id: 1,
+          title: 'Book Name 2',
+        },
+      },
+    ]);
+  });
 });
