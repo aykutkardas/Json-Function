@@ -40,11 +40,11 @@ const data = [
 
 describe("Utils Functions", () => {
   it("Get-Object-Deep-Prop function not found.", () => {
-    const result = getObjDeepProp(data[3], "education.isDone");
-    expect(result).to.deep.equal(false);
+    const result = getObjDeepProp("education.isDone")(data[3]);
+    expect(result).to.deep.equal(undefined);
   });
   it("Get-Object-Deep-Prop function found.", () => {
-    const result = getObjDeepProp(data[0], "education.isDone");
+    const result = getObjDeepProp("education.isDone")(data[0]);
     expect(result).to.deep.equal(true);
   });
 });

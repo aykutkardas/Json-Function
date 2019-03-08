@@ -32,7 +32,7 @@ const where: WhereFunction = (data, queries, options) => {
       matchingItems = data.filter((item, index) => {
         let value = item[fieldName];
         if (options && options.deep) {
-          value = getObjDeepProp(item, fieldName);
+          value = getObjDeepProp(fieldName)(item);
         }
         return value === query[fieldName];
       });

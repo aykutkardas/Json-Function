@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.5",
+    "@types/node": "^11.10.5",
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-minify": "^0.5.0",
@@ -42,5 +43,8 @@
   "bugs": {
     "url": "https://github.com/aykutkardas/json-function/issues"
   },
-  "homepage": "https://github.com/aykutkardas/json-function#readme"
+  "homepage": "https://github.com/aykutkardas/json-function#readme",
+  "dependencies": {
+    "lodash.clonedeep": "^4.5.0"
+  }
 }

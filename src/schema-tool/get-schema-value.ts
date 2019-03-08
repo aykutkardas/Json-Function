@@ -2,7 +2,7 @@ import { SchemaToolObject } from "./";
 import getObjDeepProp from "../utils/get-obj-deep-prop";
 import { isString, isObject } from '../type-check';
 
-type RecursiveFunction = (
+type SchemaFunction = (
   schema: Object,
   item: Object,
   fields: string[]
@@ -11,41 +11,42 @@ type RecursiveFunction = (
 const isSchemeToolsObject = (obj: SchemaToolObject) =>
   obj instanceof Object && obj.__schema__;
 
-const recursive: RecursiveFunction = (schema, item, fields) => {
+const schemaToolGenerator = (obj: SchemaToolObject, item: Object) => {
+  const { __schema__ } = obj;
+  const { job, seperator = " " } = __schema__;
+  let { values = [] } = __schema__;
+
+  values = values.map((value: string) => getObjDeepProp(value)(item));
+
+  if (job === "join") {
+    return values.join(seperator);
+  }
+
+  if (job === "custom") {
+    const { custom } = __schema__;
+    if (typeof custom === 'function') {
+      return custom(...values);
+    }
+  }
+}
+
+const getSchemaValue: SchemaFunction = (schema, item, fields) => {
   Object.keys(schema).forEach(fieldName => {
     const activeField = schema[fieldName];
 
     if (isString(activeField) && fields.indexOf(fieldName) === -1) {
-
-      schema[fieldName] = getObjDeepProp(item, activeField);
+      schema[fieldName] = getObjDeepProp(activeField)(item);
       fields.push(fieldName);
-
     } else if (isSchemeToolsObject(activeField)) {
-
-      const { __schema__ } = activeField;
-      const { job, seperator = " " } = __schema__;
-      let { values = [] } = __schema__;
-
-      values = values.map((value: string) => getObjDeepProp(item, value));
-
-      if (job === "join") {
-        schema[fieldName] = values.join(seperator);
-      }
-
-      if (job === "custom") {
-        const { custom } = __schema__;
-        if (typeof custom === 'function') {
-          schema[fieldName] = custom(...values);
-        }
-      }
-
+      schema[fieldName] = schemaToolGenerator(activeField, item);
     } else if (isObject(activeField)) {
-      recursive(activeField, item, fields);
+      getSchemaValue(activeField, item, fields);
     }
+
   });
 
   fields.length = 0;
   return schema;
 };
 
-export default recursive;
+export default getSchemaValue;

@@ -1,6 +1,8 @@
 import SchemaTools from './schema-tool';
 import getSchemaValue from './schema-tool/get-schema-value';
 
+const cloneDeep = require('lodash.clonedeep');
+
 type SchemaFunction = (data: Object[], schema: Object | Function) => Object[];
 
 const schema: SchemaFunction = (data = [], schema = {}) => {
@@ -14,16 +16,7 @@ const schema: SchemaFunction = (data = [], schema = {}) => {
   const fields: string[] = [];
 
   data.forEach(item => {
-    const temp = JSON.parse(JSON.stringify(schemaObj));
-
-    Object.keys(schemaObj).forEach(key => {
-      if (!schemaObj[key].__schema__) {
-        return false;
-      }
-      Object.keys(schemaObj[key].__schema__).forEach(subKey => {
-        temp[key].__schema__[subKey] = schemaObj[key].__schema__[subKey];
-      });
-    });
+    const temp = cloneDeep(schemaObj);
     result.push(getSchemaValue(temp, item, fields));
   });
 

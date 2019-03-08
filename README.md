@@ -103,7 +103,7 @@ Custom seperator
 ```js
 schema(data, (sc) => ({
   id: 'id',
-  fullName: sc.join('user.firstname', 'user.lastname').with('_')
+  fullName: sc.join('user.firstname', 'user.lastname', { seperator: '_' })
 }));
 ```
 
