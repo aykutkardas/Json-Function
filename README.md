@@ -107,6 +107,29 @@ schema(data, (sc) => ({
 }));
 ```
 
+Use your own special function.
+```js
+schema(data, (sc) => ({
+  id: 'id',
+  fullName: sc.custom(
+    (firstname, lastname) => `${firstname.toUpperCase()} ${lastname.toUpperCase()}`,
+    "user.firstname",
+    "user.lastname"
+  ),
+}))
+```
+
+Example
+```js
+schema(data, (sc) => ({
+  id: 'id',
+  createdAt: sc.custom(
+    (createdAt) => moment(createdAt).format('DD/MM/YYYY'),
+    "createdAt",
+  ),
+}))
+```
+
 ## where [• documentation](https://worn.gitbook.io/json-function/functions/where)
 
 
