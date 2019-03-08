@@ -1,40 +1,9 @@
-import { isObject, isString } from "../type-check";
+// https://github.com/burakcan/mb
 
-type GetObjDeepPropFunction = (
-  obj: Object,
-  props: string,
-  defaultValue?: any
-) => any;
+// Original
+// var mb=p=>o=>p.map(c=>o=(o||{})[c])&&o
 
-const getObjDeepProp: GetObjDeepPropFunction = (obj, props, defaultValue) => {
-  if (!isObject(obj)) {
-    return false;
-  }
+// Customize
+const mb = p => o => p.split('.').map(c => o = (o || {})[c]) && o;
 
-  if (!isString(props)) {
-    return obj;
-  }
-
-  const propsArr = props.split(".");
-  let rootObj: any = obj;
-
-  propsArr.forEach(prop => {
-    if (!rootObj) {
-      rootObj = false;
-      return;
-    }
-    if (
-      typeof rootObj[prop] !== "undefined" ||
-      rootObj[prop] !== null ||
-      !isNaN(rootObj[prop])
-    ) {
-      rootObj = rootObj[prop];
-      return;
-    }
-    rootObj = false;
-  });
-
-  return rootObj !== false ? rootObj : defaultValue || false;
-};
-
-export default getObjDeepProp;
+export default mb;

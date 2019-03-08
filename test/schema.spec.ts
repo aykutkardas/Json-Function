@@ -80,9 +80,9 @@ describe('Schema Tools Function', () => {
       },
     ]);
   });
-  it('.join().with() method.', () => {
+  it('.join() method use with seperator.', () => {
     const result = schema(data, (sc) => ({
-      fullName: sc.join('user.firstname', 'user.lastname').with('_'),
+      fullName: sc.join('user.firstname', 'user.lastname', { seperator: '_' }),
       book: {
         id: 'id',
         title: 'title',
@@ -131,6 +131,58 @@ describe('Schema Tools Function', () => {
           id: 1,
           title: 'Book Name 2',
         },
+      },
+    ]);
+  });
+  it('complex sc methods.', () => {
+    const result = schema(data, (sc) => ({
+      fullName: sc.join('user.firstname', 'user.lastname'),
+      book: {
+        deepTitle: sc.custom((title: string) => title.toUpperCase(), "title"),
+      },
+      id: sc.custom((id: number) => id + 1, "id"),
+    }));
+
+    expect(result).to.deep.equal([
+      {
+        fullName: 'John Doe',
+        id: 1,
+        book: {
+          deepTitle: 'BOOK NAME',
+        }
+      },
+      {
+        fullName: 'Johnny Doe',
+        id: 2,
+        book: {
+          deepTitle: 'BOOK NAME 2',
+        }
+      },
+    ]);
+  });
+  it('duplicate .join() methods.', () => {
+    const result = schema(data, (sc) => ({
+      fullName: sc.join('user.firstname', 'user.lastname'),
+      book: {
+        deepTitle: sc.join('id', 'title'),
+      },
+      oneRowData: sc.join('id', 'title', 'user.firstname', 'user.lastname', { seperator: '_' }),
+    }));
+
+    expect(result).to.deep.equal([
+      {
+        fullName: 'John Doe',
+        book: {
+          deepTitle: '0 Book Name',
+        },
+        oneRowData: '0_Book Name_John_Doe'
+      },
+      {
+        fullName: 'Johnny Doe',
+        book: {
+          deepTitle: '1 Book Name 2',
+        },
+        oneRowData: '1_Book Name 2_Johnny_Doe'
       },
     ]);
   });

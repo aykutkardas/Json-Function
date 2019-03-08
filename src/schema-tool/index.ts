@@ -1,5 +1,3 @@
-import { schema } from "..";
-
 type JoinMethod = (...args: string[]) => SchemaToolObject;
 type CustomMethod = (fn: Function, ...args: string[]) => SchemaToolObject;
 type WithMethod = (seperator: string) => SchemaToolObject;
@@ -10,40 +8,47 @@ export interface SchemaToolObject {
     values?: string[];
     seperator?: string;
     custom?: Function;
-  };
+  }
+}
+
+export interface SchemaToolObject {
   join: JoinMethod;
   with: WithMethod;
   custom: CustomMethod;
 }
 
 class SchemaTool {
-  __schema__: {
-    job?: string;
-    values?: string[];
-    seperator?: string;
-    custom?: Function;
-  };
-
-  constructor() {
-    this.__schema__ = {};
-  }
-
   join(...args: string[]) {
-    this.__schema__.values = args;
-    this.__schema__.job = "join";
-    return this;
-  }
+    let config: Object = { seperator: ' ' };
+    const values: string[] = [];
 
-  with(seperator: string) {
-    this.__schema__.seperator = seperator;
-    return this;
+    args.forEach(arg => {
+      if (typeof arg === 'string') {
+        values.push(arg);
+        return;
+      }
+      if (typeof arg === 'object') {
+        config = { ...(<Object>arg) };
+      }
+    });
+
+    return {
+      __schema__: {
+        values,
+        ...config,
+        job: 'join',
+      }
+    };
   }
 
   custom(fn: Function, ...args: string[]) {
-    this.__schema__.values = args;
-    this.__schema__.job = "custom";
-    this.__schema__.custom = fn;
-    return this;
+    return {
+      __schema__: {
+        values: args,
+        job: 'custom',
+        custom: fn,
+      }
+    }
   }
 }
 

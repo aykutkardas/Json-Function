@@ -30,7 +30,7 @@ const innerJoin: InnerJoinFunction = (
   data = data.map(item => {
     const [otherDataItem] = where(
       otherData,
-      { [otherDataFieldName]: getObjDeepProp(item, dataFieldName) },
+      { [otherDataFieldName]: getObjDeepProp(dataFieldName)(item) },
       { deep: true }
     );
 
