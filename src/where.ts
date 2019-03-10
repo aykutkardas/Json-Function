@@ -1,6 +1,5 @@
 import { isArray, isObject, isArrayOfObject } from "./type-check";
 import getObjDeepProp from "./utils/get-obj-deep-prop";
-import { SSL_OP_NETSCAPE_CA_DN_BUG } from "constants";
 
 type WhereFunction = (
   data: Object[],
@@ -51,7 +50,7 @@ const where: WhereFunction = (data, queries, options) => {
     return [];
   }
 
-  let queriesArr: (Object)[];
+  let queriesArr: Object[];
 
   if (isObject(queries)) {
     queriesArr = [queries];
