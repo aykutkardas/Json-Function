@@ -1,1 +1,5 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var _typeCheck=require("../type-check"),getObjDeepProp=function(a,b,c){if(!(0,_typeCheck.isObject)(a))return!1;if(!(0,_typeCheck.isString)(b))return a;var d=b.split("."),e=a;return d.forEach(function(a){return e?"undefined"==typeof e[a]&&null===e[a]&&isNaN(e[a])?void(e=!1):void(e=e[a]):void(e=!1)}),!1===e?c||!1:e};exports.default=getObjDeepProp;
+'use strict';Object.defineProperty(exports,'__esModule',{value:!0});// https://github.com/burakcan/mb
+// Original
+// var mb=p=>o=>p.map(c=>o=(o||{})[c])&&o
+// Customize
+var mb=function(a){return function(b){return a.split('.').map(function(a){return b=(b||{})[a]})&&b}};exports.default=mb;
