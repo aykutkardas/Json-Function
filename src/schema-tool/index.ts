@@ -28,7 +28,7 @@ class SchemaTool {
         return;
       }
       if (typeof arg === 'object') {
-        config = { ...(<Object>arg) };
+        config = { ...config, ...(<Object>arg) };
       }
     });
 

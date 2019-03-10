@@ -29,13 +29,17 @@ const isDefined: TypeCheckFunction = value => value !== undefined;
 const isOneOf: OneOfCheckFunction = (value, options) =>
   isArray(options) ? options.includes(value) : false;
 
+const isSchemeToolsObject: TypeCheckFunction = value =>
+  isObject(value) && isObject(value.__schema__);
+
 export {
-  isNumber,
+  isOneOf,
   isArray,
+  isString,
+  isNumber,
+  isObject,
+  isDefined,
   isArrayOfString,
   isArrayOfObject,
-  isString,
-  isDefined,
-  isOneOf,
-  isObject
+  isSchemeToolsObject
 };

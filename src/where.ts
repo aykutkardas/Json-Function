@@ -29,7 +29,7 @@ const where: WhereFunction = (data, queries, options) => {
 
   queriesArr.forEach(query => {
     Object.keys(query).forEach(fieldName => {
-      matchingItems = data.filter((item, index) => {
+      matchingItems = data.filter((item) => {
         let value = item[fieldName];
         if (options && options.deep) {
           value = getObjDeepProp(fieldName)(item);
