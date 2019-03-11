@@ -6,7 +6,7 @@ type WhereFunction = (
   queries: Object | Object[],
   options?: {
     deep?: boolean;
-  }
+  },
 ) => Object[];
 
 enum ComparisonOperators {
@@ -22,14 +22,33 @@ enum ComparisonOperators {
   NotIn = 'not in',
   Regex = 'regex'
 }
-const checkOperator = (operator: string, opcode?: any): (Error | void) => {
+
+const operatorsWithComparableArrayorObject = [
+  ComparisonOperators.StrictEqual,
+  ComparisonOperators.StrictNotEqual
+];
+
+/**
+ * Checks the operator and the opcode are run with stable 
+ * @param operator 
+ * @param opcode 
+ */
+const checkOperator = (operator: string, opcode?: any): void => {
+
+  console.log(operator, opcode);
+
   if (!(Object.values(ComparisonOperators).includes(operator))) {
-    return new Error(`The given operator is not supporting.`);
+    throw new Error(`The given operator is not supporting.`);
   }
 
   if ((operator == ComparisonOperators.In || operator == ComparisonOperators.NotIn) &&
-    (opcode instanceof Array)) {
-    return Error(`Opcode should be instance of an Array in 'in' and 'not in' comparisons`);
+    !(opcode instanceof Array)) {
+    throw new Error(`Opcode should be instance of an Array in 'in' and 'not in' comparisons`);
+  }
+
+  if (!operatorsWithComparableArrayorObject.includes(operator as ComparisonOperators)
+    && (opcode instanceof Array || opcode instanceof Object)) {
+    throw new Error(`The operator should be one of these ${operatorsWithComparableArrayorObject.join(',')} when the opcode is Array or Object.`);
   }
 
 }
@@ -40,12 +59,13 @@ const checkOperator = (operator: string, opcode?: any): (Error | void) => {
  * @param opcode The second opcode in one condition
  */
 const logical = (operator: string, opcode: any): (Error | Object) => {
+
   checkOperator(operator, opcode);
 
   return { operator, opcode };
 }
 
-const where: WhereFunction = (data, queries, options) => {
+const where: WhereFunction = (data, queries, options?) => {
   if (!isArray(data)) {
     return [];
   }
@@ -74,13 +94,26 @@ const where: WhereFunction = (data, queries, options) => {
 
         if (query[fieldName] instanceof Object) {
           const { operator, opcode } = query[fieldName];
-          checkOperator(operator);
+          checkOperator(operator,opcode);
+          
+          /* When the opcode is array or object then compare two same typed variables */
+          if (operatorsWithComparableArrayorObject.includes(operator as ComparisonOperators)
+            && (opcode instanceof Array || opcode instanceof Object)
+          ) {
+            if (operator == ComparisonOperators.StrictEqual) {
+              return JSON.stringify(opcode) === JSON.stringify(value);
+            } else {
+              return !(JSON.stringify(opcode) === JSON.stringify(value));
+            }
+          }
 
+          /* compare with regex */
           if (operator == ComparisonOperators.Regex) {
             const pattern = new RegExp(opcode);
             return pattern.test(value);
           }
 
+          /* compare with includes */
           if (operator == ComparisonOperators.In) {
             return opcode.includes(value);
           }
@@ -89,6 +122,7 @@ const where: WhereFunction = (data, queries, options) => {
             return !opcode.includes(value);
           }
 
+          /* it could be dangerous but taken some preventions like checking operator. */
           return eval(`${value} ${operator} ${opcode}`);
         }
 
