@@ -34,9 +34,7 @@ const operatorsWithComparableArrayorObject = [
  * @param opcode 
  */
 const checkOperator = (operator: string, opcode?: any): void => {
-
-  console.log(operator, opcode);
-
+  
   if (!(Object.values(ComparisonOperators).includes(operator))) {
     throw new Error(`The given operator is not supporting.`);
   }
