@@ -1,12 +1,12 @@
 type JoinMethod = (...args: string[]) => SchemaToolObject;
 type CustomMethod = (fn: Function, ...args: string[]) => SchemaToolObject;
-type WithMethod = (seperator: string) => SchemaToolObject;
+type WithMethod = (separator: string) => SchemaToolObject;
 
 export interface SchemaToolObject {
   __schema__: {
     job?: string;
     values?: string[];
-    seperator?: string;
+    separator?: string;
     custom?: Function;
   }
 }
@@ -19,7 +19,7 @@ export interface SchemaToolObject {
 
 class SchemaTool {
   join(...args: string[]) {
-    let config: Object = { seperator: ' ' };
+    let config: Object = { separator: ' ' };
     const values: string[] = [];
 
     args.forEach(arg => {

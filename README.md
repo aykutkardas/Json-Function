@@ -98,12 +98,12 @@ schema(data, (sc) => ({
 }));
 ```
 
-Custom seperator
+Custom separator
 
 ```js
 schema(data, (sc) => ({
   id: 'id',
-  fullName: sc.join('user.firstname', 'user.lastname', { seperator: '_' })
+  fullName: sc.join('user.firstname', 'user.lastname', { separator: '_' })
 }));
 ```
 

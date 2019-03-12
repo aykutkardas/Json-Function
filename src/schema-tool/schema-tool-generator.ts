@@ -3,13 +3,13 @@ import { SchemaToolObject } from "./";
 
 const schemaToolGenerator = (obj: SchemaToolObject, item: Object) => {
   const { __schema__ } = obj;
-  const { job, seperator = " " } = __schema__;
+  const { job, separator = " " } = __schema__;
   let { values = [] } = __schema__;
 
   values = values.map((value: string) => getObjDeepProp(value)(item));
 
   if (job === "join") {
-    return values.join(seperator);
+    return values.join(separator);
   }
 
   if (job === "custom") {

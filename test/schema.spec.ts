@@ -80,9 +80,9 @@ describe('Schema Tools Function', () => {
       },
     ]);
   });
-  it('.join() method use with seperator.', () => {
+  it('.join() method use with separator.', () => {
     const result = schema(data, (sc) => ({
-      fullName: sc.join('user.firstname', 'user.lastname', { seperator: '_' }),
+      fullName: sc.join('user.firstname', 'user.lastname', { separator: '_' }),
       book: {
         id: 'id',
         title: 'title',
@@ -166,7 +166,7 @@ describe('Schema Tools Function', () => {
       book: {
         deepTitle: sc.join('id', 'title'),
       },
-      oneRowData: sc.join('id', 'title', 'user.firstname', 'user.lastname', { seperator: '_' }),
+      oneRowData: sc.join('id', 'title', 'user.firstname', 'user.lastname', { separator: '_' }),
     }));
 
     expect(result).to.deep.equal([
