@@ -94,3 +94,19 @@ describe("Where function", () => {
     ]);
   });
 });
+
+describe("Where Tools Function", () => {
+  it(".gt() method.", () => {
+    const result = where(data, wh => ({
+      id: wh.gt(3)
+    }));
+    expect(result).to.deep.equal([
+      {
+        userId: 1,
+        id: 4,
+        title: "et porro tempora",
+        completed: true
+      }
+    ]);
+  });
+});
