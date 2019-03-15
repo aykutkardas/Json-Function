@@ -145,6 +145,28 @@ where(data, { completed: false });
 where(data, [{ completed: false }, { userId: 2 }]);
 ```
 
+Use "callback" for advanced filter.
+
+```js
+// id <= 3
+where(data, (wh) => ({
+  id: wh.lte(3),
+}));
+```
+
+Other **wh** methods.
+```js
+wh.lte(3)        // value <= 3
+wh.lt(3)         // value <  3
+wh.gte(3)        // value >= 3
+wh.gt(3)         // value >  3
+wh.between(3,5)  // value >= 3 && value <= 5
+wh.eq("3")       // value == 3
+wh.ne("3")       // value != 3
+wh.in('test')    // value.includes('test')
+wh.nin('test')   // !value.includes('test')
+```
+
 ## select [• documentation](https://worn.gitbook.io/json-function/functions/select)
 
 
