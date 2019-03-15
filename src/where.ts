@@ -41,23 +41,26 @@ const where: WhereFunction = (data, queries, options) => {
         }
 
         if (isObject(activeQuery) && activeQuery.type) {
-          const { type } = activeQuery;
+          const { type, value: argValue } = activeQuery;
           if (type === ">") {
-            return value > activeQuery.value;
+            return value > argValue;
           } else if (type === ">=") {
-            return value >= activeQuery.value;
+            return value >= argValue;
           } else if (type === "<") {
-            return value < activeQuery.value;
+            return value < argValue;
           } else if (type === "<=") {
-            return value <= activeQuery.value;
+            return value <= argValue;
           } else if (type === "includes") {
-            return value.includes(activeQuery.value);
+            return value.includes(argValue);
           } else if (type === "!includes") {
-            return !value.includes(activeQuery.value);
+            return !value.includes(argValue);
           } else if (type === "==") {
-            return value == activeQuery.value;
+            return value == argValue;
           } else if (type === "!=") {
-            return value != activeQuery.value;
+            return value != argValue;
+          } else if (type === "between") {
+            const [min, max] = argValue;
+            return value >= min && value <= max;
           }
 
           return false;

@@ -61,6 +61,13 @@ class WhereTool {
     }
   }
 
+  between(minValue: number, maxValue: number): WhereToolObject {
+    return {
+      value: [minValue, maxValue],
+      type: 'between'
+    }
+  }
+
 }
 
 export default new WhereTool();

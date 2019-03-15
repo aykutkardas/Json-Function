@@ -284,6 +284,67 @@ describe("Where Tools Function", () => {
         completed: true
       }
     ]);
+  });
+  it(".between() method.", () => {
+    const result = where(data, wh => ({
+      id: wh.between(1,3)
+    }));
+    expect(result).to.deep.equal([
+      {
+        userId: 1,
+        id: 1,
+        title: "delectus aut autem",
+        completed: false,
+        education: {
+          isDone: true
+        }
+      },
+      {
+        userId: 2,
+        id: 2,
+        title: "quis ut nam facilis et officia qui",
+        completed: false,
+        education: {
+          isDone: false
+        }
+      },
+      {
+        userId: 2,
+        id: 3,
+        title: "fugiat veniam minus",
+        completed: false,
+        education: {
+          isDone: false
+        }
+      }
+    ]);
+    
+  });
+  it("duplicate advanced where method.", () => {
+    const result = where(data, wh => ({
+      id: wh.lte(3),
+      userId: wh.gt(1),
+    }));
+    expect(result).to.deep.equal([
+      {
+        userId: 2,
+        id: 2,
+        title: "quis ut nam facilis et officia qui",
+        completed: false,
+        education: {
+          isDone: false
+        }
+      },
+      {
+        userId: 2,
+        id: 3,
+        title: "fugiat veniam minus",
+        completed: false,
+        education: {
+          isDone: false
+        }
+      }
+    ]);
     
   });
 });
