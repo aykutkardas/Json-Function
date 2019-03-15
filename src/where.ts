@@ -56,8 +56,8 @@ const where: WhereFunction = (data, queries, options) => {
             return !value.includes(activeQuery.value);
           } else if (type === "==") {
             return value == activeQuery.value;
-          } else if (type === "===") {
-            return value === activeQuery.value;
+          } else if (type === "!=") {
+            return value != activeQuery.value;
           }
 
           return false;
