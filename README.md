@@ -3,8 +3,6 @@
 [![Build Status](https://travis-ci.com/aykutkardas/Json-Function.svg?branch=master)](https://travis-ci.com/aykutkardas/Json-Function)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
-**Full Size** _~4 kb_
-
 
 ## [Documentation](https://worn.gitbook.io/json-function/) • [Changelog](https://worn.gitbook.io/json-function/changelog)
 
@@ -93,8 +91,8 @@ Use "callback" for advanced conversions.
 
 ```js
 schema(data, (sc) => ({
-  id: 'id',
-  fullName: sc.join('user.firstname', 'user.lastname')
+  id: "id",
+  fullName: sc.join("user.firstname", "user.lastname")
 }));
 ```
 
@@ -102,15 +100,15 @@ Custom separator
 
 ```js
 schema(data, (sc) => ({
-  id: 'id',
-  fullName: sc.join('user.firstname', 'user.lastname', { separator: '_' })
+  id: "id",
+  fullName: sc.join("user.firstname", "user.lastname", { separator: "_" })
 }));
 ```
 
 Use your own special function.
 ```js
 schema(data, (sc) => ({
-  id: 'id',
+  id: "id",
   fullName: sc.custom(
     (firstname, lastname) => `${firstname.toUpperCase()} ${lastname.toUpperCase()}`,
     "user.firstname",
@@ -122,9 +120,9 @@ schema(data, (sc) => ({
 Example
 ```js
 schema(data, (sc) => ({
-  id: 'id',
+  id: "id",
   createdAt: sc.custom(
-    (createdAt) => moment(createdAt).format('DD/MM/YYYY'),
+    (createdAt) => moment(createdAt).format("DD/MM/YYYY"),
     "createdAt",
   ),
 }))
@@ -163,8 +161,8 @@ wh.gt(3)         // value >  3
 wh.between(3,5)  // value >= 3 && value <= 5
 wh.eq("3")       // value == 3
 wh.ne("3")       // value != 3
-wh.in('test')    // value.includes('test')
-wh.nin('test')   // !value.includes('test')
+wh.in("test")    // value.includes("test")
+wh.nin("test")   // !value.includes("test")
 ```
 
 ## select [• documentation](https://worn.gitbook.io/json-function/functions/select)
