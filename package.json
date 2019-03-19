@@ -44,7 +44,5 @@
     "url": "https://github.com/aykutkardas/json-function/issues"
   },
   "homepage": "https://github.com/aykutkardas/json-function#readme",
-  "dependencies": {
-    "lodash.clonedeep": "^4.5.0"
-  }
+  "dependencies": {}
 }
