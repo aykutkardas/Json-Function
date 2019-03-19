@@ -1,7 +1,6 @@
 import SchemaTools from './schema-tool';
 import getSchemaValue from './schema-tool/get-schema-value';
-
-const cloneDeep = require('lodash.clonedeep');
+import { cloneDeep } from './utils';
 
 type SchemaFunction = (data: Object[], schema: Object | Function) => Object[];
 

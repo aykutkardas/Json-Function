@@ -1,2 +1,6 @@
 test/
 src/
+.babelrc
+.travis.yml
+tsconfig.json
+yarn.lock

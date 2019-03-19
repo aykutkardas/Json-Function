@@ -1,7 +1,3 @@
-type JoinMethod = (...args: string[]) => SchemaToolObject;
-type CustomMethod = (fn: Function, ...args: string[]) => SchemaToolObject;
-type WithMethod = (separator: string) => SchemaToolObject;
-
 export interface SchemaToolObject {
   __schema__: {
     job?: string;
@@ -11,14 +7,8 @@ export interface SchemaToolObject {
   }
 }
 
-export interface SchemaToolObject {
-  join: JoinMethod;
-  with: WithMethod;
-  custom: CustomMethod;
-}
-
-class SchemaTool {
-  join(...args: string[]) {
+export default {
+  join: (...args: string[]): SchemaToolObject => {
     let config: Object = { separator: ' ' };
     const values: string[] = [];
 
@@ -39,17 +29,13 @@ class SchemaTool {
         job: 'join',
       }
     };
-  }
+  },
 
-  custom(fn: Function, ...args: string[]) {
-    return {
+  custom: (fn: Function, ...args: string[]): SchemaToolObject => ({
       __schema__: {
         values: args,
         job: 'custom',
         custom: fn,
       }
-    }
-  }
+  })
 }
-
-export default new SchemaTool();
