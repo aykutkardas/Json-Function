@@ -199,3 +199,17 @@ import { orderBy } from "json-function";
 
 orderBy(data, "title", "DESC");
 ```
+
+
+## toArray [• documentation](https://worn.gitbook.io/json-function/functions/to-array)
+
+
+```js
+import { toArray } from "json-function";
+
+// default key "uid"
+toArray(data);
+
+// custom key
+toArray(data, { key: "_id_" });
+```
