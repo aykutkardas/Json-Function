@@ -11,7 +11,7 @@ const toArray: ToArrayFunction = (data, config) => {
     return data;
   }
 
-  if(!isObject) {
+  if(!isObject(data)) {
     return [];
   }
 
