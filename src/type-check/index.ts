@@ -10,6 +10,8 @@ const isNumber: TypeCheckFunction = value => typeof value === "number" && !isNaN
 
 const isString: TypeCheckFunction = value => typeof value === "string";
 
+const isFunction: TypeCheckFunction = value => value && typeof value === "function";
+
 const isArray: TypeCheckFunction = value => value && Array.isArray(value);
 
 const isArrayOfString: TypeCheckFunction = value => isArray(value) && 
@@ -20,7 +22,6 @@ const isArrayOfObject: TypeCheckFunction = value => isArray(value) &&
 
 const isObject: TypeCheckFunction = value =>
   value && getType(value) === "[object Object]";
-
 
 const isOneOf: OneOfCheckFunction = (value, options) =>
   isArray(options) ? options.includes(value) : false;
@@ -35,6 +36,7 @@ export {
   isNumber,
   isObject,
   isDefined,
+  isFunction,
   isArrayOfString,
   isArrayOfObject,
   isSchemeToolsObject

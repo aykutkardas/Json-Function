@@ -1,4 +1,4 @@
-import { isArray, isObject, isArrayOfObject } from "./type-check";
+import { isArray, isObject, isFunction, isArrayOfObject } from "./type-check";
 import getObjDeepProp from "./utils/get-obj-deep-prop";
 import WhereTool from "./where-tool";
 
@@ -21,8 +21,8 @@ const where: WhereFunction = (data, queries, options) => {
     queriesArr = [queries];
   } else if (isArrayOfObject(queries)) {
     queriesArr = <Object[]>queries;
-  } else if (typeof queries === "function") {
-    queriesArr = [queries(WhereTool)];
+  } else if (isFunction(queries)) {
+    queriesArr = [(<Function>queries)(WhereTool)];
   } else {
     return data;
   }
