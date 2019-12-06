@@ -4,6 +4,7 @@ import {
   limit as Limit,
   select as Select,
   schema as Schema,
+  transform as Transform,
   innerJoin as InnerJoin
 } from ".";
 
@@ -85,6 +86,10 @@ class JsonFunction {
           this.data = Schema(this.data, schema);
           break;
 
+        case "transform":
+          this.data = Transform(this.data);
+          break;
+
         case "innerJoin":
           const [otherData, dataFieldName, otherDataFieldName] = innerJoin;
           this.data = InnerJoin(
@@ -119,6 +124,11 @@ class JsonFunction {
   schema(schema: Object) {
     this.option.schema = schema;
     this.process.push("schema");
+    return this;
+  }
+
+  transform() {
+    this.process.push("transform");
     return this;
   }
 
