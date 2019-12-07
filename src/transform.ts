@@ -2,14 +2,14 @@ import { isArray, isObject } from "./type-check";
 
 type TransformFunction = (data: Object[]) => Object[];
 
-const renameKeys = (obj: Object): Object => {
-  const temp = Object.entries(obj).map(([key, val]) => [
+const transformKeys = (obj: Object): Object => {
+  const tempObj = Object.entries(obj).map(([key, val]) => [
     key.replace(/_(.)/g, g =>  g[1].toUpperCase()),
     processVal(val)
   ]);
 
   const newObject = {};
-  temp.forEach(([key, val]) => {
+  tempObj.forEach(([key, val]) => {
     newObject[key] = val;
   });
 
@@ -20,9 +20,9 @@ const processVal = (val: any): any => {
   if(typeof(val) !== 'object' ) {
     return val;
   } else if (isArray(val)) {
-    return val.map(renameKeys);
+    return val.map(transformKeys);
   } else {
-    return renameKeys(val);
+    return transformKeys(val);
   }
 } 
 
@@ -31,7 +31,7 @@ const transform: TransformFunction = (data) => {
     return [];
   }
 
-  return data.map(item => renameKeys(item));
+  return data.map(item => transformKeys(item));
 }
 
 export default transform;
