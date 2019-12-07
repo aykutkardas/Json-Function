@@ -4,25 +4,25 @@ import "mocha";
 
 const data = [
   {
-    userId: 1,
+    user_id: 1,
     id: 1,
     title: "delectus aut autem",
     completed: false
   },
   {
-    userId: 1,
+    user_id: 1,
     id: 2,
     title: "quis ut nam facilis et officia qui",
     completed: false
   },
   {
-    userId: 1,
+    user_id: 1,
     id: 3,
     title: "fugiat veniam minus",
     completed: false
   },
   {
-    userId: 1,
+    user_id: 1,
     id: 4,
     title: "et porro tempora",
     completed: true
@@ -74,6 +74,37 @@ describe("JsonFunction Class", () => {
       }
     ]);
   });
+
+  it("Method Chaining Test with transform.", () => {
+    const result = JsonFunction.where({ completed: false })
+      .orderBy("title", "DESC")
+      .limit(2)
+      .innerJoin(data2, "id", "id")
+      .transform() // user_id > userId
+      .select(["userId", "firstName", "title", "completed"])
+      .schema({
+        id: "userId",
+        firstName: "firstName",
+        todo: {
+          title: "title",
+          completed: "completed"
+        }
+      })
+      .get(data);
+    expect(result).to.deep.equal([
+      {
+        id: 1,
+        firstName: "Mike",
+        todo: { title: "quis ut nam facilis et officia qui", completed: false }
+      },
+      {
+        id: 1,
+        firstName: "David",
+        todo: { title: "fugiat veniam minus", completed: false }
+      }
+    ]);
+  });
+
   it("Method Standard Use Test", () => {
     JsonFunction.where({ completed: false });
     JsonFunction.select(["title", "completed"]);
@@ -124,7 +155,7 @@ describe("JsonFunction Class", () => {
       }
     ]);
   });
-  
+
   it("setQuery and getQuery test", () => {
 
     const unCompleteTodoQuery = JsonFunction
@@ -135,7 +166,7 @@ describe("JsonFunction Class", () => {
       .getQuery();
 
     const result = JsonFunction.setQuery(unCompleteTodoQuery).get(data);
-    
+
     const result2 = JsonFunction.get(data, { query: unCompleteTodoQuery });
 
     expect(unCompleteTodoQuery).to.deep.equal({
@@ -167,5 +198,4 @@ describe("JsonFunction Class", () => {
       }
     ]);
   });
-
 });
