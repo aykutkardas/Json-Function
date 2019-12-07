@@ -3,8 +3,9 @@
 [![Build Status](https://travis-ci.com/aykutkardas/Json-Function.svg?branch=master)](https://travis-ci.com/aykutkardas/Json-Function)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
-
 ## [Documentation](https://worn.gitbook.io/json-function/) • [Changelog](https://worn.gitbook.io/json-function/changelog)
+
+Lets you use where, limit, select, orderBy, and more in JSON data.
 
 ## Install
 
@@ -12,9 +13,19 @@
 npm install json-function
 ```
 
+or
+
+```
+yarn add json-function
+```
+
 # Usage
 
 ## JsonFunction [• documentation](https://worn.gitbook.io/json-function/)
+
+Json-Function provides a lot of useful functions especially for your json data. It contains the methods you need too much to eliminate unnecessary code repetition.
+
+You can use the Json-Function methods separately, but it is possible to use them all together. You can also chain it.
 
 Chaining
 
@@ -65,6 +76,8 @@ Instead of an entire "class", you can use only the methods you need.
 
 ## innerJoin [• documentation](https://worn.gitbook.io/json-function/functions/inner-join)
 
+The "innerJoin" function is used to join two arrays.
+
 
 ```js
 import { innerJoin } from "json-function";
@@ -73,6 +86,8 @@ innerJoin(data, data2, "id", "userId");
 ```
 
 ## schema [• documentation](https://worn.gitbook.io/json-function/functions/schema)
+
+The "Schema" function is a great way to reconfigure your json data and make it your own.
 
 ```js
 import { schema } from "json-function";
@@ -130,6 +145,7 @@ schema(data, (sc) => ({
 
 ## where [• documentation](https://worn.gitbook.io/json-function/functions/where)
 
+The "Where" function provides a comfortable method for filtering a json data.
 
 ```js
 import { where } from "json-function";
@@ -167,6 +183,7 @@ wh.nin("test")   // !value.includes("test")
 
 ## select [• documentation](https://worn.gitbook.io/json-function/functions/select)
 
+The "Select" function is a practical method where you only get the desired fields of a json data.
 
 ```js
 import { select } from "json-function";
@@ -180,6 +197,7 @@ select(data, ["title", "completed"]);
 
 ## limit [• documentation](https://worn.gitbook.io/json-function/functions/limit)
 
+"Limit" is used to get a limited number of elements from a json data. Almost javascript works like slice() but it is much easier and clearer.
 
 ```js
 import { limit } from "json-function";
@@ -193,6 +211,7 @@ limit(data, 2, 2);
 
 ## orderBy [• documentation](https://worn.gitbook.io/json-function/functions/order-by)
 
+With the "orderBy" function you can reorder the data in your json array.
 
 ```js
 import { orderBy } from "json-function";
@@ -200,8 +219,9 @@ import { orderBy } from "json-function";
 orderBy(data, "title", "DESC");
 ```
 
-
 ## toArray [• documentation](https://worn.gitbook.io/json-function/functions/to-array)
+
+Converts objects into meaningful sequences.
 
 
 ```js
@@ -212,4 +232,13 @@ toArray(data);
 
 // custom key
 toArray(data, { key: "_id_" });
+```
+
+## transform [• documentation](https://worn.gitbook.io/json-function/functions/transform)
+JSON converts the snake_case keys in your data to camelCase.
+
+```js
+import { transform } from "json-function";
+
+transform(data);
 ```
