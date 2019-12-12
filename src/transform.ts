@@ -17,7 +17,7 @@ const transformKeys = (obj: Object): Object => {
 }
 
 const processVal = (val: any): any => {
-  if(typeof(val) !== 'object' ) {
+  if(!val || typeof(val) !== 'object' ) {
     return val;
   } else if (isArray(val)) {
     return val.map(transformKeys);
