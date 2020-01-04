@@ -1,1 +1,0 @@
-'use strict';Object.defineProperty(exports,'__esModule',{value:!0});var _typeCheck=require('./type-check'),limit=function(a,b,c){return(0,_typeCheck.isArray)(a)?((0,_typeCheck.isNumber)(b)||(b=10),(0,_typeCheck.isNumber)(c)||(c=0),a.slice(c,b+c)):[]};exports.default=limit;
