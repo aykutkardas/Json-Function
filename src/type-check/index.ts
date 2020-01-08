@@ -2,7 +2,7 @@ type TypeCheckFunction = (value: any) => boolean;
 type OneOfCheckFunction = (value: any, options: any[]) => boolean;
 type GetTypeFunction = (value: any) => string;
 
-const getType: GetTypeFunction = value => toString.call(value);
+const getType: GetTypeFunction = value => Object.prototype.toString.call(value);
 
 const isDefined: TypeCheckFunction = value => value !== undefined;
 
