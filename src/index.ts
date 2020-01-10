@@ -8,6 +8,18 @@ import innerJoin from "./innerJoin";
 import toArray from "./toArray";
 import jsonFunction from "./json-function";
 
-export { limit, select, where, orderBy, schema, transform, innerJoin, toArray };
+import * as utils from "./type-check";
+
+export {
+  limit,
+  select,
+  where,
+  orderBy,
+  schema,
+  transform,
+  innerJoin,
+  toArray,
+  utils,
+};
 
 export default jsonFunction;
