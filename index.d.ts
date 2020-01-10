@@ -27,7 +27,10 @@ declare module "json-function" {
   ): Object[];
 
   // { schema } Function
-  export function schema(data: Object[], schema: Object | Function): Object[];
+  export function schema(data: Object[] | Object, schema: Object | Function): Object[] | Object;
+
+  // { transform } Function
+  export function transform(data: Object[] | Object): Object[] | Object;
 
   // { select } Function
   export function select(data: Object[], columns: string | string[]): Object[];
