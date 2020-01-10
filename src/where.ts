@@ -71,7 +71,6 @@ const where: WhereFunction = (data, queries, options) => {
     });
 
     result = [...result, ...matchingItems];
-    matchingItems = [];
   });
 
   return result;
