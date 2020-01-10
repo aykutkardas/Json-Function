@@ -10,9 +10,9 @@ const isNumber: TypeCheckFunction = value => typeof value === "number" && !isNaN
 
 const isString: TypeCheckFunction = value => typeof value === "string";
 
-const isFunction: TypeCheckFunction = value => value && typeof value === "function";
+const isFunction: TypeCheckFunction = value => typeof value === "function";
 
-const isArray: TypeCheckFunction = value => value && Array.isArray(value);
+const isArray: TypeCheckFunction = value => Array.isArray(value);
 
 const isArrayOfString: TypeCheckFunction = value => isArray(value) && 
   !value.map((val: any) => isString(val)).includes(false);
