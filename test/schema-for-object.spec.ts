@@ -2,26 +2,16 @@ import { expect } from 'chai';
 import { schema } from '../src';
 import 'mocha';
 
-const data = [
-  {
-    id: 0,
-    user: {
-      firstname: 'John',
-      lastname: 'Doe',
-    },
-    title: 'Book Name',
+const data = {
+  id: 0,
+  user: {
+    firstname: 'John',
+    lastname: 'Doe',
   },
-  {
-    id: 1,
-    user: {
-      firstname: 'Johnny',
-      lastname: 'Doe',
-    },
-    title: 'Book Name 2',
-  },
-];
+  title: 'Book Name',
+};
 
-describe('Schema Function', () => {
+describe('Schema Function for Object', () => {
   it('Rearrange data test using the schema function.', () => {
     const result = schema(data, {
       book: {
@@ -32,28 +22,18 @@ describe('Schema Function', () => {
       lastname: 'user.lastname',
     });
 
-    expect(result).to.deep.equal([
-      {
-        firstname: 'John',
-        lastname: 'Doe',
-        book: {
-          id: 0,
-          title: 'Book Name',
-        },
+    expect(result).to.deep.equal({
+      firstname: 'John',
+      lastname: 'Doe',
+      book: {
+        id: 0,
+        title: 'Book Name',
       },
-      {
-        firstname: 'Johnny',
-        lastname: 'Doe',
-        book: {
-          id: 1,
-          title: 'Book Name 2',
-        },
-      },
-    ]);
+    });
   });
 });
 
-describe('Schema Tools Function', () => {
+describe('Schema Tools Function for Object', () => {
   it('.join() method.', () => {
     const result = schema(data, (sc) => ({
       fullName: sc.join('user.firstname', 'user.lastname'),
@@ -63,22 +43,13 @@ describe('Schema Tools Function', () => {
       },
     }));
 
-    expect(result).to.deep.equal([
-      {
-        fullName: 'John Doe',
-        book: {
-          id: 0,
-          title: 'Book Name',
-        },
+    expect(result).to.deep.equal({
+      fullName: 'John Doe',
+      book: {
+        id: 0,
+        title: 'Book Name',
       },
-      {
-        fullName: 'Johnny Doe',
-        book: {
-          id: 1,
-          title: 'Book Name 2',
-        },
-      },
-    ]);
+    });
   });
   it('.join() method use with separator.', () => {
     const result = schema(data, (sc) => ({
@@ -89,22 +60,13 @@ describe('Schema Tools Function', () => {
       },
     }));
 
-    expect(result).to.deep.equal([
-      {
-        fullName: 'John_Doe',
-        book: {
-          id: 0,
-          title: 'Book Name',
-        },
+    expect(result).to.deep.equal({
+      fullName: 'John_Doe',
+      book: {
+        id: 0,
+        title: 'Book Name',
       },
-      {
-        fullName: 'Johnny_Doe',
-        book: {
-          id: 1,
-          title: 'Book Name 2',
-        },
-      },
-    ]);
+    });
   });
   it('.custom() method.', () => {
     const result = schema(data, (sc) => ({
@@ -117,22 +79,13 @@ describe('Schema Tools Function', () => {
       },
     }));
 
-    expect(result).to.deep.equal([
-      {
-        fullName: 'JOHN DOE',
-        book: {
-          id: 0,
-          title: 'Book Name',
-        },
+    expect(result).to.deep.equal({
+      fullName: 'JOHN DOE',
+      book: {
+        id: 0,
+        title: 'Book Name',
       },
-      {
-        fullName: 'JOHNNY DOE',
-        book: {
-          id: 1,
-          title: 'Book Name 2',
-        },
-      },
-    ]);
+    });
   });
   it('complex sc methods.', () => {
     const result = schema(data, (sc) => ({
@@ -143,22 +96,13 @@ describe('Schema Tools Function', () => {
       id: sc.custom((id: number) => id + 1, "id"),
     }));
 
-    expect(result).to.deep.equal([
-      {
+    expect(result).to.deep.equal({
         fullName: 'John Doe',
         id: 1,
         book: {
           deepTitle: 'BOOK NAME',
         }
-      },
-      {
-        fullName: 'Johnny Doe',
-        id: 2,
-        book: {
-          deepTitle: 'BOOK NAME 2',
-        }
-      },
-    ]);
+      });
   });
   it('duplicate .join() methods.', () => {
     const result = schema(data, (sc) => ({
@@ -169,21 +113,26 @@ describe('Schema Tools Function', () => {
       oneRowData: sc.join('id', 'title', 'user.firstname', 'user.lastname', { separator: '_' }),
     }));
 
-    expect(result).to.deep.equal([
-      {
+    expect(result).to.deep.equal({
         fullName: 'John Doe',
         book: {
           deepTitle: '0 Book Name',
         },
         oneRowData: '0_Book Name_John_Doe'
+      });
+  });
+});
+
+describe('Schema Unexpected Data', () => {
+  it('.join() method with null data.', () => {
+    const result = schema(null, (sc) => ({
+      fullName: sc.join('user.firstname', 'user.lastname'),
+      book: {
+        id: 'id',
+        title: 'title',
       },
-      {
-        fullName: 'Johnny Doe',
-        book: {
-          deepTitle: '1 Book Name 2',
-        },
-        oneRowData: '1_Book Name 2_Johnny_Doe'
-      },
-    ]);
+    }));
+
+    expect(result).to.deep.equal(null);
   });
 });
