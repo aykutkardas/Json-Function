@@ -27,7 +27,7 @@ const innerJoin: InnerJoinFunction = (
     return data;
   }
 
-  data = data.map(item => {
+  return data.map(item => {
     const [otherDataItem] = where(
       otherData,
       { [otherDataFieldName]: getObjDeepProp(dataFieldName)(item) },
@@ -41,7 +41,6 @@ const innerJoin: InnerJoinFunction = (
     return item;
   });
 
-  return data;
 };
 
 export default innerJoin;
