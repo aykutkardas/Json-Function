@@ -53,15 +53,15 @@ const where: WhereFunction = (data, queries, options) => {
             return value < argValue;
           } else if (type === "<=") {
             return value <= argValue;
-          } else if (type === "includes") {
+          } else if (type === "in") {
             return value.includes(argValue);
-          } else if (type === "!includes") {
+          } else if (type === "nin") {
             return !value.includes(argValue);
           } else if (type === "==") {
             return value == argValue;
           } else if (type === "!=") {
             return value != argValue;
-          } else if (type === "between") {
+          } else if (type === "btw") {
             const [min, max] = argValue;
             return value >= min && value <= max;
           }

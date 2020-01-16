@@ -1,43 +1,31 @@
-type WhereToolObject = {
+type WhereToolMethod = {
   value: any;
-  type: string;
+  type: "<" | "<=" | ">" | ">=" | "==" | "!=" | "in" | "nin" | "btw";
 };
 
-export default {
-  lt: (value: number): WhereToolObject => ({
-    value,
-    type: "<"
-  }),
-  lte: (value: number): WhereToolObject => ({
-    value,
-    type: "<="
-  }),
-  gt: (value: number): WhereToolObject => ({
-    value,
-    type: ">"
-  }),
-  gte: (value: number): WhereToolObject => ({
-    value,
-    type: ">="
-  }),
-  eq: (value: any): WhereToolObject => ({
-    value,
-    type: "=="
-  }),
-  ne: (value: any): WhereToolObject => ({
-    value,
-    type: "!="
-  }),
-  in: (value: any): WhereToolObject => ({
-    value,
-    type: "includes"
-  }),
-  nin: (value: any): WhereToolObject => ({
-    value,
-    type: "!includes"
-  }),
-  between: (...value: number[]): WhereToolObject => ({
-    value,
-    type: "between"
-  })
+interface WhereToolObject {
+  lt: (value: number) => WhereToolMethod,
+  lte: (value: number) => WhereToolMethod,
+  gt: (value: number) => WhereToolMethod,
+  gte: (value: number) => WhereToolMethod,
+  eq: (value: any) => WhereToolMethod,
+  ne: (value: any) => WhereToolMethod,
+  in: (value: any) => WhereToolMethod,
+  nin: (value: any) => WhereToolMethod,
+  between: (min: number, max: number) => WhereToolMethod,
+}
+
+
+const whereToolObject: WhereToolObject = {
+  lt: (value) => ({ value, type: "<" }),
+  lte: (value) => ({ value, type: "<=" }),
+  gt: (value) => ({ value, type: ">" }),
+  gte: (value) => ({ value, type: ">=" }),
+  eq: (value) => ({ value, type: "==" }),
+  ne: (value) => ({ value, type: "!=" }),
+  in: (value) => ({ value, type: "in" }),
+  nin: (value) => ({ value, type: "nin" }),
+  between: (min, max) => ({ value: [min, max], type: "btw" })
 };
+
+export default whereToolObject;
