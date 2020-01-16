@@ -1,16 +1,17 @@
 import { isFunction, isObject, isArrayOfObject } from "./type-check";
-import SchemaTools from './schema-tool';
-import getSchemaValue from './schema-tool/get-schema-value';
-import { cloneDeep } from './utils';
+import SchemaTools from "./schema-tool";
+import getSchemaValue from "./schema-tool/get-schema-value";
+import { cloneDeep } from "./utils";
 
-type SchemaFunction = (data: Object[] | Object, schema: Object | Function) => Object[] | Object;
+type SchemaFunction = (
+  data: Object[] | Object,
+  schema: Object | Function
+) => Object[] | Object;
 
 const schema: SchemaFunction = (data, schema = {}) => {
-
   if (!isArrayOfObject(data) && !isObject(data)) {
     return null;
   }
-
 
   let schemaObj: Object;
   if (isObject(schema)) {
@@ -30,7 +31,6 @@ const schema: SchemaFunction = (data, schema = {}) => {
     const temp = cloneDeep(schemaObj);
     return getSchemaValue(temp, data);
   }
-
 };
 
 export default schema;

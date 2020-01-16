@@ -40,7 +40,6 @@ const innerJoin: InnerJoinFunction = (
 
     return item;
   });
-
 };
 
 export default innerJoin;

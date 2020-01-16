@@ -83,11 +83,11 @@ class JsonFunction {
           break;
 
         case "schema":
-          this.data = (<Object[]>Schema(this.data, schema));
+          this.data = <Object[]>Schema(this.data, schema);
           break;
 
         case "transform":
-          this.data = (<Object[]>Transform(this.data));
+          this.data = <Object[]>Transform(this.data);
           break;
 
         case "innerJoin":

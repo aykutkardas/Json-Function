@@ -4,20 +4,20 @@ export interface SchemaToolObject {
     values?: string[];
     separator?: string;
     custom?: Function;
-  }
+  };
 }
 
 export default {
   join: (...args: string[]): SchemaToolObject => {
-    let config: Object = { separator: ' ' };
+    let config: Object = { separator: " " };
     const values: string[] = [];
 
     args.forEach(arg => {
-      if (typeof arg === 'string') {
+      if (typeof arg === "string") {
         values.push(arg);
         return;
       }
-      if (typeof arg === 'object') {
+      if (typeof arg === "object") {
         config = { ...config, ...(<Object>arg) };
       }
     });
@@ -26,16 +26,16 @@ export default {
       __schema__: {
         values,
         ...config,
-        job: 'join',
+        job: "join"
       }
     };
   },
 
   custom: (fn: Function, ...args: string[]): SchemaToolObject => ({
-      __schema__: {
-        values: args,
-        job: 'custom',
-        custom: fn,
-      }
+    __schema__: {
+      values: args,
+      job: "custom",
+      custom: fn
+    }
   })
-}
+};

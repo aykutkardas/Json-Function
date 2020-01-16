@@ -1,13 +1,8 @@
-import { isString, isObject, isSchemeToolsObject } from '../type-check';
+import { isString, isObject, isSchemeToolsObject } from "../type-check";
 import getObjDeepProp from "../utils/get-obj-deep-prop";
-import schemaToolGenerator from './schema-tool-generator';
+import schemaToolGenerator from "./schema-tool-generator";
 
-type SchemaFunction = (
-  schema: Object,
-  item: Object,
-) => Object;
-
-
+type SchemaFunction = (schema: Object, item: Object) => Object;
 
 const getSchemaValue: SchemaFunction = (schema, item) => {
   Object.keys(schema).forEach(fieldName => {
@@ -20,7 +15,6 @@ const getSchemaValue: SchemaFunction = (schema, item) => {
     } else if (isObject(activeField)) {
       getSchemaValue(activeField, item);
     }
-
   });
 
   return schema;

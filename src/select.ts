@@ -17,7 +17,7 @@ const select: SelectFunction = (data, columns) => {
     return data;
   }
 
-  data = data.map(item => {
+  return data.map(item => {
     const newItem = {};
     columnsArr.forEach(column => {
       if (isDefined(item[column])) {
@@ -26,8 +26,6 @@ const select: SelectFunction = (data, columns) => {
     });
     return newItem;
   });
-
-  return data;
 };
 
 export default select;

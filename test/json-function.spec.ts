@@ -157,9 +157,7 @@ describe("JsonFunction Class", () => {
   });
 
   it("setQuery and getQuery test", () => {
-
-    const unCompleteTodoQuery = JsonFunction
-      .orderBy("title", "DESC")
+    const unCompleteTodoQuery = JsonFunction.orderBy("title", "DESC")
       .where({ completed: false })
       .limit(2)
       .select(["title", "completed"])

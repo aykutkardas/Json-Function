@@ -14,20 +14,19 @@ const transformKeys = (obj: Object): Object => {
   });
 
   return newObject;
-}
+};
 
 const processVal = (val: any): any => {
-  if (!val || typeof (val) !== 'object') {
+  if (!val || typeof val !== "object") {
     return val;
   } else if (isArray(val)) {
     return val.map(transformKeys);
   } else {
     return transformKeys(val);
   }
-}
+};
 
-const transform: TransformFunction = (data) => {
-
+const transform: TransformFunction = data => {
   if (isArrayOfObject(data)) {
     return (<Object[]>data).map(item => transformKeys(item));
   } else if (isObject(data)) {
@@ -35,7 +34,6 @@ const transform: TransformFunction = (data) => {
   }
 
   return null;
-
-}
+};
 
 export default transform;
