@@ -2,6 +2,7 @@ import { where } from "../src";
 import { expect } from "chai";
 import "mocha";
 
+const testData = require("./test-data.json");
 const data = [
   {
     userId: 1,
@@ -65,6 +66,17 @@ describe("Where function", () => {
     ]);
   });
   it("[Multiple Parametre] Data filtering test using Where function.", () => {
+    const result = where(testData, { completed: false, id: 1 });
+    expect(result).to.deep.equal([
+      {
+        userId: 1,
+        id: 1,
+        title: "delectus aut autem",
+        completed: false
+      }
+    ]);
+  });
+  it("[Multiple Parametre] Data filtering test using Or-Where function.", () => {
     const result = where(data, [{ completed: true }, { userId: 2 }]);
     expect(result).to.deep.equal([
       {
@@ -252,7 +264,6 @@ describe("Where Tools Function", () => {
         }
       }
     ]);
-    
   });
   it(".nin() method.", () => {
     const result = where(data, wh => ({
@@ -287,7 +298,7 @@ describe("Where Tools Function", () => {
   });
   it(".between() method.", () => {
     const result = where(data, wh => ({
-      id: wh.between(1,3)
+      id: wh.between(1, 3)
     }));
     expect(result).to.deep.equal([
       {
@@ -318,12 +329,11 @@ describe("Where Tools Function", () => {
         }
       }
     ]);
-    
   });
   it("duplicate advanced where method.", () => {
     const result = where(data, wh => ({
       id: wh.lte(3),
-      userId: wh.gt(1),
+      userId: wh.gt(1)
     }));
     expect(result).to.deep.equal([
       {
@@ -345,6 +355,5 @@ describe("Where Tools Function", () => {
         }
       }
     ]);
-    
   });
 });

@@ -27,12 +27,15 @@ const where: WhereFunction = (data, queries, options) => {
     return data;
   }
 
-  let matchingItems: Object[] = [];
-  let result: Object[] = [];
+  let result = [];
 
   queriesArr.forEach(query => {
+    let temp = data;
+
     Object.keys(query).forEach(fieldName => {
-      matchingItems = data.filter(item => {
+
+      temp = temp.filter(item => {
+
         let value = item[fieldName];
         const activeQuery = query[fieldName];
 
@@ -70,10 +73,10 @@ const where: WhereFunction = (data, queries, options) => {
       });
     });
 
-    result = [...result, ...matchingItems];
+    result = [...result, ...temp];
   });
 
   return result;
-};
+}
 
 export default where;
