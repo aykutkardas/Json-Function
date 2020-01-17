@@ -1,6 +1,6 @@
 import limit from "./limit";
 import select from "./select";
-import where from "./where/where";
+import where from "./where";
 import orderBy from "./orderBy";
 import schema from "./schema";
 import transform from "./transform";
