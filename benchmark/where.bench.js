@@ -1,14 +1,14 @@
 var Benchmark = require('benchmark');
 var suite = new Benchmark.Suite;
 
-const select = require('../dist/package/select').default;
+const data = require('../test/test-data.json');
+
+const where = require('../dist/package/where').default;
 
 module.exports = function () {
-  const data = [{ a: 1, b: 2, c: 3 }];
-
   suite
-    .add('Select, with-one-field', function () {
-      select(data, "a");
+    .add('Where, basic', function () {
+      where(data, { userId: 1 });
     })
     .on('cycle', function (event) {
       console.log(String(event.target));
