@@ -1,4 +1,4 @@
-import { innerJoin } from "../src";
+import { innerJoin } from "../src/package";
 import { expect } from "chai";
 import "mocha";
 

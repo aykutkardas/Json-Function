@@ -1,4 +1,4 @@
-import JsonFunction from "../src";
+import JsonFunction from "../src/package";
 import { expect } from "chai";
 import "mocha";
 

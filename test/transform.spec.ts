@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { transform } from "../src";
+import { transform } from "../src/package";
 import "mocha";
 
 const data = [

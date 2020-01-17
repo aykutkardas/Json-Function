@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { schema } from "../src";
+import { schema } from "../src/package";
 import "mocha";
 
 const data = {

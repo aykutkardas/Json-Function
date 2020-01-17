@@ -1,4 +1,4 @@
-import { limit } from "../src";
+import { limit } from "../src/package";
 import { expect } from "chai";
 import "mocha";
 

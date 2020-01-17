@@ -1,4 +1,4 @@
-import { utils } from "../src";
+import { utils } from "../src/package";
 import { expect } from "chai";
 import "mocha";
 

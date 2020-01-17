@@ -1,4 +1,4 @@
-import { toArray } from "../src";
+import { toArray } from "../src/package";
 import { expect } from "chai";
 import "mocha";
 
