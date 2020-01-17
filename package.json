@@ -6,7 +6,8 @@
   "scripts": {
     "test": "cross-env TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha -r ts-node/register -r ignore-styles -r jsdom-global/register test/**/*.spec.ts",
     "test-windows": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' mocha -r ts-node/register -r ignore-styles -r jsdom-global/register test/**/*.spec.ts",
-    "build": "tsc && babel --presets es2015 -d dist/ dist"
+    "build": "tsc && babel --presets es2015 -d dist/ dist",
+    "benchmark": "node benchmark/"
   },
   "author": "Aykut Kardaş",
   "license": "Apache-2.0",
@@ -20,6 +21,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-minify": "^0.5.1",
+    "benchmark": "^2.1.4",
     "chai": "^4.2.0",
     "cross-env": "^5.2.1",
     "ignore-styles": "^5.0.1",
