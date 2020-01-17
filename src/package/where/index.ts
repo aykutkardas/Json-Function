@@ -43,30 +43,8 @@ const where: WhereFunction = (data, queries, options) => {
           value = getObjDeepProp(fieldName)(item);
         }
 
-        if (isObject(activeQuery) && activeQuery.type) {
-          const { type, value: argValue } = activeQuery;
-          if (type === ">") {
-            return value > argValue;
-          } else if (type === ">=") {
-            return value >= argValue;
-          } else if (type === "<") {
-            return value < argValue;
-          } else if (type === "<=") {
-            return value <= argValue;
-          } else if (type === "in") {
-            return value.includes(argValue);
-          } else if (type === "nin") {
-            return !value.includes(argValue);
-          } else if (type === "==") {
-            return value == argValue;
-          } else if (type === "!=") {
-            return value != argValue;
-          } else if (type === "btw") {
-            const [min, max] = argValue;
-            return value >= min && value <= max;
-          }
-
-          return false;
+        if (isFunction(activeQuery)) {
+          return (activeQuery(value));
         }
 
         return value === activeQuery;

@@ -1,31 +1,26 @@
-type WhereToolMethod = {
-  value: any;
-  type: "<" | "<=" | ">" | ">=" | "==" | "!=" | "in" | "nin" | "btw";
-};
-
 interface WhereToolObject {
-  lt: (value: number) => WhereToolMethod,
-  lte: (value: number) => WhereToolMethod,
-  gt: (value: number) => WhereToolMethod,
-  gte: (value: number) => WhereToolMethod,
-  eq: (value: any) => WhereToolMethod,
-  ne: (value: any) => WhereToolMethod,
-  in: (value: any) => WhereToolMethod,
-  nin: (value: any) => WhereToolMethod,
-  between: (min: number, max: number) => WhereToolMethod,
+  lt: (input: number) => (value: any) => boolean,
+  lte: (value: number) => (value: any) => boolean,
+  gt: (value: number) => (value: any) => boolean,
+  gte: (value: number) => (value: any) => boolean,
+  eq: (value: any) => (value: any) => boolean,
+  ne: (value: any) => (value: any) => boolean,
+  in: (value: any) => (value: any) => boolean,
+  nin: (value: any) => (value: any) => boolean,
+  between: (min: number, max: number) => (value: any) => boolean,
 }
 
 
 const whereToolObject: WhereToolObject = {
-  lt: (value) => ({ value, type: "<" }),
-  lte: (value) => ({ value, type: "<=" }),
-  gt: (value) => ({ value, type: ">" }),
-  gte: (value) => ({ value, type: ">=" }),
-  eq: (value) => ({ value, type: "==" }),
-  ne: (value) => ({ value, type: "!=" }),
-  in: (value) => ({ value, type: "in" }),
-  nin: (value) => ({ value, type: "nin" }),
-  between: (min, max) => ({ value: [min, max], type: "btw" })
+  lt: (input) => (value) => value < input,
+  lte: (input) => (value) => value <= input,
+  gt: (input) => (value) => value > input,
+  gte: (input) => (value) => value >= input,
+  eq: (input) => (value) => value == input,
+  ne: (input) => (value) => value != input,
+  in: (input) => (value) => value.includes(input),
+  nin: (input) => (value) => !value.includes(input),
+  between: (min, max) => (value) => value >= min && value <= max,
 };
 
 export default whereToolObject;
