@@ -7,25 +7,30 @@ const select: SelectFunction = (data, columns) => {
     return [];
   }
 
-  let columnsArr: string[];
-
   if (isString(columns)) {
-    columnsArr = [<string>columns];
-  } else if (isArray(columns)) {
-    columnsArr = <string[]>columns;
-  } else {
-    return data;
-  }
-
-  return data.map(item => {
-    const newItem = {};
-    columnsArr.forEach(column => {
+    return data.map(item => {
+      const newItem = {};
+      const column = (<string>columns);
       if (isDefined(item[column])) {
         newItem[column] = item[column];
       }
+      return newItem;
     });
-    return newItem;
-  });
+  }
+
+  if (isArray(columns)) {
+    return data.map(item => {
+      const newItem = {};
+      (<string[]>columns).forEach(column => {
+        if (isDefined(item[column])) {
+          newItem[column] = item[column];
+        }
+      });
+      return newItem;
+    });
+  }
+
+  return data;
 };
 
 export default select;
