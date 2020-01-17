@@ -1,5 +1,5 @@
-import { isString, isObject, isSchemeToolsObject } from "../type-check";
-import getObjDeepProp from "../utils/get-obj-deep-prop";
+import { isString, isObject, isSchemeToolsObject } from "../../../utils/type-check";
+import getObjDeepProp from "../../../utils/get-obj-deep-prop";
 import schemaToolGenerator from "./schema-tool-generator";
 
 type SchemaFunction = (schema: Object, item: Object) => Object;

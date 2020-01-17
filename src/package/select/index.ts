@@ -1,4 +1,4 @@
-import { isArray, isString, isDefined } from "./type-check";
+import { isArray, isString, isDefined } from "../../utils/type-check";
 
 type SelectFunction = (data: Object[], columns: string | string[]) => Object[];
 

@@ -6,9 +6,9 @@ import {
   schema as Schema,
   transform as Transform,
   innerJoin as InnerJoin
-} from ".";
+} from "..";
 
-import { isObject } from "./type-check";
+import { isObject } from "../../utils/type-check";
 
 type Option = {
   orderBy: string[];

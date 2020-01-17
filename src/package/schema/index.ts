@@ -1,7 +1,7 @@
-import { isFunction, isObject, isArrayOfObject } from "./type-check";
-import SchemaTools from "./schema-tool";
-import getSchemaValue from "./schema-tool/get-schema-value";
-import { cloneDeep } from "./utils";
+import { isFunction, isObject, isArrayOfObject } from "../../utils/type-check";
+import SchemaTools from "./tool/callback";
+import getSchemaValue from "./tool/get-schema-value";
+import { cloneDeep } from "../../utils";
 
 type SchemaFunction = (
   data: Object[] | Object,

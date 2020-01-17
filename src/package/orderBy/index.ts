@@ -1,4 +1,4 @@
-import { isArray, isString, isOneOf } from "./type-check";
+import { isArray, isString, isOneOf } from "../../utils/type-check";
 
 type OrderByFunction = (
   data: Object[],

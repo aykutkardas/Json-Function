@@ -1,14 +1,14 @@
 import limit from "./limit";
 import select from "./select";
-import where from "./where";
+import where from "./where/where";
 import orderBy from "./orderBy";
 import schema from "./schema";
 import transform from "./transform";
 import innerJoin from "./innerJoin";
 import toArray from "./toArray";
-import jsonFunction from "./json-function";
+import jsonFunction from "./_main";
 
-import * as utils from "./type-check";
+import * as utils from "../utils/type-check";
 
 export {
   limit,

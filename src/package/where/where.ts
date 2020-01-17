@@ -1,6 +1,6 @@
-import { isArray, isObject, isFunction, isArrayOfObject } from "./type-check";
-import getObjDeepProp from "./utils/get-obj-deep-prop";
-import WhereTool from "./where-tool";
+import { isArray, isObject, isFunction, isArrayOfObject } from "../../utils/type-check";
+import getObjDeepProp from "../../utils/get-obj-deep-prop";
+import WhereTool from "./tool/callback";
 
 type WhereFunction = (
   data: Object[],

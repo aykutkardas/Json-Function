@@ -1,4 +1,4 @@
-import { isArray, isObject, isArrayOfObject } from "./type-check";
+import { isArray, isObject, isArrayOfObject } from "../../utils/type-check";
 
 type TransformFunction = (data: Object[] | Object) => Object[] | Object;
 

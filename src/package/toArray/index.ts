@@ -1,4 +1,4 @@
-import { isObject, isArrayOfObject } from "./type-check";
+import { isObject, isArrayOfObject } from "../../utils/type-check";
 
 type Config = {
   key: string;

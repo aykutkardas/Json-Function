@@ -1,4 +1,4 @@
-import { isArray, isNumber } from "./type-check";
+import { isArray, isNumber } from "../../utils/type-check";
 
 type LimitFunction = (data: any[], limit: number, start?: number) => any[];
 

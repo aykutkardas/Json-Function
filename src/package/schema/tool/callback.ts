@@ -1,4 +1,4 @@
-export interface SchemaToolObject {
+ export interface SchemaToolObject {
   __schema__: {
     job?: string;
     values?: string[];
