@@ -1,12 +1,12 @@
 interface WhereToolObject {
   lt: (input: number) => (value: any) => boolean,
-  lte: (value: number) => (value: any) => boolean,
-  gt: (value: number) => (value: any) => boolean,
-  gte: (value: number) => (value: any) => boolean,
-  eq: (value: any) => (value: any) => boolean,
-  ne: (value: any) => (value: any) => boolean,
-  in: (value: any) => (value: any) => boolean,
-  nin: (value: any) => (value: any) => boolean,
+  lte: (input: number) => (value: any) => boolean,
+  gt: (input: number) => (value: any) => boolean,
+  gte: (input: number) => (value: any) => boolean,
+  eq: (input: any) => (value: any) => boolean,
+  ne: (input: any) => (value: any) => boolean,
+  in: (input: any) => (value: any) => boolean,
+  nin: (input: any) => (value: any) => boolean,
   between: (min: number, max: number) => (value: any) => boolean,
 }
 
