@@ -9,6 +9,8 @@ const isDefined: TypeCheckFunction = value => value !== undefined;
 const isNumber: TypeCheckFunction = value =>
   typeof value === "number" && !isNaN(value);
 
+const isNull: TypeCheckFunction = value => value === null;
+
 const isString: TypeCheckFunction = value => typeof value === "string";
 
 const isFunction: TypeCheckFunction = value => typeof value === "function";
@@ -35,6 +37,7 @@ export {
   isArray,
   isString,
   isNumber,
+  isNull,
   isObject,
   isDefined,
   isFunction,
