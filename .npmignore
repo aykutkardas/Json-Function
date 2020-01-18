@@ -1,5 +1,7 @@
 test/
 src/
+becnhmark/
+
 .babelrc
 .travis.yml
 tsconfig.json
