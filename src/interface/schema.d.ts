@@ -1,3 +1,6 @@
+/**
+ * The `Schema` function is a great way to reconfigure your json data and make it your own.
+ */
 export type SchemaFunction = (
   data: Object[] | Object,
   schema: Object | Function
