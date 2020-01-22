@@ -1,3 +1,6 @@
+/**
+ * The `innerJoin` function is used to join two arrays.
+ */
 export type InnerJoinFunction = (
   data: Object[],
   otherData: Object[],

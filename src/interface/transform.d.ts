@@ -1,3 +1,6 @@
+/**
+ * JSON converts the `snake_case` keys in your data to `camelCase`.
+ */
 export type TransformFunction = (
   data: Object[] | Object
 ) => Object[] | Object;

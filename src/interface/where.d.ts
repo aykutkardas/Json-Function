@@ -1,3 +1,6 @@
+/**
+ * The `Where` function provides a comfortable method for filtering a json data.
+ */
 export type WhereFunction = (
   data: Object[],
   queries: Object | Object[] | Function,
