@@ -1,14 +1,8 @@
 import { isArray, isObject, isFunction, isArrayOfObject } from "../../utils/type-check";
+import { WhereFunction } from "../../interface/where";
 import getObjDeepProp from "../../utils/get-obj-deep-prop";
 import WhereTool from "./tool/callback";
 
-type WhereFunction = (
-  data: Object[],
-  queries: Object | Object[] | Function,
-  options?: {
-    deep?: boolean;
-  }
-) => Object[];
 
 const where: WhereFunction = (data, queries, options) => {
   if (!isArray(data)) {

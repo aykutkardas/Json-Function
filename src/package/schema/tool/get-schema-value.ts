@@ -1,10 +1,9 @@
 import { isString, isObject, isSchemeToolsObject } from "../../../utils/type-check";
 import getObjDeepProp from "../../../utils/get-obj-deep-prop";
+import { GetSchemaValueFunction } from '../../../interface/schema';
 import schemaToolGenerator from "./schema-tool-generator";
 
-type SchemaFunction = (schema: Object, item: Object) => Object;
-
-const getSchemaValue: SchemaFunction = (schema, item) => {
+const getSchemaValue: GetSchemaValueFunction = (schema, item) => {
   Object.keys(schema).forEach(fieldName => {
     const activeField = schema[fieldName];
 

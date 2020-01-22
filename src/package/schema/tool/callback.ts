@@ -1,11 +1,4 @@
- export interface SchemaToolObject {
-  __schema__: {
-    job?: string;
-    values?: string[];
-    separator?: string;
-    custom?: Function;
-  };
-}
+import { SchemaToolObject } from '../../../interface/schema';
 
 export default {
   join: (...args: string[]): SchemaToolObject => {

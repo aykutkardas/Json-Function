@@ -1,8 +1,8 @@
 import getObjDeepProp from "../../../utils/get-obj-deep-prop";
-import { SchemaToolObject } from "./callback";
+import { SchemaToolGenerator } from '../../../interface/schema';
 import { isFunction } from "../../../utils/type-check";
 
-const schemaToolGenerator = (obj: SchemaToolObject, item: Object) => {
+const schemaToolGenerator: SchemaToolGenerator = (obj, item) => {
   const { __schema__ } = obj;
   const { job, separator = " " } = __schema__;
   let { values = [] } = __schema__;
