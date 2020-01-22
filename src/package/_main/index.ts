@@ -8,22 +8,9 @@ import {
   innerJoin as InnerJoin
 } from "..";
 
-import { isObject } from "../../utils/type-check";
+import { Option, Config } from 'interface/main';
+import { isObject } from "utils/type-check";
 
-type Option = {
-  orderBy: string[];
-  where: object | object[];
-  limit: number[];
-  select: string | string[];
-  schema: Object;
-  innerJoin: [Object[], string, string];
-};
-
-type Config = {
-  resetRecord?: boolean;
-  query?: Option;
-  [key: string]: any;
-};
 
 class JsonFunction {
   data: Object[] = [];

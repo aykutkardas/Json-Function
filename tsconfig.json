@@ -7,9 +7,14 @@
     "sourceMap": false,
     "experimentalDecorators": true,
     "lib": ["dom", "es6", "es5", "es2017"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "interface/*": ["./src/interface/*"],
+      "utils/*": ["./src/utils/*"]
+    }
   },
-  "include": ["./src/**/*"],
-  "exclude": ["./test/**/*.spec.ts"],
+  "include": ["./src/package/**/*"],
+  "exclude": ["./src/interface/*"],
   "compileOnSave": false
 }

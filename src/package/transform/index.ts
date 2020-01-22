@@ -1,8 +1,9 @@
-import { isArray, isObject, isArrayOfObject } from "../../utils/type-check";
+import { isArray, isObject, isArrayOfObject } from "utils/type-check";
 
-type TransformFunction = (data: Object[] | Object) => Object[] | Object;
+import { TransformFunction, TransformKeysFn, ProcessValFn } from 'interface/transform';
 
-const transformKeys = (obj: Object): Object => {
+const transformKeys: TransformKeysFn = (obj) => {
+
   const tempObj = Object.entries(obj).map(([key, val]) => [
     key.replace(/_(.)/g, g => g[1].toUpperCase()),
     processVal(val)
@@ -16,7 +17,7 @@ const transformKeys = (obj: Object): Object => {
   return newObject;
 };
 
-const processVal = (val: any): any => {
+const processVal: ProcessValFn = (val) => {
   if (!val || typeof val !== "object") {
     return val;
   } else if (isArray(val)) {

@@ -1,120 +1,33 @@
+import { InnerJoinFunction } from "./src/interface/innerJoin";
+import { LimitFunction } from "./src/interface/limit";
+import { OrderByFunction } from "./src/interface/orderBy";
+import { SchemaFunction } from "./src/interface/schema";
+import { SelectFunction } from "./src/interface/select";
+import { ToArrayFunction } from "./src/interface/toArray";
+import { TransformFunction } from "./src/interface/transform";
+import { WhereFunction } from "./src/interface/where";
+import { JsonFunctionClass } from "./src/interface/main";
+
 declare module "json-function" {
-  // { innerJoin } Function
-  export function innerJoin(
-    data: Object[],
-    otherData: Object[],
-    dataFieldName: string,
-    otherDataFieldName: string
-  ): Object[];
+  export const innerJoin: InnerJoinFunction;
 
   // { where } Function
-  export function where(
-    data: Object[],
-    queries: Object | Object[],
-    options?: {
-      deep?: boolean;
-    }
-  ): Object[];
+  export const where: WhereFunction;
 
   // { limit } Function
-  export function limit(data: any[], limit: number, start?: number): any[];
+  export const limit: LimitFunction;
 
   // { orderBy } Function
-  export function orderBy(
-    data: Object[],
-    fieldName: string,
-    order?: string
-  ): Object[];
+  export const orderBy: OrderByFunction;
 
   // { schema } Function
-  export function schema(data: Object[] | Object, schema: Object | Function): Object[] | Object;
+  export const schema: SchemaFunction;
 
   // { transform } Function
-  export function transform(data: Object[] | Object): Object[] | Object;
+  export const transform: TransformFunction;
 
   // { select } Function
-  export function select(data: Object[], columns: string | string[]): Object[];
-
-  /* ****************************************************** */
-
-  // JsonFunction.where Method
-  function _where(
-    queries: Object | Object[],
-    options?: {
-      deep?: boolean;
-    }
-  ): JsonFunctionClass;
-
-  // JsonFunction.where Method
-  function _innerJoin(
-    otherData: Object[],
-    dataFieldName: string,
-    otherDataFieldName: string
-  ): JsonFunctionClass;
-
-  // JsonFunction.limit Method
-  export function _limit(limit: number, start?: number): JsonFunctionClass;
-
-  // JsonFunction.orderBy Method
-  export function _orderBy(
-    fieldName: string,
-    order?: string
-  ): JsonFunctionClass;
-
-  // JsonFunction.schema Method
-  export function _schema(schema: Object | Function): JsonFunctionClass;
-
-  // JsonFunction.select Method
-  export function _select(columns: string | string[]): JsonFunctionClass;
-
-  // JsonFuncttion.get Method
-
-  export namespace JsonFunctionProperty {
-    type Option = {
-      orderBy: string[];
-      where: object | object[];
-      limit: number[];
-      select: string | string[];
-      schema: Object;
-      innerJoin: [Object[], string, string];
-    };
-
-    type Config = {
-      resetRecord?: boolean;
-      query?: Option;
-      [key: string]: any;
-    };
-  }
-
-  export function _get(
-    data: Object[],
-    options?: {
-      query?: JsonFunctionProperty.Option;
-    }
-  );
-
-  // JsonFunction.getQuery Method
-  export function _getQuery(): JsonFunctionProperty.Option;
-
-  // JsonFunction.setQuery Method
-  export function _setQuery(
-    query: JsonFunctionProperty.Option
-  ): JsonFunctionClass;
-
-  // JsonFunction
-  interface JsonFunctionClass {
-    option: JsonFunctionProperty.Option;
-    config: JsonFunctionProperty.Config;
-    where: typeof _where;
-    innerJoin: typeof _innerJoin;
-    limit: typeof _limit;
-    orderBy: typeof _orderBy;
-    schema: typeof _schema;
-    select: typeof _select;
-    get: typeof _get;
-    getQuery: typeof _getQuery;
-    setQuery: typeof _setQuery;
-  }
+  export const select: SelectFunction;
 
   const module: JsonFunctionClass;
 

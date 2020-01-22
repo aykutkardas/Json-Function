@@ -1,15 +1,4 @@
-interface WhereToolObject {
-  lt: (input: number) => (value: any) => boolean,
-  lte: (input: number) => (value: any) => boolean,
-  gt: (input: number) => (value: any) => boolean,
-  gte: (input: number) => (value: any) => boolean,
-  eq: (input: any) => (value: any) => boolean,
-  ne: (input: any) => (value: any) => boolean,
-  in: (input: any) => (value: any) => boolean,
-  nin: (input: any) => (value: any) => boolean,
-  between: (min: number, max: number) => (value: any) => boolean,
-}
-
+import { WhereToolObject } from "interface/where";
 
 const whereToolObject: WhereToolObject = {
   lt: (input) => (value) => value < input,

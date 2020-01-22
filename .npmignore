@@ -1,5 +1,6 @@
 test/
-src/
+src/package
+src/utils
 becnhmark/
 
 .babelrc

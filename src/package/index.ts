@@ -8,7 +8,7 @@ import innerJoin from "./innerJoin";
 import toArray from "./toArray";
 import jsonFunction from "./_main";
 
-import * as utils from "../utils/type-check";
+import * as utils from "utils/type-check";
 
 export {
   limit,
