@@ -1,6 +1,5 @@
-import { isArray, isString, isDefined } from "utils/type-check";
-
-import { SelectFunction } from "interface/select";
+import { isArray, isString, isDefined } from "../../utils/type-check";
+import { SelectFunction } from "../../interface/select";
 
 const select: SelectFunction = (data, columns) => {
   if (!isArray(data)) {

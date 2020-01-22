@@ -1,9 +1,8 @@
-import { isFunction, isObject, isArrayOfObject } from "utils/type-check";
+import { isFunction, isObject, isArrayOfObject } from "../../utils/type-check";
 import SchemaTools from "./tool/callback";
 import getSchemaValue from "./tool/get-schema-value";
-import { cloneDeep } from "utils/index";
-
-import { SchemaFunction } from 'interface/schema';
+import { cloneDeep } from "../../utils/index";
+import { SchemaFunction } from '../../interface/schema';
 
 const schema: SchemaFunction = (data, schema = {}) => {
   if (!isArrayOfObject(data) && !isObject(data)) {

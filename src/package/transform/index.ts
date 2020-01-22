@@ -1,6 +1,5 @@
-import { isArray, isObject, isArrayOfObject } from "utils/type-check";
-
-import { TransformFunction, TransformKeysFn, ProcessValFn } from 'interface/transform';
+import { isArray, isObject, isArrayOfObject } from "../../utils/type-check";
+import { TransformFunction, TransformKeysFn, ProcessValFn } from '../../interface/transform';
 
 const transformKeys: TransformKeysFn = (obj) => {
 

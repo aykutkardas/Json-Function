@@ -1,6 +1,5 @@
-import { isArray, isNumber } from "utils/type-check";
-
-import { LimitFunction } from 'interface/limit';
+import { isArray, isNumber } from "../../utils/type-check";
+import { LimitFunction } from '../../interface/limit';
 
 const limit: LimitFunction = (data, limit, start) => {
   if (!isArray(data)) {

@@ -1,4 +1,4 @@
-import { WhereToolObject } from "interface/where";
+import { WhereToolObject } from "../../../interface/where";
 
 const whereToolObject: WhereToolObject = {
   lt: (input) => (value) => value < input,

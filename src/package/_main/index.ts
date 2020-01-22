@@ -8,8 +8,8 @@ import {
   innerJoin as InnerJoin
 } from "..";
 
-import { Option, Config } from 'interface/main';
-import { isObject } from "utils/type-check";
+import { Option, Config } from '../../interface/main';
+import { isObject } from "../../utils/type-check";
 
 
 class JsonFunction {

@@ -1,6 +1,6 @@
-import { isArray, isString, isOneOf } from "utils/type-check";
+import { isArray, isString, isOneOf } from "../../utils/type-check";
 
-import { OrderByFunction } from 'interface/orderBy';
+import { OrderByFunction } from '../../interface/orderBy';
 
 const orderBy: OrderByFunction = (data, fieldName, order = "ASC") => {
   if (!isArray(data)) {

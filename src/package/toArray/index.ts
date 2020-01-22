@@ -1,6 +1,6 @@
-import { isObject, isArrayOfObject } from "utils/type-check";
+import { isObject, isArrayOfObject } from "../../utils/type-check";
 
-import { ToArrayFunction } from "interface/toArray";
+import { ToArrayFunction } from "../../interface/toArray";
 
 const toArray: ToArrayFunction = (data, config) => {
   if (!isObject(data)) {

@@ -1,6 +1,6 @@
-import { isArrayOfObject, isObject, isString } from "utils/type-check";
-import getObjDeepProp from "utils/get-obj-deep-prop";
-import { InnerJoinFunction } from 'interface/innerJoin';
+import { isArrayOfObject, isObject, isString } from "../../utils/type-check";
+import getObjDeepProp from "../../utils/get-obj-deep-prop";
+import { InnerJoinFunction } from '../../interface/innerJoin';
 import { where } from "..";
 
 
