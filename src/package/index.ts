@@ -3,6 +3,7 @@ import select from "./select";
 import where from "./where";
 import orderBy from "./orderBy";
 import schema from "./schema";
+import search from "./search";
 import transform from "./transform";
 import innerJoin from "./innerJoin";
 import toArray from "./toArray";
@@ -16,6 +17,7 @@ export {
   where,
   orderBy,
   schema,
+  search,
   transform,
   innerJoin,
   toArray,
