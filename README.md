@@ -219,6 +219,25 @@ import { orderBy } from "json-function";
 orderBy(data, "title", "DESC");
 ```
 
+## search • [documentation](https://worn.gitbook.io/json-function/functions/search)
+
+Search over fields of objects.
+
+```js
+import { search } from "json-function";
+
+// Syntax: search(data: Object[], key: any, fields: string | string[], options?);
+
+// single field
+search(data, "key", "description");
+
+// multiple field
+search(data, "key", ["user.firstName", "description"]);
+
+// case sensitive
+search(data, "key", "description", { caseSensitive: false });
+```
+
 ## toArray • [documentation](https://worn.gitbook.io/json-function/functions/to-array)
 
 Converts objects into meaningful sequences.
