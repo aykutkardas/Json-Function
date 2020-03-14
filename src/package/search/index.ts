@@ -40,7 +40,7 @@ const search: SearchFunction = (data, key, fields, options) => {
       if (isString(key)) {
         let flag = "g"; 
 
-        if (options && options.caseSensitive) {
+        if (options && !options.caseSensitive) {
           flag += "i";
         } 
 
