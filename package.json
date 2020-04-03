@@ -2,7 +2,7 @@
   "name": "json-function",
   "version": "1.8.16",
   "description": "It allows you to use methods such as where, limit, select, orderBy on JSON data.",
-  "main": "dist/index.js",
+  "main": "dist/package/index.js",
   "scripts": {
     "test": "cross-env TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha -r ts-node/register -r ignore-styles -r jsdom-global/register test/**/*.spec.ts",
     "test-windows": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' mocha -r ts-node/register -r ignore-styles -r jsdom-global/register test/**/*.spec.ts",
