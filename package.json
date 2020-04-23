@@ -10,7 +10,7 @@
     "benchmark": "node benchmark/"
   },
   "author": "Aykut Kardaş",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "directories": {
     "test": "test"
   },
