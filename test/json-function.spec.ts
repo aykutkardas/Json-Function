@@ -141,6 +141,7 @@ describe("JsonFunction Class", () => {
       where: { completed: false },
       limit: [2, 0],
       select: ["title", "completed"],
+      search: null,
       schema: null,
       innerJoin: null
     });
@@ -172,6 +173,7 @@ describe("JsonFunction Class", () => {
       where: { completed: false },
       limit: [2, 0],
       select: ["title", "completed"],
+      search: null,
       schema: null,
       innerJoin: null
     });
@@ -194,6 +196,26 @@ describe("JsonFunction Class", () => {
         title: "fugiat veniam minus",
         completed: false
       }
+    ]);
+  });
+
+  it("Search method chain test", () => {
+    const result = JsonFunction.where({ completed: false })
+      .search("ut", "title")
+      .get(data);
+    expect(result).to.deep.equal([
+      {
+        user_id: 1,
+        id: 2,
+        title: "quis ut nam facilis et officia qui",
+        completed: false
+      },
+      {
+        user_id: 1,
+        id: 1,
+        title: "delectus aut autem",
+        completed: false
+      },
     ]);
   });
 });

@@ -3,6 +3,7 @@ import {
   where as Where,
   limit as Limit,
   select as Select,
+  search as Search,
   schema as Schema,
   transform as Transform,
   innerJoin as InnerJoin
@@ -15,6 +16,7 @@ type Option = {
   where: object | object[];
   limit: number[];
   select: string | string[];
+  search: [string, string | string[], Object?];
   schema: Object;
   innerJoin: [Object[], string, string];
 };
@@ -34,6 +36,7 @@ class JsonFunction {
     where: null,
     limit: null,
     select: null,
+    search: null,
     schema: null,
     innerJoin: null
   };
@@ -48,6 +51,7 @@ class JsonFunction {
       where: null,
       limit: null,
       select: null,
+      search: null,
       schema: null,
       innerJoin: null
     };
@@ -60,7 +64,7 @@ class JsonFunction {
 
   processManager() {
     const { option } = this;
-    const { orderBy, where, limit, select, schema, innerJoin } = option;
+    const { orderBy, where, limit, select, search, schema, innerJoin } = option;
 
     this.process.forEach(process => {
       switch (process) {
@@ -80,6 +84,11 @@ class JsonFunction {
 
         case "select":
           this.data = Select(this.data, select);
+          break;
+
+        case "search":
+          const [key, fields, option] = search;
+          this.data = Search(this.data, key, fields, option);
           break;
 
         case "schema":
@@ -135,6 +144,12 @@ class JsonFunction {
   select(fields: string | string[]) {
     this.option.select = fields;
     this.process.push("select");
+    return this;
+  }
+
+  search(key, fields: string | string[], option?) {
+    this.option.search = [key, fields, option];
+    this.process.push("search");
     return this;
   }
 
