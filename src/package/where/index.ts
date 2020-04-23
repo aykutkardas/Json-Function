@@ -22,7 +22,10 @@ const where: WhereFunction = (data, queries, options) => {
   } else if (isArrayOfObject(queries)) {
     queriesArr = <Object[]>queries;
   } else if (isFunction(queries)) {
-    queriesArr = [(<Function>queries)(WhereTool)];
+    queriesArr = (<Function>queries)(WhereTool);
+    if (!isArrayOfObject(queriesArr)) {
+      queriesArr = [queriesArr];
+    }
   } else {
     return data;
   }
