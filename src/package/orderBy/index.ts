@@ -1,12 +1,18 @@
 import { isArray, isString, isOneOf } from "../../utils/type-check";
+import getObjDeepProp from "../../utils/get-obj-deep-prop";
+
+type OrderByConfig = {
+  deep: boolean;
+};
 
 type OrderByFunction = (
   data: Object[],
   fieldName: string,
-  order?: string
+  order?: string,
+  config?: OrderByConfig
 ) => Object[];
 
-const orderBy: OrderByFunction = (data, fieldName, order = "ASC") => {
+const orderBy: OrderByFunction = (data, fieldName, order = "ASC", config) => {
   if (!isArray(data)) {
     return [];
   }
@@ -25,15 +31,21 @@ const orderBy: OrderByFunction = (data, fieldName, order = "ASC") => {
     return data;
   }
 
-  if (order === "DESC") {
-    return data.sort((a, b) =>
-      b[fieldName] > a[fieldName] ? 1 : a[fieldName] > b[fieldName] ? -1 : 0
-    );
-  }
+  return data.sort((a, b) => {
+    let firstValue = a[fieldName];
+    let secondValue = b[fieldName];
 
-  return data.sort((a, b) =>
-    a[fieldName] > b[fieldName] ? 1 : b[fieldName] > a[fieldName] ? -1 : 0
-  );
+    if (config && config.deep) {
+      firstValue = getObjDeepProp(fieldName)(a);
+      secondValue = getObjDeepProp(fieldName)(b);
+    }
+
+    if (order === "DESC") {
+      return secondValue > firstValue ? 1 : firstValue > secondValue ? -1 : 0;
+    }
+
+    return firstValue > secondValue ? 1 : secondValue > firstValue ? -1 : 0;
+  });
 };
 
 export default orderBy;
