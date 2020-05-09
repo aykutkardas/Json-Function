@@ -23,11 +23,17 @@ declare module "json-function" {
   export function orderBy(
     data: Object[],
     fieldName: string,
-    order?: string
+    order?: string,
+    options?: {
+      deep?: boolean;
+    }
   ): Object[];
 
   // { schema } Function
-  export function schema(data: Object[] | Object, schema: Object | Function): Object[] | Object;
+  export function schema(
+    data: Object[] | Object,
+    schema: Object | Function
+  ): Object[] | Object;
 
   // { transform } Function
   export function transform(data: Object[] | Object): Object[] | Object;
@@ -58,7 +64,10 @@ declare module "json-function" {
   // JsonFunction.orderBy Method
   export function _orderBy(
     fieldName: string,
-    order?: string
+    order?: string,
+    options?: {
+      deep?: boolean;
+    }
   ): JsonFunctionClass;
 
   // JsonFunction.schema Method

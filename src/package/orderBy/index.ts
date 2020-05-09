@@ -5,12 +5,12 @@ type OrderByFunction = (
   data: Object[],
   fieldName: string,
   order?: string,
-  config?: {
+  options?: {
     deep?: boolean;
   }
 ) => Object[];
 
-const orderBy: OrderByFunction = (data, fieldName, order = "ASC", config) => {
+const orderBy: OrderByFunction = (data, fieldName, order = "ASC", options) => {
   if (!isArray(data)) {
     return [];
   }
@@ -33,7 +33,7 @@ const orderBy: OrderByFunction = (data, fieldName, order = "ASC", config) => {
     let firstValue = a[fieldName];
     let secondValue = b[fieldName];
 
-    if (config && config.deep) {
+    if (options && options.deep) {
       firstValue = getObjDeepProp(fieldName)(a);
       secondValue = getObjDeepProp(fieldName)(b);
     }
