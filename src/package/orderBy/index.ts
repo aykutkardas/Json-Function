@@ -1,15 +1,13 @@
 import { isArray, isString, isOneOf } from "../../utils/type-check";
 import getObjDeepProp from "../../utils/get-obj-deep-prop";
 
-type OrderByConfig = {
-  deep: boolean;
-};
-
 type OrderByFunction = (
   data: Object[],
   fieldName: string,
   order?: string,
-  config?: OrderByConfig
+  config?: {
+    deep?: boolean;
+  }
 ) => Object[];
 
 const orderBy: OrderByFunction = (data, fieldName, order = "ASC", config) => {

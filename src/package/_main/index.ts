@@ -6,13 +6,13 @@ import {
   search as Search,
   schema as Schema,
   transform as Transform,
-  innerJoin as InnerJoin
+  innerJoin as InnerJoin,
 } from "..";
 
 import { isObject } from "../../utils/type-check";
 
 type Option = {
-  orderBy: string[];
+  orderBy: [string, string, Object?];
   where: object | object[];
   limit: number[];
   select: string | string[];
@@ -38,11 +38,11 @@ class JsonFunction {
     select: null,
     search: null,
     schema: null,
-    innerJoin: null
+    innerJoin: null,
   };
 
   config: Config = {
-    resetRecord: true
+    resetRecord: true,
   };
 
   reset() {
@@ -53,7 +53,7 @@ class JsonFunction {
       select: null,
       search: null,
       schema: null,
-      innerJoin: null
+      innerJoin: null,
     };
 
     this.data = [];
@@ -66,11 +66,11 @@ class JsonFunction {
     const { option } = this;
     const { orderBy, where, limit, select, search, schema, innerJoin } = option;
 
-    this.process.forEach(process => {
+    this.process.forEach((process) => {
       switch (process) {
         case "orderBy":
-          const [fieldName, order] = orderBy;
-          this.data = OrderBy(this.data, fieldName, order);
+          const [fieldName, order, config] = orderBy;
+          this.data = OrderBy(this.data, fieldName, order, config);
           break;
 
         case "where":
@@ -196,7 +196,7 @@ class JsonFunction {
 
     this.option = query;
 
-    Object.keys(query).forEach(process => {
+    Object.keys(query).forEach((process) => {
       if (query[process]) {
         this.process.push(process);
       }
