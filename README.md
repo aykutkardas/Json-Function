@@ -142,7 +142,6 @@ schema(data, (sc) => ({
   ),
 }))
 ```
-https://nj0ql.csb.app/
 ## where • [documentation](https://worn.gitbook.io/json-function/functions/where) • [samples](https://nj0ql.csb.app/)
 
 The "Where" function provides a comfortable method for filtering a json data.
@@ -217,6 +216,9 @@ With the "orderBy" function you can reorder the data in your json array.
 import { orderBy } from "json-function";
 
 orderBy(data, "title", "DESC");
+
+
+orderBy(data, "user.firstname", "DESC", { deep: true });
 ```
 
 ## search • [documentation](https://worn.gitbook.io/json-function/functions/search)
