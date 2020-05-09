@@ -10,6 +10,7 @@ interface WhereToolObject {
   in: (input: any) => (value: any) => boolean,
   nin: (input: any) => (value: any) => boolean,
   between: (min: number, max: number) => (value: any) => boolean,
+  oneOf: (input: any) => (value: any[] | string) => boolean, 
 }
 
 
@@ -23,6 +24,7 @@ const whereToolObject: WhereToolObject = {
   in: (input) => (value) => (isArray(value) || isString(value)) && value.includes(input),
   nin: (input) => (value) => (isArray(value) || isString(value)) && !value.includes(input),
   between: (min, max) => (value) => value >= min && value <= max,
+  oneOf: (input) => (value) => (isArray(input) || isString(input)) && input.includes(value),
 };
 
 export default whereToolObject;
