@@ -1,3 +1,5 @@
+import { isArray, isString } from '../../../utils/type-check';
+
 interface WhereToolObject {
   lt: (input: number) => (value: any) => boolean,
   lte: (input: number) => (value: any) => boolean,
@@ -18,8 +20,8 @@ const whereToolObject: WhereToolObject = {
   gte: (input) => (value) => value >= input,
   eq: (input) => (value) => value == input,
   ne: (input) => (value) => value != input,
-  in: (input) => (value) => value.includes(input),
-  nin: (input) => (value) => !value.includes(input),
+  in: (input) => (value) => (isArray(value) || isString(value)) && value.includes(input),
+  nin: (input) => (value) => (isArray(value) || isString(value)) && !value.includes(input),
   between: (min, max) => (value) => value >= min && value <= max,
 };
 

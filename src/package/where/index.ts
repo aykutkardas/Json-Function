@@ -47,7 +47,7 @@ const where: WhereFunction = (data, queries, options) => {
         }
 
         if (isFunction(activeQuery)) {
-          return (activeQuery(value));
+          return activeQuery(value);
         }
 
         return value === activeQuery;

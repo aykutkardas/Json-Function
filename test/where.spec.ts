@@ -296,6 +296,18 @@ describe("Where Tools Function", () => {
       }
     ]);
   });
+  it(".in() on non-properties method.", () => {
+    const result = where(data, wh => ({
+      nonproperties: wh.in("nam")
+    }));
+    expect(result).to.deep.equal([]);
+  });
+  it(".nin() on non-properties method.", () => {
+    const result = where(data, wh => ({
+      nonproperties: wh.nin("nam")
+    }));
+    expect(result).to.deep.equal([]);
+  });
   it(".between() method.", () => {
     const result = where(data, wh => ({
       id: wh.between(1, 3)
