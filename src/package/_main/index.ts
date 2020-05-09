@@ -112,8 +112,13 @@ class JsonFunction {
     });
   }
 
-  orderBy(fieldName: string, order: string = "ASC") {
+  orderBy(fieldName: string, order: string = "ASC", orderBy?) {
     this.option.orderBy = [fieldName, order];
+
+    if (orderBy) {
+      this.option.orderBy.push(orderBy);
+    }
+
     this.process.push("orderBy");
     return this;
   }
