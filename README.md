@@ -182,7 +182,7 @@ wh.eq("3")            // value == 3
 wh.ne("3")            // value != 3
 wh.in("test")         // value.includes("test")
 wh.nin("test")        // !value.includes("test")
-wh.oneOf(["a", "b"])  // ["a", "b"].includes(value)
+wh.oneOf([1, 2, 3])  // [1, 2, 3].includes(3)
 ```
 
 ## select • [documentation](https://worn.gitbook.io/json-function/functions/select)
@@ -221,7 +221,6 @@ With the "orderBy" function you can reorder the data in your json array.
 import { orderBy } from "json-function";
 
 orderBy(data, "title", "DESC");
-
 
 orderBy(data, "user.firstname", "DESC", { deep: true });
 ```
