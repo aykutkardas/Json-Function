@@ -138,7 +138,7 @@ describe("JsonFunction Class", () => {
     const classData = JsonFunction.data;
     expect(option).to.deep.equal({
       orderBy: ["title", "DESC"],
-      where: { completed: false },
+      where: [{ completed: false }],
       limit: [2, 0],
       select: ["title", "completed"],
       search: null,
@@ -170,7 +170,7 @@ describe("JsonFunction Class", () => {
 
     expect(unCompleteTodoQuery).to.deep.equal({
       orderBy: ["title", "DESC"],
-      where: { completed: false },
+      where: [{ completed: false }],
       limit: [2, 0],
       select: ["title", "completed"],
       search: null,

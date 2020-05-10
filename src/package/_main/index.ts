@@ -13,7 +13,7 @@ import { isObject } from "../../utils/type-check";
 
 type Option = {
   orderBy: [string, string, Object?];
-  where: object | object[];
+  where: [object | object[], Object?];
   limit: number[];
   select: string | string[];
   search: [string, string | string[], Object?];
@@ -69,12 +69,13 @@ class JsonFunction {
     this.process.forEach((process) => {
       switch (process) {
         case "orderBy":
-          const [fieldName, order, config] = orderBy;
-          this.data = OrderBy(this.data, fieldName, order, config);
+          const [fieldName, order, orderByOption] = orderBy;
+          this.data = OrderBy(this.data, fieldName, order, orderByOption);
           break;
 
         case "where":
-          this.data = Where(this.data, where);
+          const [queries, whereOption] = where;
+          this.data = Where(this.data, queries, whereOption);
           break;
 
         case "limit":
@@ -123,8 +124,13 @@ class JsonFunction {
     return this;
   }
 
-  where(queries: Object | Object[]) {
-    this.option.where = queries;
+  where(queries: Object | Object[], option?) {
+    this.option.where = [queries];
+
+    if (option) {
+      this.option.where.push(option);
+    }
+
     this.process.push("where");
     return this;
   }
