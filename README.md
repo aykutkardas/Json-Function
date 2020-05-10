@@ -182,7 +182,7 @@ wh.eq("3")            // value == 3
 wh.ne("3")            // value != 3
 wh.in("test")         // value.includes("test")
 wh.nin("test")        // !value.includes("test")
-wh.oneOf([1, 2, 3])  // [1, 2, 3].includes(3)
+wh.oneOf([1, 2, 3])  // [1, 2, 3].includes(value)
 ```
 
 ## select • [documentation](https://worn.gitbook.io/json-function/functions/select)
