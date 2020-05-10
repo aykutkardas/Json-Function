@@ -156,6 +156,10 @@ where(data, { completed: false });
 // Multiple (or)
 // (completed === false || userId === 2)
 where(data, [{ completed: false }, { userId: 2 }]);
+
+// Deep
+// (address.city === "New York")
+where(data, { "address.city": "New York" }, { deep: true });
 ```
 
 Use "callback" for advanced filter.
@@ -169,15 +173,16 @@ where(data, (wh) => ({
 
 Other **wh** methods.
 ```js
-wh.lte(3)        // value <= 3
-wh.lt(3)         // value <  3
-wh.gte(3)        // value >= 3
-wh.gt(3)         // value >  3
-wh.between(3,5)  // value >= 3 && value <= 5
-wh.eq("3")       // value == 3
-wh.ne("3")       // value != 3
-wh.in("test")    // value.includes("test")
-wh.nin("test")   // !value.includes("test")
+wh.lte(3)             // value <= 3
+wh.lt(3)              // value <  3
+wh.gte(3)             // value >= 3
+wh.gt(3)              // value >  3
+wh.between(3,5)       // value >= 3 && value <= 5
+wh.eq("3")            // value == 3
+wh.ne("3")            // value != 3
+wh.in("test")         // value.includes("test")
+wh.nin("test")        // !value.includes("test")
+wh.oneOf(["a", "b"])  // ["a", "b"].includes(value)
 ```
 
 ## select • [documentation](https://worn.gitbook.io/json-function/functions/select)
