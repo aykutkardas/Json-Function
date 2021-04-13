@@ -1,6 +1,5 @@
 import { isArrayOfObject, isObject, isString } from "../../utils/type-check";
 import getObjDeepProp from "../../utils/get-obj-deep-prop";
-import { where } from "..";
 
 type InnerJoinFunction = (
   data: Object[],
