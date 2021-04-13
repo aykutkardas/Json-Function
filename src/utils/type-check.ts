@@ -18,10 +18,10 @@ const isFunction: TypeCheckFunction = value => typeof value === "function";
 const isArray: TypeCheckFunction = value => Array.isArray(value);
 
 const isArrayOfString: TypeCheckFunction = value =>
-  isArray(value) && !value.map((val: any) => isString(val)).includes(false);
+  isArray(value) && value.every(isString);
 
 const isArrayOfObject: TypeCheckFunction = value =>
-  isArray(value) && !value.map((val: any) => isObject(val)).includes(false);
+  isArray(value) && value.every(isObject);
 
 const isObject: TypeCheckFunction = value =>
   value && getType(value) === "[object Object]";
