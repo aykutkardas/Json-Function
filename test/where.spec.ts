@@ -80,12 +80,6 @@ describe("Where function", () => {
     const result = where(data, [{ completed: true }, { userId: 2 }]);
     expect(result).to.deep.equal([
       {
-        userId: 1,
-        id: 4,
-        title: "et porro tempora",
-        completed: true
-      },
-      {
         userId: 2,
         id: 2,
         title: "quis ut nam facilis et officia qui",
@@ -102,6 +96,12 @@ describe("Where function", () => {
         education: {
           isDone: false
         }
+      },
+      {
+        userId: 1,
+        id: 4,
+        title: "et porro tempora",
+        completed: true
       }
     ]);
   });
