@@ -5,7 +5,6 @@
   "main": "dist/package/index.js",
   "scripts": {
     "test": "cross-env TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha -r ts-node/register -r ignore-styles -r jsdom-global/register test/**/*.spec.ts",
-    "test-windows": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' mocha -r ts-node/register -r ignore-styles -r jsdom-global/register test/**/*.spec.ts",
     "build": "tsc && babel --presets es2015 -d dist/ dist",
     "benchmark": "node benchmark/"
   },
