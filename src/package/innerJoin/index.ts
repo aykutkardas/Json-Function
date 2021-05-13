@@ -28,7 +28,7 @@ const innerJoin: InnerJoinFunction = (
 
   const getDataField = getObjDeepProp(dataFieldName);
   const getOtherDataField = getObjDeepProp(otherDataFieldName);
-  const temp = otherData.reduce((p, n) => p.set(getOtherDataField(n), n), new Map());
+  const temp = otherData.reduce<Map<any, object>>((p, n) => p.set(getOtherDataField(n), n), new Map());
 
   return data.map(item => {
     const otherDataItem = temp.get(getDataField(item));
