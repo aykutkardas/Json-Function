@@ -3,6 +3,7 @@
   "version": "1.8.35",
   "description": "It allows you to use methods such as where, limit, select, orderBy on JSON data.",
   "main": "dist/package/index.js",
+  "types": "dist/package/index.d.ts",
   "scripts": {
     "test": "cross-env TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha -r ts-node/register -r ignore-styles -r jsdom-global/register test/**/*.spec.ts",
     "build": "tsc && babel --presets es2015 -d dist/ dist"
