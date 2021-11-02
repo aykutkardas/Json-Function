@@ -1,4 +1,4 @@
-import { isArray, isString, isArrayOfString, isNumber } from "../../utils/type-check";
+import { isArray, isString, isArrayOfString } from "../../utils/type-check";
 import getObjDeepProp from "../../utils/get-obj-deep-prop";
 
 type SearchFunction = (
@@ -6,7 +6,7 @@ type SearchFunction = (
   key: any,
   fields: String | String[],
   options?: {
-    caseSensitive?: Boolean,
+    caseSensitive?: Boolean;
   }
 ) => Object[];
 
@@ -27,42 +27,34 @@ const search: SearchFunction = (data, key, fields, options) => {
 
   let result = [];
 
-  data.forEach(item => {
-    let fieldCount = 0;
-
-    fieldsArr.forEach(field => {
-      if (fieldCount > 0) {
-        return;
-      }
-
+  data.forEach((item) => {
+    for (let index = 0; index < fieldsArr.length; index++) {
+      const field = fieldsArr[index];
       const value = getObjDeepProp(field)(item);
 
       if (isString(key)) {
-        let flag = "g"; 
+        let flag = "g";
 
         if (options && !options.caseSensitive) {
           flag += "i";
-        } 
+        }
 
         const regex = new RegExp(key, flag);
 
         if (regex.exec(value)) {
           result.push(item);
-          fieldCount++;
+          break;
         }
       } else {
         if (key === value) {
           result.push(item);
-          fieldCount++;
+          break;
         }
       }
-    });
-
-    fieldCount = 0;
+    }
   });
 
-
   return result;
-}
+};
 
 export default search;
