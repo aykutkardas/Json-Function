@@ -7,15 +7,7 @@ import {
 import getObjDeepProp from "../../utils/get-obj-deep-prop";
 import WhereTool from "./tool/callback";
 
-const UNIQUE_IDX_KEY = "_jf_unique_idx_";
-
-const isAlreadyDefine = (result, newItem) =>
-  result.find(
-    (resultItem) => resultItem[UNIQUE_IDX_KEY] === newItem[UNIQUE_IDX_KEY]
-  );
-
 type WhereItem = {
-  [UNIQUE_IDX_KEY]?: number;
   [key: string]: any;
 };
 
@@ -50,15 +42,14 @@ const where: WhereFunction = (data, queries, options) => {
   let result = [];
 
   queriesArr.forEach((query) => {
-    let temp = data.map((item, index) => {
-      if (!item[UNIQUE_IDX_KEY]) {
-        item[UNIQUE_IDX_KEY] = index
-      }
-      return item;
-    });
+    data.forEach((item) => {
+      const fields = Object.keys(query);
+      const isMultipleWhere = fields.length > 1;
+      let isMatches = [];
 
-    Object.keys(query).forEach((fieldName) => {
-      temp = temp.filter((item) => {
+      fields.forEach((fieldName) => {
+        let isMatch = false;
+
         let value = item[fieldName];
         const activeQuery = query[fieldName];
 
@@ -67,24 +58,28 @@ const where: WhereFunction = (data, queries, options) => {
         }
 
         if (isFunction(activeQuery)) {
-          return activeQuery(value);
+          isMatch = activeQuery(value);
         }
 
-        return value === activeQuery;
-      });
-    });
+        if (value === activeQuery) {
+          isMatch = value === activeQuery;
+        }
 
-    temp.forEach((tempItem) => {
-      if (!isAlreadyDefine(result, tempItem)) {
-        result.push(tempItem);
+        if (isMultipleWhere) {
+          isMatches.push(isMatch);
+        } else {
+          isMatches = [isMatch];
+        }
+      });
+
+      if (isMatches.every((i) => i)) {
+        result.push(item);
+        isMatches = [];
       }
     });
   });
 
-  return result.map((item) => {
-    delete item[UNIQUE_IDX_KEY];
-    return item;
-  });
+  return result;
 };
 
 export default where;

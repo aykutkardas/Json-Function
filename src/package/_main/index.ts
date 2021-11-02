@@ -68,14 +68,19 @@ class JsonFunction {
 
     this.process.forEach((process) => {
       switch (process) {
-        case "orderBy":
-          const [fieldName, order, orderByOption] = orderBy;
-          this.data = OrderBy(this.data, fieldName, order, orderByOption);
-          break;
-
         case "where":
           const [queries, whereOption] = where;
           this.data = Where(this.data, queries, whereOption);
+          break;
+
+        case "search":
+          const [key, fields, option] = search;
+          this.data = Search(this.data, key, fields, option);
+          break;
+
+        case "orderBy":
+          const [fieldName, order, orderByOption] = orderBy;
+          this.data = OrderBy(this.data, fieldName, order, orderByOption);
           break;
 
         case "limit":
@@ -85,11 +90,6 @@ class JsonFunction {
 
         case "select":
           this.data = Select(this.data, select);
-          break;
-
-        case "search":
-          const [key, fields, option] = search;
-          this.data = Search(this.data, key, fields, option);
           break;
 
         case "schema":
