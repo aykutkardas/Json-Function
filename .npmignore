@@ -3,7 +3,6 @@ src/
 becnhmark/
 
 .babelrc
-.travis.yml
 .github
 tsconfig.json
 yarn.lock
