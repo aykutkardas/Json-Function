@@ -29,7 +29,7 @@ const orderBy: OrderByFunction = (data, fieldName, order = "ASC", options) => {
     return data;
   }
 
-  return data.sort((a, b) => {
+  return [...data].sort((a, b) => {
     let firstValue = a[fieldName];
     let secondValue = b[fieldName];
 

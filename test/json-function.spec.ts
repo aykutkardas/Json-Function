@@ -205,14 +205,14 @@ describe("JsonFunction Class", () => {
     expect(result).to.deep.equal([
       {
         user_id: 1,
-        id: 2,
-        title: "quis ut nam facilis et officia qui",
+        id: 1,
+        title: "delectus aut autem",
         completed: false
       },
       {
         user_id: 1,
-        id: 1,
-        title: "delectus aut autem",
+        id: 2,
+        title: "quis ut nam facilis et officia qui",
         completed: false
       },
     ]);

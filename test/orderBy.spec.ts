@@ -203,3 +203,13 @@ describe("OrdeyBy Function", () => {
     ]);
   });
 });
+
+describe("OrderBy immutability", () => {
+  it("Does not mutate the input array.", () => {
+    const input = [{ id: 3 }, { id: 1 }, { id: 2 }];
+    const result = orderBy(input, "id");
+    expect(result.map((item: any) => item.id)).to.deep.equal([1, 2, 3]);
+    expect(input.map((item) => item.id)).to.deep.equal([3, 1, 2]);
+    expect(result).to.not.equal(input);
+  });
+});
