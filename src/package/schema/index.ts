@@ -19,7 +19,9 @@ function schema(
   data: unknown,
   schema: SchemaInput = {}
 ): AnyObject[] | AnyObject | null {
-  if (!isArrayOfObject(data) && !isObject(data)) {
+  const isList = isArrayOfObject(data);
+
+  if (!isList && !isObject(data)) {
     return null;
   }
 
@@ -34,7 +36,7 @@ function schema(
 
   const build = compileSchema(schemaObj);
 
-  return isArrayOfObject(data) ? data.map(build) : build(data);
+  return isList ? (data as AnyObject[]).map(build) : build(data as AnyObject);
 }
 
 export default schema;
