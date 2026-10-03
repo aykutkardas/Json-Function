@@ -1,7 +1,6 @@
 import { isFunction, isObject, isArrayOfObject, AnyObject } from "../../utils/type-check";
 import SchemaTools, { SchemaToolObject, SchemaTools as SchemaToolsType } from "./tool/callback";
-import getSchemaValue from "./tool/get-schema-value";
-import { cloneDeep } from "../../utils";
+import compileSchema from "./tool/compile-schema";
 
 // Strings are dotted paths read from each item; nested objects build nested
 // output.
@@ -33,15 +32,9 @@ function schema(
     return data;
   }
 
-  if (isArrayOfObject(data)) {
-    return data.map(item => {
-      const temp = cloneDeep(schemaObj);
-      return getSchemaValue(temp, item);
-    });
-  }
+  const build = compileSchema(schemaObj);
 
-  const temp = cloneDeep(schemaObj);
-  return getSchemaValue(temp, data);
+  return isArrayOfObject(data) ? data.map(build) : build(data);
 }
 
 export default schema;
