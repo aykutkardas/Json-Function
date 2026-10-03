@@ -8,6 +8,60 @@ export type SearchOptions = {
 const escapeRegExp = (value: string) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+type Predicate = (item: any) => boolean;
+
+// Builds the item check once: field getters are resolved up front, and the
+// key is matched with String#includes, or one regular expression for case
+// insensitive search (its case folding is kept as before). Returns null when
+// the fields are invalid.
+export const compileSearch = (
+  key: unknown,
+  fields: string | string[],
+  options?: SearchOptions
+): Predicate | null => {
+  let fieldsArr: string[];
+
+  if (isString(fields)) {
+    fieldsArr = [fields];
+  } else if (isArrayOfString(fields)) {
+    fieldsArr = fields;
+  } else {
+    return null;
+  }
+
+  const getters = fieldsArr.map((field) => getObjDeepProp(field));
+
+  let matches: (value: unknown) => boolean;
+
+  if (isString(key)) {
+    const regex =
+      options && options.caseSensitive === false
+        ? new RegExp(escapeRegExp(key), "i")
+        : null;
+
+    matches = (value) => {
+      // Missing fields and nested objects must not match by being
+      // stringified into "undefined", "null" or "[object Object]".
+      if (value === undefined || value === null || typeof value === "object") {
+        return false;
+      }
+      const text = typeof value === "string" ? value : String(value);
+      return regex ? regex.test(text) : text.includes(key);
+    };
+  } else {
+    matches = (value) => value === key;
+  }
+
+  return (item) => {
+    for (let i = 0; i < getters.length; i++) {
+      if (matches(getters[i](item))) {
+        return true;
+      }
+    }
+    return false;
+  };
+};
+
 function search<T>(
   data: T[],
   key: unknown,
@@ -18,47 +72,9 @@ function search<T>(
     return [];
   }
 
-  let fieldsArr: string[];
+  const predicate = compileSearch(key, fields, options);
 
-  if (isString(fields)) {
-    fieldsArr = [fields];
-  } else if (isArrayOfString(fields)) {
-    fieldsArr = fields;
-  } else {
-    return data;
-  }
-
-  const result: T[] = [];
-
-  data.forEach((item) => {
-    for (let index = 0; index < fieldsArr.length; index++) {
-      const field = fieldsArr[index];
-      const value = getObjDeepProp(field)(item);
-
-      if (isString(key)) {
-        // Missing fields and nested objects must not match by being
-        // stringified into "undefined", "null" or "[object Object]".
-        if (value === undefined || value === null || typeof value === "object") {
-          continue;
-        }
-
-        const flag = options && options.caseSensitive === false ? "i" : "";
-        const regex = new RegExp(escapeRegExp(key), flag);
-
-        if (regex.test(String(value))) {
-          result.push(item);
-          break;
-        }
-      } else {
-        if (key === value) {
-          result.push(item);
-          break;
-        }
-      }
-    }
-  });
-
-  return result;
+  return predicate ? data.filter(predicate) : data;
 }
 
 export default search;
