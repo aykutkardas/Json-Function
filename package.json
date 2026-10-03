@@ -21,6 +21,7 @@
     "dist"
   ],
   "sideEffects": false,
+  "packageManager": "pnpm@12.8.1",
   "scripts": {
     "test": "vitest run --typecheck",
     "typecheck": "tsc --noEmit",

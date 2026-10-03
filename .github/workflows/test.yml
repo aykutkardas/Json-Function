@@ -13,15 +13,16 @@ jobs:
         node-version: [22.x, 24.x]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
-          cache: yarn
-      - run: yarn install --frozen-lockfile
-      - run: yarn typecheck
-      - run: yarn test
-      - run: yarn build
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
         env:
           CI: true

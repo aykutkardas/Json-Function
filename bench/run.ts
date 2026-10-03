@@ -1,4 +1,4 @@
-// Usage: yarn bench [itemCount]
+// Usage: pnpm bench [itemCount]
 import JsonFunction, {
   where,
   search,

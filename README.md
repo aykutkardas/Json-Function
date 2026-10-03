@@ -17,7 +17,7 @@ npm install json-function
 or
 
 ```
-yarn add json-function
+pnpm add json-function
 ```
 
 # Usage
