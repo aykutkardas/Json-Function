@@ -1,8 +1,8 @@
 # Json Function
 
-[![npm](https://img.shields.io/npm/v/json-function?color=%234fc921)](https://www.npmjs.com/package/json-function)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?color=%234fc921)](https://opensource.org/licenses/MIT)
-[![Build Status](https://github.com/aykutkardas/Json-Function/workflows/Test/badge.svg?color=%234fc921)](https://github.com/aykutkardas/Json-Function/actions)
+[![npm](https://img.shields.io/npm/v/json-function?color=4fc921)](https://www.npmjs.com/package/json-function)
+[![License](https://img.shields.io/npm/l/json-function?color=4fc921)](https://github.com/aykutkardas/Json-Function/blob/main/LICENSE)
+[![Test](https://github.com/aykutkardas/Json-Function/actions/workflows/test.yml/badge.svg)](https://github.com/aykutkardas/Json-Function/actions/workflows/test.yml)
 
 ## [Documentation](https://worn.gitbook.io/json-function/) • [Changelog](https://worn.gitbook.io/json-function/changelog)
 
