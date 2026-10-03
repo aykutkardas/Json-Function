@@ -241,7 +241,7 @@ search(data, "key", "description");
 // multiple field
 search(data, "key", ["user.firstName", "description"]);
 
-// case sensitive
+// case insensitive (search is case sensitive by default)
 search(data, "key", "description", { caseSensitive: false });
 ```
 

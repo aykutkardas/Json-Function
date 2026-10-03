@@ -10,6 +10,9 @@ type SearchFunction = (
   }
 ) => Object[];
 
+const escapeRegExp = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 const search: SearchFunction = (data, key, fields, options) => {
   if (!isArray(data)) {
     return [];
@@ -33,15 +36,16 @@ const search: SearchFunction = (data, key, fields, options) => {
       const value = getObjDeepProp(field)(item);
 
       if (isString(key)) {
-        let flag = "g";
-
-        if (options && !options.caseSensitive) {
-          flag += "i";
+        // Missing fields and nested objects must not match by being
+        // stringified into "undefined", "null" or "[object Object]".
+        if (value === undefined || value === null || typeof value === "object") {
+          continue;
         }
 
-        const regex = new RegExp(key, flag);
+        const flag = options && options.caseSensitive === false ? "i" : "";
+        const regex = new RegExp(escapeRegExp(key), flag);
 
-        if (regex.exec(value)) {
+        if (regex.test(String(value))) {
           result.push(item);
           break;
         }
