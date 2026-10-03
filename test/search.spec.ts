@@ -1,8 +1,7 @@
 import { search } from "../src/package";
-import { expect } from "chai";
-import "mocha";
+import { describe, it, expect } from "vitest";
 
-const testData = require("./test-data.json");
+import testData from "./test-data.json";
 
 describe("Search function", () => {
   it("Search with a string in a field.", () => {

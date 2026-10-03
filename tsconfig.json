@@ -1,17 +1,12 @@
 {
   "compilerOptions": {
-    "outDir": "dist/",
-    "declaration": true,
-    "declarationDir": "dist/",
-    "target": "es5",
+    "target": "es2019",
     "module": "esnext",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "lib": ["dom", "es6", "es5", "es2017"],
-    "resolveJsonModule": true
+    "moduleResolution": "bundler",
+    "lib": ["es2019"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
-  "include": ["./src/**/*"],
-  "exclude": ["./test/**/*.spec.ts"],
-  "compileOnSave": false
+  "include": ["./src/**/*"]
 }

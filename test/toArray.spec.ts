@@ -1,6 +1,5 @@
 import { toArray } from "../src/package";
-import { expect } from "chai";
-import "mocha";
+import { describe, it, expect } from "vitest";
 
 const data = {
   SpahhfW88GEcnVEXBkSB: {

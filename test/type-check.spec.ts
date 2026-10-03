@@ -1,6 +1,5 @@
 import { utils } from "../src/package";
-import { expect } from "chai";
-import "mocha";
+import { describe, it, expect } from "vitest";
 
 describe("TypeCheck isString Test", () => {
   it("Give string value", () => {

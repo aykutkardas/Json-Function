@@ -1,8 +1,0 @@
-test/
-src/
-becnhmark/
-
-.babelrc
-.github
-tsconfig.json
-yarn.lock

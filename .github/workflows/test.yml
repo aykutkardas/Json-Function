@@ -1,6 +1,8 @@
 name: Test
 
-on: [push]
+on:
+  push:
+  pull_request:
 
 jobs:
   test:
@@ -8,15 +10,18 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [22.x, 24.x]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: yarn install
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn typecheck
       - run: yarn test
+      - run: yarn build
         env:
           CI: true

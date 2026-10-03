@@ -1,8 +1,7 @@
 import { where } from "../src/package";
-import { expect } from "chai";
-import "mocha";
+import { describe, it, expect } from "vitest";
 
-const testData = require("./test-data.json");
+import testData from "./test-data.json";
 const data = [
   {
     userId: 1,

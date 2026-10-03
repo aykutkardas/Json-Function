@@ -1,6 +1,5 @@
 import getObjDeepProp from "../src/utils/get-obj-deep-prop";
-import { expect } from "chai";
-import "mocha";
+import { describe, it, expect } from "vitest";
 
 const data = [
   {
