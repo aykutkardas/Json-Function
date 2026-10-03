@@ -1,5 +1,6 @@
 import { isArray, isString, isDefined, isObject, AnyObject } from "../../utils/type-check";
 import getObjDeepProp from "../../utils/get-obj-deep-prop";
+import setOwn from "../../utils/set-own";
 
 export type SelectOptions = {
   deep?: boolean;
@@ -7,19 +8,26 @@ export type SelectOptions = {
 
 // Writes value at a dotted path, creating the intermediate objects:
 // setDeep({}, "user.name", "John") -> { user: { name: "John" } }
+// Only own properties are walked, so a path like "__proto__.x" creates a
+// "__proto__" key instead of writing to Object.prototype.
 const setDeep = (target: AnyObject, path: string, value: unknown) => {
   const keys = path.split(".");
   const lastKey = keys.pop() as string;
   let current = target;
 
   keys.forEach(key => {
-    if (!isObject(current[key])) {
-      current[key] = {};
+    const next = Object.prototype.hasOwnProperty.call(current, key) ? current[key] : undefined;
+
+    if (isObject(next)) {
+      current = next;
+    } else {
+      const created = {};
+      setOwn(current, key, created);
+      current = created;
     }
-    current = current[key];
   });
 
-  current[lastKey] = value;
+  setOwn(current, lastKey, value);
 };
 
 // Builds the per-item projection once. Returns null when the columns are
@@ -53,12 +61,18 @@ export const compileSelect = (
     };
   }
 
+  // setOwn on every write is about twice as slow, so it is only used when a
+  // column actually needs it.
+  const write = columnsArr.indexOf("__proto__") === -1
+    ? (target: AnyObject, key: string, value: unknown) => { target[key] = value; }
+    : setOwn;
+
   return (item: AnyObject) => {
     const newItem: AnyObject = {};
     for (let i = 0; i < columnsArr.length; i++) {
       const column = columnsArr[i];
       if (isDefined(item[column])) {
-        newItem[column] = item[column];
+        write(newItem, column, item[column]);
       }
     }
     return newItem;

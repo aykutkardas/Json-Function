@@ -1,5 +1,6 @@
 import { isString, isObject, isFunction, isSchemeToolsObject, AnyObject } from "../../../utils/type-check";
 import getObjDeepProp from "../../../utils/get-obj-deep-prop";
+import setOwn from "../../../utils/set-own";
 import { SchemaToolObject } from "./callback";
 
 type FieldBuilder = (item: AnyObject) => unknown;
@@ -42,6 +43,18 @@ const compileSchema = (schema: AnyObject): ((item: AnyObject) => AnyObject) => {
     // Any other value is copied to the output as it is.
     return [key, () => field];
   });
+
+  // The definition may be loaded from JSON, so its keys are data too. setOwn
+  // is only used when a key needs it, since it slows down every write.
+  if (fields.some(([key]) => key === "__proto__")) {
+    return item => {
+      const result: AnyObject = {};
+      for (let i = 0; i < fields.length; i++) {
+        setOwn(result, fields[i][0], fields[i][1](item));
+      }
+      return result;
+    };
+  }
 
   return item => {
     const result: AnyObject = {};

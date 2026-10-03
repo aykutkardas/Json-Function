@@ -1,4 +1,5 @@
 import { isArray, isObject, AnyObject } from "../../utils/type-check";
+import setOwn from "../../utils/set-own";
 
 const MAX_CACHE_SIZE = 5000;
 const keyCache = new Map<string, string>();
@@ -24,7 +25,14 @@ const transformKeys = (obj: AnyObject): AnyObject => {
 
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      newObject[toCamelCase(key)] = processVal(obj[key]);
+      const newKey = toCamelCase(key);
+      // Keys like "____proto____" become "__proto__" after conversion. The
+      // check stays here so the common path is a plain property write.
+      if (newKey === "__proto__") {
+        setOwn(newObject, newKey, processVal(obj[key]));
+      } else {
+        newObject[newKey] = processVal(obj[key]);
+      }
     }
   }
 
