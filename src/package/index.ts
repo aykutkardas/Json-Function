@@ -5,7 +5,7 @@ import orderBy from "./orderBy";
 import schema from "./schema";
 import search from "./search";
 import transform from "./transform";
-import innerJoin from "./innerJoin";
+import innerJoin, { leftJoin } from "./innerJoin";
 import toArray from "./toArray";
 import jsonFunction from "./_main";
 
@@ -20,6 +20,7 @@ export {
   search,
   transform,
   innerJoin,
+  leftJoin,
   toArray,
   utils,
 };

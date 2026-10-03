@@ -77,13 +77,23 @@ Instead of an entire "class", you can use only the methods you need.
 
 ## innerJoin • [documentation](https://worn.gitbook.io/json-function/functions/inner-join)
 
-The "innerJoin" function is used to join two arrays.
+The "innerJoin" function is used to join two arrays. Like SQL's `INNER JOIN`, items without a match are dropped and an item with several matches appears once per match.
 
 
 ```js
 import { innerJoin } from "json-function";
 
 innerJoin(data, data2, "id", "userId");
+```
+
+## leftJoin
+
+Same as `innerJoin`, but items without a match are kept unchanged (SQL's `LEFT JOIN`).
+
+```js
+import { leftJoin } from "json-function";
+
+leftJoin(data, data2, "id", "userId");
 ```
 
 ## schema • [documentation](https://worn.gitbook.io/json-function/functions/schema)
