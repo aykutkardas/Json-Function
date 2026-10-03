@@ -282,3 +282,26 @@ import { transform } from "json-function";
 
 transform(data);
 ```
+# Migrating from 1.x
+
+- **Chaining is immutable.** Every method returns a new query instead of changing a shared one. Calling methods one by one without using the return value no longer builds a query:
+
+  ```js
+  // 1.x
+  JsonFunction.where({ completed: false });
+  JsonFunction.limit(2);
+  JsonFunction.get(data);
+
+  // 2.x
+  const query = JsonFunction.where({ completed: false }).limit(2);
+  query.get(data);
+  ```
+
+  The `resetRecord` option and the `option`/`data` properties are gone.
+- **`getQuery()` returns an ordered list of steps** and the steps run in that order. Queries saved in the old object format are still accepted by `setQuery()` and `get(data, { query })`.
+- **`innerJoin` is a real inner join.** Items without a match are dropped and an item with several matches appears once per match. Use `leftJoin` to keep unmatched items.
+- **`where` with several queries** returns each matching item once, in input order.
+- **`orderBy` no longer sorts the input array in place.**
+- **`search` matches the key literally** (no regular expressions), skips missing fields, and is case sensitive unless `caseSensitive: false` is passed.
+- **`transform`** keeps primitives, nested arrays and non-plain objects such as `Date` intact.
+- **TypeScript:** functions are generic, so results keep their item type.
