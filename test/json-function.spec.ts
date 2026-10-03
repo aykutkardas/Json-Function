@@ -74,15 +74,14 @@ describe("JsonFunction Class", () => {
     ]);
   });
 
-  it("Method Chaining Test with transform.", () => {
+  it("Method Chaining Test with renamed fields.", () => {
     const result = JsonFunction.where({ completed: false })
       .orderBy("title", "DESC")
       .limit(2)
       .innerJoin(data2, "id", "id")
-      .transform() // user_id > userId
-      .select(["userId", "firstName", "title", "completed"])
+      .select(["user_id", "firstName", "title", "completed"])
       .schema({
-        id: "userId",
+        id: "user_id",
         firstName: "firstName",
         todo: {
           title: "title",
@@ -177,11 +176,6 @@ describe("JsonFunction Class", () => {
     const rows = [{ a: 1 }, { a: 2 }];
     const query = JsonFunction.limit(1).where({ a: 2 }).getQuery();
     expect(JsonFunction.setQuery(query).get(rows)).to.deep.equal([]);
-  });
-
-  it("Keeps transform in a saved query.", () => {
-    const query = JsonFunction.transform().getQuery();
-    expect(JsonFunction.setQuery(query).get([{ a_b: 1 }])).to.deep.equal([{ aB: 1 }]);
   });
 
   it("Applies every call when a method is used twice.", () => {

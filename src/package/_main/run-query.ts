@@ -4,7 +4,6 @@ import OrderBy, { compileOrderBy, sortBySpec, topKBySpec, hasTotalOrder, SortSpe
 import Limit from "../limit";
 import Select, { compileSelect } from "../select";
 import Schema from "../schema";
-import Transform from "../transform";
 import { innerJoin as InnerJoin, leftJoin as LeftJoin } from "../innerJoin";
 import { isArray } from "../../utils/type-check";
 import type { Step } from "./index";
@@ -24,8 +23,6 @@ export const runStep = (data: object[], step: Step): object[] => {
       return Select(data, step.args[0], step.args[1]);
     case "schema":
       return Schema(data, step.args[0]);
-    case "transform":
-      return Transform(data);
     case "innerJoin":
       return InnerJoin(data, step.args[0], step.args[1], step.args[2]);
     case "leftJoin":
@@ -75,7 +72,7 @@ const toOp = (step: Step): Op | null => {
       return { kind: "barrier", step };
     }
     default:
-      // schema, transform and joins validate the whole array first, so they
+      // schema and joins validate the whole array first, so they
       // keep running on it to give exactly the same results.
       return { kind: "barrier", step };
   }

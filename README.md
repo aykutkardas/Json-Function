@@ -279,16 +279,6 @@ toArray(data);
 toArray(data, { key: "_id_" });
 ```
 
-## transform • [documentation](https://worn.gitbook.io/json-function/functions/transform)
-
-Converts the snake_case keys in your data to camelCase, including nested objects and arrays.
-
-```js
-import { transform } from "json-function";
-
-transform(data);
-```
-
 # TypeScript
 
 Types are included. Standalone functions keep the item type of their input:
@@ -329,5 +319,5 @@ JsonFunction.where({ city: "Ankara" }).get<User>(users); // User[]
 - **`where` with several queries** returns each matching item once, in input order.
 - **`orderBy` no longer sorts the input array in place.**
 - **`search` matches the key literally** (no regular expressions), skips missing fields, and is case sensitive unless `caseSensitive: false` is passed.
-- **`transform`** keeps primitives, nested arrays and non-plain objects such as `Date` intact.
+- **`transform` and `.transform()` are removed.** Converting key casing is outside what this library queries, and the function was the source of a prototype pollution issue. Use a package such as [`camelcase-keys`](https://www.npmjs.com/package/camelcase-keys) (`camelcaseKeys(data, { deep: true })`), or rename specific fields with `schema(data, { userId: "user_id" })`.
 - **TypeScript:** functions are generic, so results keep their item type.

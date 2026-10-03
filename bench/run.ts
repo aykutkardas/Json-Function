@@ -5,7 +5,6 @@ import JsonFunction, {
   orderBy,
   schema,
   select,
-  transform,
   innerJoin,
 } from "../src/package";
 
@@ -16,7 +15,6 @@ const data = Array.from({ length: count }, (_, i) => ({
   completed: i % 3 === 0,
   score: (i * 7919) % 1000,
   title: "task number " + i,
-  user_info: { user_name: "user" + (i % 500), city_name: i % 2 ? "Istanbul" : "Ankara" },
   user: { name: "user" + (i % 500), city: i % 2 ? "Istanbul" : "Ankara" },
 }));
 const owners = Array.from({ length: 500 }, (_, i) => ({ ownerName: "user" + i, team: i % 7 }));
@@ -33,7 +31,6 @@ const cases: [string, () => unknown][] = [
   ["orderBy deep", () => orderBy(data, "user.name", "ASC", { deep: true })],
   ["select", () => select(data, ["id", "score"])],
   ["schema", () => schema(data, { id: "id", name: "user.name", city: "user.city" })],
-  ["transform", () => transform(data)],
   ["innerJoin", () => innerJoin(data, owners, "user.name", "ownerName")],
   [
     "chain where→orderBy→select→limit(10)",

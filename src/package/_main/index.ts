@@ -13,7 +13,6 @@ export type Step =
   | { type: "limit"; args: [number, number] }
   | { type: "select"; args: [string | string[], SelectOptions?] }
   | { type: "schema"; args: [SchemaInput] }
-  | { type: "transform"; args: [] }
   | { type: "innerJoin"; args: [object[], string, string] }
   | { type: "leftJoin"; args: [object[], string, string] };
 
@@ -106,10 +105,6 @@ export class JsonFunction {
 
   schema(schema: SchemaInput) {
     return this.add({ type: "schema", args: [schema] });
-  }
-
-  transform() {
-    return this.add({ type: "transform", args: [] });
   }
 
   innerJoin(otherData: object[], dataFieldName: string, otherFieldName: string) {

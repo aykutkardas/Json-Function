@@ -33,7 +33,7 @@ const randomStep = (): Step => {
   // random numbers each time it is called.
   const threshold = int(20);
 
-  switch (int(9)) {
+  switch (int(8)) {
     case 0:
       return {
         type: "where",
@@ -87,8 +87,6 @@ const randomStep = (): Step => {
       };
     case 6:
       return { type: "schema", args: [{ id: "id", score: "score", g: "group", deepTag: "nested.tag" }] };
-    case 7:
-      return { type: "transform", args: [] };
     default:
       return {
         type: pick(["innerJoin", "leftJoin"] as const),

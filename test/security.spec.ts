@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import JsonFunction, { select, transform, schema } from "../src/package";
+import JsonFunction, { select, schema } from "../src/package";
 
 // Keys that come from data or user input must never change Object.prototype
 // or the prototype of returned objects.
@@ -31,14 +31,6 @@ describe("Prototype pollution", () => {
     const result: any[] = select(rows, "__proto__");
     expect(result[0].role).to.equal(undefined);
     expect(hasOwn(result[0], "__proto__")).to.equal(true);
-  });
-
-  it("transform does not let a key that becomes __proto__ set the prototype.", () => {
-    const row = JSON.parse('{"name":"a","____proto____":{"is_admin":true}}');
-    const result: any = transform(row);
-    expect(result.isAdmin).to.equal(undefined);
-    expect(Object.getPrototypeOf(result)).to.equal(Object.prototype);
-    expect(result["__proto__"]).to.deep.equal({ isAdmin: true });
   });
 
   it("schema loaded from JSON keeps a __proto__ field as a plain key.", () => {
