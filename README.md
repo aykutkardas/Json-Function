@@ -4,33 +4,25 @@
 [![License](https://img.shields.io/npm/l/json-function?color=4fc921)](https://github.com/aykutkardas/Json-Function/blob/main/LICENSE)
 [![Test](https://github.com/aykutkardas/Json-Function/actions/workflows/test.yml/badge.svg)](https://github.com/aykutkardas/Json-Function/actions/workflows/test.yml)
 
-## [Documentation](https://worn.gitbook.io/json-function/) • [Changelog](https://worn.gitbook.io/json-function/changelog)
+Use `where`, `select`, `orderBy`, `limit` and more on arrays of JSON objects. Each function works on its own, or you can chain them into a query. No dependencies, TypeScript types included, and fast on large arrays.
 
-Lets you use where, limit, select, orderBy, and more in JSON data.
-
-> The documentation site still describes 1.x. For what changed in 2.0, see [Migrating from 1.x](#migrating-from-1x).
+**[Documentation](docs/README.md)** • **[Changelog](CHANGELOG.md)**
 
 ## Install
 
-```
+```bash
 npm install json-function
 ```
 
 or
 
-```
+```bash
 pnpm add json-function
 ```
 
-# Usage
+## Usage
 
-## JsonFunction • [documentation](https://worn.gitbook.io/json-function/)
-
-Json-Function provides query helpers for arrays of JSON objects, so you don't have to rewrite the same filtering, sorting and mapping code.
-
-You can use each method on its own, or chain them together.
-
-Chaining
+Chain methods and run the query with `get`:
 
 ```js
 import JsonFunction from "json-function";
@@ -43,260 +35,33 @@ const result = JsonFunction
   .get(data);
 ```
 
-Every method returns a new query, so you can also build one step by step or reuse a partial query. Steps run in the order they were added.
+Or use only the functions you need:
 
 ```js
-import JsonFunction from "json-function";
+import { where, orderBy } from "json-function";
 
-let query = JsonFunction.where({ completed: false });
-query = query.select(["title", "completed"]);
-
-const firstTwo = query.limit(2).get(data);
-const sorted = query.orderBy("title", "DESC").get(data);
+const incomplete = where(data, { completed: false });
+const sorted = orderBy(incomplete, "title", "DESC");
 ```
 
-or create a query and use it at any time.
-```js
-const queryTwoIncompleteTasks = JsonFunction
-  .where({ completed: false })
-  .select(["title", "completed"])
-  .limit(2)
-  .getQuery();
-```
-
-Query usage
-```js
-JsonFunction.setQuery(queryTwoIncompleteTasks).get(data);
-// or
-JsonFunction.get(data, { query: queryTwoIncompleteTasks });
-```
-
-
-# Methods
-
-Instead of an entire "class", you can use only the methods you need.
-
-## innerJoin • [documentation](https://worn.gitbook.io/json-function/functions/inner-join)
-
-The "innerJoin" function is used to join two arrays. Like SQL's `INNER JOIN`, items without a match are dropped and an item with several matches appears once per match.
-
-
-```js
-import { innerJoin } from "json-function";
-
-innerJoin(data, data2, "id", "userId");
-```
-
-## leftJoin
-
-Same as `innerJoin`, but items without a match are kept unchanged (SQL's `LEFT JOIN`).
-
-```js
-import { leftJoin } from "json-function";
-
-leftJoin(data, data2, "id", "userId");
-```
-
-## schema • [documentation](https://worn.gitbook.io/json-function/functions/schema)
-
-The "Schema" function is a great way to reconfigure your json data and make it your own.
-
-```js
-import { schema } from "json-function";
-
-schema(data, {
-  book: {
-    id: "id",
-    title: "title"
-  },
-  firstname: "user.firstname",
-  lastname: "user.lastname"
-});
-```
-
-Use "callback" for advanced conversions.
-
-```js
-schema(data, (sc) => ({
-  id: "id",
-  fullName: sc.join("user.firstname", "user.lastname")
-}));
-```
-
-Custom separator
-
-```js
-schema(data, (sc) => ({
-  id: "id",
-  fullName: sc.join("user.firstname", "user.lastname", { separator: "_" })
-}));
-```
-
-Use your own special function.
-```js
-schema(data, (sc) => ({
-  id: "id",
-  fullName: sc.custom(
-    (firstname, lastname) => `${firstname.toUpperCase()} ${lastname.toUpperCase()}`,
-    "user.firstname",
-    "user.lastname"
-  ),
-}))
-```
-
-Example
-```js
-schema(data, (sc) => ({
-  id: "id",
-  createdAt: sc.custom(
-    (createdAt) => moment(createdAt).format("DD/MM/YYYY"),
-    "createdAt",
-  ),
-}))
-```
-## where • [documentation](https://worn.gitbook.io/json-function/functions/where) • [samples](https://nj0ql.csb.app/)
-
-The "Where" function provides a comfortable method for filtering a json data.
-
-```js
-import { where } from "json-function";
-
-// Single
-// (completed === false)
-where(data, { completed: false });
-
-// Multiple fields (and)
-// (completed === false && userId === 2)
-where(data, { completed: false, userId: 2 });
-
-// Multiple queries (or)
-// (completed === false || userId === 2)
-where(data, [{ completed: false }, { userId: 2 }]);
-
-// Deep
-// (address.city === "New York")
-where(data, { "address.city": "New York" }, { deep: true });
-```
-
-Use "callback" for advanced filter.
-
-```js
-// id <= 3
-where(data, (wh) => ({
-  id: wh.lte(3),
-}));
-```
-
-Other **wh** methods.
-```js
-wh.lte(3)             // value <= 3
-wh.lt(3)              // value <  3
-wh.gte(3)             // value >= 3
-wh.gt(3)              // value >  3
-wh.between(3,5)       // value >= 3 && value <= 5
-wh.eq("3")            // value == 3
-wh.ne("3")            // value != 3
-wh.in("test")         // value.includes("test")
-wh.nin("test")        // !value.includes("test")
-wh.oneOf([1, 2, 3])  // [1, 2, 3].includes(value)
-```
-
-## select • [documentation](https://worn.gitbook.io/json-function/functions/select)
-
-The "Select" function is a practical method where you only get the desired fields of a json data.
-
-```js
-import { select } from "json-function";
-
-// Single
-select(data, "title");
-
-// Multiple
-select(data, ["title", "completed"]);
-
-// Deep
-// { id: 1, user: { firstname: "John" } }
-select(data, ["id", "user.firstname"], { deep: true });
-```
-
-## limit • [documentation](https://worn.gitbook.io/json-function/functions/limit)
-
-"Limit" returns a limited number of items, optionally starting from a given index. It works like `slice()` with a count instead of an end index.
-
-```js
-import { limit } from "json-function";
-
-// limit
-limit(data, 2);
-
-// limit and Start
-limit(data, 2, 2);
-```
-
-## orderBy • [documentation](https://worn.gitbook.io/json-function/functions/order-by)
-
-With the "orderBy" function you can reorder the data in your json array.
-
-```js
-import { orderBy } from "json-function";
-
-orderBy(data, "title", "DESC");
-
-orderBy(data, "user.firstname", "DESC", { deep: true });
-```
-
-## search • [documentation](https://worn.gitbook.io/json-function/functions/search)
-
-Search over fields of objects.
-
-```js
-import { search } from "json-function";
-
-// Syntax: search(data: Object[], key: any, fields: string | string[], options?);
-
-// single field
-search(data, "key", "description");
-
-// multiple field
-search(data, "key", ["user.firstName", "description"]);
-
-// case insensitive (search is case sensitive by default)
-search(data, "key", "description", { caseSensitive: false });
-```
-
-## toArray • [documentation](https://worn.gitbook.io/json-function/functions/to-array)
-
-Converts objects into meaningful sequences.
-
-
-```js
-import { toArray } from "json-function";
-
-// default key "uid"
-toArray(data);
-
-// custom key
-toArray(data, { key: "_id_" });
-```
-
-# TypeScript
-
-Types are included. Standalone functions keep the item type of their input:
-
-```ts
-import { where, select } from "json-function";
-
-type User = { id: number; name: string; city: string };
-
-where(users, { city: "Ankara" }); // User[]
-select(users, ["id", "name"]);    // Pick<User, "id" | "name">[]
-```
-
-Chains don't track the type through every step, so pass the result type to `get` if you know it:
-
-```ts
-JsonFunction.where({ city: "Ankara" }).get<User>(users); // User[]
-```
+Every chain method returns a new query, so partial queries can be reused, and `getQuery()`/`setQuery()` save and restore them. See [Chaining](docs/README.md#chaining).
+
+## Functions
+
+| Function | What it does |
+|---|---|
+| [`where`](docs/where.md) | Filter by field values, with AND, OR, deep fields and comparison helpers (`wh.gt`, `wh.in`, ...) |
+| [`search`](docs/search.md) | Find items whose fields contain a text |
+| [`select`](docs/select.md) | Keep only some fields, including nested ones |
+| [`orderBy`](docs/order-by.md) | Sort by a field, ascending or descending |
+| [`limit`](docs/limit.md) | Take a number of items from a start index |
+| [`schema`](docs/schema.md) | Rename, nest, join and compute fields |
+| [`innerJoin` / `leftJoin`](docs/joins.md) | Join two arrays on a field |
+| [`toArray`](docs/to-array.md) | Turn an object of objects into an array |
+
+## TypeScript
+
+Types are included, and standalone functions keep the item type of their input: `where(users, ...)` returns `User[]` and `select(users, ["id", "name"])` returns `Pick<User, "id" | "name">[]`. See [TypeScript](docs/README.md#typescript).
 
 # Migrating from 1.x
 
