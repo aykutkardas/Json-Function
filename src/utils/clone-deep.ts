@@ -1,28 +1,21 @@
-// https://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript
+import { isArray, isObject } from "./type-check";
 
-import { isNull, isObject } from './type-check';
-
-export default function cloneDeep(object) {
-  if (
-    isNull(object) 
-    || !isObject(object) 
-    || "isActiveClone" in object
-  ) {
-    return object;
+// Copies plain objects and arrays without touching the source. Other values
+// (functions, dates, ...) are shared, which is what schema definitions need.
+export default function cloneDeep<T>(value: T): T {
+  if (isArray(value)) {
+    return (value as any).map(cloneDeep);
   }
 
-  const newObject: Object = object.constructor();
-
-  for (const key in object) {
-
-    if (!Object.prototype.hasOwnProperty.call(object, key)) {
-      continue;
-    }
-
-    object.isActiveClone = null;
-    newObject[key] = cloneDeep(object[key]);
-    delete object.isActiveClone;
+  if (!isObject(value)) {
+    return value;
   }
 
-  return newObject;
+  const result = {};
+
+  Object.keys(value).forEach(key => {
+    result[key] = cloneDeep(value[key]);
+  });
+
+  return result as T;
 }

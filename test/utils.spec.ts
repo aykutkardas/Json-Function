@@ -1,4 +1,5 @@
 import getObjDeepProp from "../src/utils/get-obj-deep-prop";
+import cloneDeep from "../src/utils/clone-deep";
 import { describe, it, expect } from "vitest";
 
 const data = [
@@ -45,5 +46,24 @@ describe("Utils Functions", () => {
   it("Get-Object-Deep-Prop function found.", () => {
     const result = getObjDeepProp("education.isDone")(data[0]);
     expect(result).to.deep.equal(true);
+  });
+});
+
+describe("cloneDeep", () => {
+  it("Copies nested objects and arrays without changing the source.", () => {
+    const fn = () => 1;
+    const source = { a: { b: [1, { c: 2 }] }, fn };
+    const copy = cloneDeep(source);
+    expect(copy).to.deep.equal(source);
+    expect(copy.a).to.not.equal(source.a);
+    expect(copy.a.b).to.not.equal(source.a.b);
+    expect(copy.fn).to.equal(fn);
+    expect(Object.keys(source)).to.deep.equal(["a", "fn"]);
+  });
+
+  it("Handles objects without a prototype.", () => {
+    const source = Object.create(null);
+    source.a = 1;
+    expect(cloneDeep(source)).to.deep.equal({ a: 1 });
   });
 });

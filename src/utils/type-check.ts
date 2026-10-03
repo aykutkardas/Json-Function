@@ -24,7 +24,7 @@ const isArrayOfObject: TypeCheckFunction = value =>
   isArray(value) && value.every(isObject);
 
 const isObject: TypeCheckFunction = value =>
-  value && getType(value) === "[object Object]";
+  Boolean(value) && getType(value) === "[object Object]";
 
 const isOneOf: OneOfCheckFunction = (value, options) =>
   isArray(options) ? options.includes(value) : false;

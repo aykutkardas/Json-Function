@@ -89,6 +89,11 @@ describe("TypeCheck isObject Test", () => {
   it("Give without object value", () => {
     expect(utils.isObject(true)).to.equal(false);
   });
+  it("Returns a boolean for falsy values", () => {
+    expect(utils.isObject(0)).to.equal(false);
+    expect(utils.isObject("")).to.equal(false);
+    expect(utils.isObject(null)).to.equal(false);
+  });
 });
 
 describe("TypeCheck isOneOf Test", () => {
