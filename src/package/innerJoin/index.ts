@@ -1,19 +1,13 @@
-import { isArrayOfObject, isString } from "../../utils/type-check";
+import { isArrayOfObject, isString, AnyObject } from "../../utils/type-check";
 import getObjDeepProp from "../../utils/get-obj-deep-prop";
 
-type JoinFunction = (
-  data: Object[],
-  otherData: Object[],
+const join = (
+  keepUnmatched: boolean,
+  data: AnyObject[],
+  otherData: AnyObject[],
   dataFieldName: string,
   otherDataFieldName: string
-) => Object[];
-
-const join = (keepUnmatched: boolean): JoinFunction => (
-  data,
-  otherData,
-  dataFieldName,
-  otherDataFieldName
-) => {
+): AnyObject[] => {
   if (!isArrayOfObject(data)) {
     return [];
   }
@@ -28,7 +22,7 @@ const join = (keepUnmatched: boolean): JoinFunction => (
 
   const getDataField = getObjDeepProp(dataFieldName);
   const getOtherDataField = getObjDeepProp(otherDataFieldName);
-  const index = new Map<any, Object[]>();
+  const index = new Map<unknown, AnyObject[]>();
 
   otherData.forEach(otherItem => {
     const key = getOtherDataField(otherItem);
@@ -41,7 +35,7 @@ const join = (keepUnmatched: boolean): JoinFunction => (
     }
   });
 
-  const result: Object[] = [];
+  const result: AnyObject[] = [];
 
   data.forEach(item => {
     const matches = index.get(getDataField(item));
@@ -58,9 +52,23 @@ const join = (keepUnmatched: boolean): JoinFunction => (
 
 // Like SQL INNER JOIN: only items with at least one match are returned, once
 // per match.
-export const innerJoin = join(false);
+export function innerJoin<T extends object, U extends object>(
+  data: T[],
+  otherData: U[],
+  dataFieldName: string,
+  otherDataFieldName: string
+): (T & U)[] {
+  return join(false, data, otherData, dataFieldName, otherDataFieldName) as (T & U)[];
+}
 
 // Like SQL LEFT JOIN: items without a match are kept unchanged.
-export const leftJoin = join(true);
+export function leftJoin<T extends object, U extends object>(
+  data: T[],
+  otherData: U[],
+  dataFieldName: string,
+  otherDataFieldName: string
+): (T & Partial<U>)[] {
+  return join(true, data, otherData, dataFieldName, otherDataFieldName) as (T & Partial<U>)[];
+}
 
 export default innerJoin;

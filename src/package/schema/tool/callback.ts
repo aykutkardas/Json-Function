@@ -1,15 +1,24 @@
- export interface SchemaToolObject {
+export interface SchemaToolObject {
   __schema__: {
     job?: string;
     values?: string[];
     separator?: string;
-    custom?: Function;
+    custom?: (...values: any[]) => unknown;
   };
 }
 
-export default {
-  join: (...args: string[]): SchemaToolObject => {
-    let config: Object = { separator: " " };
+export type JoinOptions = {
+  separator?: string;
+};
+
+export interface SchemaTools {
+  join: (...args: (string | JoinOptions)[]) => SchemaToolObject;
+  custom: (fn: (...values: any[]) => unknown, ...args: string[]) => SchemaToolObject;
+}
+
+const schemaTools: SchemaTools = {
+  join: (...args) => {
+    let config: JoinOptions = { separator: " " };
     const values: string[] = [];
 
     args.forEach(arg => {
@@ -18,7 +27,7 @@ export default {
         return;
       }
       if (typeof arg === "object") {
-        config = { ...config, ...(<Object>arg) };
+        config = { ...config, ...arg };
       }
     });
 
@@ -31,7 +40,7 @@ export default {
     };
   },
 
-  custom: (fn: Function, ...args: string[]): SchemaToolObject => ({
+  custom: (fn, ...args) => ({
     __schema__: {
       values: args,
       job: "custom",
@@ -39,3 +48,5 @@ export default {
     }
   })
 };
+
+export default schemaTools;

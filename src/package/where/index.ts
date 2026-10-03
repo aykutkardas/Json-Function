@@ -5,41 +5,40 @@ import {
   isArrayOfObject,
 } from "../../utils/type-check";
 import getObjDeepProp from "../../utils/get-obj-deep-prop";
-import WhereTool from "./tool/callback";
+import WhereTool, { WhereToolObject } from "./tool/callback";
 
-type WhereItem = {
-  [key: string]: any;
+// Each field is compared with === unless its value is a predicate, such as
+// the ones returned by the `wh` helpers.
+export type WhereQuery = Record<string, any>;
+
+export type WhereQueries =
+  | WhereQuery
+  | WhereQuery[]
+  | ((wh: WhereToolObject) => WhereQuery | WhereQuery[]);
+
+export type WhereOptions = {
+  deep?: boolean;
 };
 
-type WhereFunction = (
-  data: WhereItem[],
-  queries: Object | Object[] | Function,
-  options?: {
-    deep?: boolean;
-  }
-) => Object[];
-
-const where: WhereFunction = (data, queries, options) => {
+function where<T>(data: T[], queries: WhereQueries, options?: WhereOptions): T[] {
   if (!isArray(data)) {
     return [];
   }
 
-  let queriesArr: Object[];
+  let queriesArr: WhereQuery[];
 
-  if (isObject(queries)) {
+  if (isFunction(queries)) {
+    const result = queries(WhereTool);
+    queriesArr = isArrayOfObject(result) ? result : [result];
+  } else if (isObject(queries)) {
     queriesArr = [queries];
   } else if (isArrayOfObject(queries)) {
-    queriesArr = <Object[]>queries;
-  } else if (isFunction(queries)) {
-    queriesArr = (<Function>queries)(WhereTool);
-    if (!isArrayOfObject(queriesArr)) {
-      queriesArr = [queriesArr];
-    }
+    queriesArr = queries;
   } else {
     return data;
   }
 
-  const matchesQuery = (item: WhereItem, query: Object) =>
+  const matchesQuery = (item: any, query: WhereQuery) =>
     Object.keys(query).every((fieldName) => {
       let value = item[fieldName];
       const activeQuery = query[fieldName];
@@ -60,6 +59,6 @@ const where: WhereFunction = (data, queries, options) => {
   return data.filter((item) =>
     queriesArr.some((query) => matchesQuery(item, query))
   );
-};
+}
 
 export default where;

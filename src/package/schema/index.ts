@@ -1,36 +1,47 @@
-import { isFunction, isObject, isArrayOfObject } from "../../utils/type-check";
-import SchemaTools from "./tool/callback";
+import { isFunction, isObject, isArrayOfObject, AnyObject } from "../../utils/type-check";
+import SchemaTools, { SchemaToolObject, SchemaTools as SchemaToolsType } from "./tool/callback";
 import getSchemaValue from "./tool/get-schema-value";
 import { cloneDeep } from "../../utils";
 
-type SchemaFunction = (
-  data: Object[] | Object,
-  schema: Object | Function
-) => Object[] | Object;
+// Strings are dotted paths read from each item; nested objects build nested
+// output.
+export type SchemaDefinition = {
+  [key: string]: string | SchemaToolObject | SchemaDefinition;
+};
 
-const schema: SchemaFunction = (data, schema = {}) => {
+export type SchemaInput =
+  | SchemaDefinition
+  | ((sc: SchemaToolsType) => SchemaDefinition);
+
+function schema(data: object[], schema: SchemaInput): AnyObject[];
+function schema(data: object, schema: SchemaInput): AnyObject;
+function schema(data: unknown, schema: SchemaInput): AnyObject[] | AnyObject | null;
+function schema(
+  data: unknown,
+  schema: SchemaInput = {}
+): AnyObject[] | AnyObject | null {
   if (!isArrayOfObject(data) && !isObject(data)) {
     return null;
   }
 
-  let schemaObj: Object;
-  if (isObject(schema)) {
+  let schemaObj: AnyObject;
+  if (isFunction(schema)) {
+    schemaObj = schema(SchemaTools);
+  } else if (isObject(schema)) {
     schemaObj = schema;
-  } else if (isFunction(schema)) {
-    schemaObj = (<Function>schema)(SchemaTools);
   } else {
     return data;
   }
 
   if (isArrayOfObject(data)) {
-    return (<Object[]>data).map(item => {
+    return data.map(item => {
       const temp = cloneDeep(schemaObj);
       return getSchemaValue(temp, item);
     });
-  } else if (isObject(data)) {
-    const temp = cloneDeep(schemaObj);
-    return getSchemaValue(temp, data);
   }
-};
+
+  const temp = cloneDeep(schemaObj);
+  return getSchemaValue(temp, data);
+}
 
 export default schema;

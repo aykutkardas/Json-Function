@@ -22,7 +22,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --typecheck",
     "typecheck": "tsc --noEmit",
     "build": "tsup"
   },

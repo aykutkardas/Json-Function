@@ -1,21 +1,14 @@
 import { isArray, isNumber } from "../../utils/type-check";
 
-type LimitFunction = (data: any[], limit: number, start?: number) => any[];
-
-const limit: LimitFunction = (data, limit, start) => {
+function limit<T>(data: T[], limit?: number, start?: number): T[] {
   if (!isArray(data)) {
     return [];
   }
 
-  if (!isNumber(limit)) {
-    limit = 10;
-  }
+  const count = isNumber(limit) ? limit : 10;
+  const from = isNumber(start) ? start : 0;
 
-  if (!isNumber(start)) {
-    start = 0;
-  }
-
-  return data.slice(start, limit + start);
-};
+  return data.slice(from, count + from);
+}
 
 export default limit;

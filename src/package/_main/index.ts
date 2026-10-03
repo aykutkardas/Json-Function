@@ -10,31 +10,36 @@ import {
   leftJoin as LeftJoin,
 } from "..";
 
-import { isArray, isObject } from "../../utils/type-check";
+import { isArray, isObject, AnyObject } from "../../utils/type-check";
+import type { WhereQueries, WhereOptions } from "../where";
+import type { SearchOptions } from "../search";
+import type { Order, OrderByOptions } from "../orderBy";
+import type { SelectOptions } from "../select";
+import type { SchemaInput } from "../schema";
 
 export type Step =
-  | { type: "where"; args: [Object | Object[] | Function, Object?] }
-  | { type: "search"; args: [any, string | string[], Object?] }
-  | { type: "orderBy"; args: [string, string, Object?] }
+  | { type: "where"; args: [WhereQueries, WhereOptions?] }
+  | { type: "search"; args: [unknown, string | string[], SearchOptions?] }
+  | { type: "orderBy"; args: [string, Order, OrderByOptions?] }
   | { type: "limit"; args: [number, number] }
-  | { type: "select"; args: [string | string[], Object?] }
-  | { type: "schema"; args: [Object | Function] }
+  | { type: "select"; args: [string | string[], SelectOptions?] }
+  | { type: "schema"; args: [SchemaInput] }
   | { type: "transform"; args: [] }
-  | { type: "innerJoin"; args: [Object[], string, string] }
-  | { type: "leftJoin"; args: [Object[], string, string] };
+  | { type: "innerJoin"; args: [object[], string, string] }
+  | { type: "leftJoin"; args: [object[], string, string] };
 
 export type Query = Step[];
 
 // Shape returned by getQuery() before 2.0. Still accepted by setQuery() and
 // get(data, { query }); its steps run in this fixed key order.
-type LegacyQuery = {
-  orderBy?: [string, string, Object?];
-  where?: [Object | Object[], Object?];
-  limit?: number[];
-  select?: string | string[];
-  search?: [string, string | string[], Object?];
-  schema?: Object;
-  innerJoin?: [Object[], string, string];
+export type LegacyQuery = {
+  orderBy?: [string, Order, OrderByOptions?] | null;
+  where?: [WhereQueries, WhereOptions?] | null;
+  limit?: number[] | null;
+  select?: string | string[] | null;
+  search?: [string, string | string[], SearchOptions?] | null;
+  schema?: SchemaInput | null;
+  innerJoin?: [object[], string, string] | null;
 };
 
 type Config = {
@@ -45,7 +50,7 @@ const fromLegacyQuery = (query: LegacyQuery): Query => {
   const steps: Query = [];
 
   Object.keys(query).forEach((type) => {
-    const value = query[type];
+    const value = (query as AnyObject)[type];
 
     if (!value) {
       return;
@@ -73,7 +78,7 @@ const normalizeQuery = (query: Query | LegacyQuery): Query => {
   return [];
 };
 
-const runStep = (data: Object[], step: Step): Object[] => {
+const runStep = (data: object[], step: Step): object[] => {
   switch (step.type) {
     case "where":
       return Where(data, step.args[0], step.args[1]);
@@ -86,9 +91,9 @@ const runStep = (data: Object[], step: Step): Object[] => {
     case "select":
       return Select(data, step.args[0], step.args[1]);
     case "schema":
-      return <Object[]>Schema(data, step.args[0]);
+      return Schema(data, step.args[0]);
     case "transform":
-      return <Object[]>Transform(data);
+      return Transform(data);
     case "innerJoin":
       return InnerJoin(data, step.args[0], step.args[1], step.args[2]);
     case "leftJoin":
@@ -115,15 +120,15 @@ export class JsonFunction {
     return new JsonFunction([...this.steps, step]);
   }
 
-  where(queries: Object | Object[] | Function, option?: Object) {
+  where(queries: WhereQueries, option?: WhereOptions) {
     return this.add({ type: "where", args: [queries, option] });
   }
 
-  search(key: any, fields: string | string[], option?: Object) {
+  search(key: unknown, fields: string | string[], option?: SearchOptions) {
     return this.add({ type: "search", args: [key, fields, option] });
   }
 
-  orderBy(fieldName: string, order: string = "ASC", option?: Object) {
+  orderBy(fieldName: string, order: Order = "ASC", option?: OrderByOptions) {
     return this.add({ type: "orderBy", args: [fieldName, order, option] });
   }
 
@@ -131,11 +136,11 @@ export class JsonFunction {
     return this.add({ type: "limit", args: [limit, start] });
   }
 
-  select(fields: string | string[], option?: Object) {
+  select(fields: string | string[], option?: SelectOptions) {
     return this.add({ type: "select", args: [fields, option] });
   }
 
-  schema(schema: Object | Function) {
+  schema(schema: SchemaInput) {
     return this.add({ type: "schema", args: [schema] });
   }
 
@@ -143,22 +148,23 @@ export class JsonFunction {
     return this.add({ type: "transform", args: [] });
   }
 
-  innerJoin(otherData: Object[], dataFieldName: string, otherFieldName: string) {
+  innerJoin(otherData: object[], dataFieldName: string, otherFieldName: string) {
     return this.add({
       type: "innerJoin",
       args: [otherData, dataFieldName, otherFieldName],
     });
   }
 
-  leftJoin(otherData: Object[], dataFieldName: string, otherFieldName: string) {
+  leftJoin(otherData: object[], dataFieldName: string, otherFieldName: string) {
     return this.add({
       type: "leftJoin",
       args: [otherData, dataFieldName, otherFieldName],
     });
   }
 
-  // Runs the steps in the order they were added.
-  get(data: Object[], config: Config = {}) {
+  // Runs the steps in the order they were added. The result type is not
+  // tracked through the chain; pass it as T if you know it.
+  get<T = AnyObject>(data: object[], config: Config = {}): T[] {
     const steps = config.query
       ? [...this.steps, ...normalizeQuery(config.query)]
       : this.steps;
@@ -166,7 +172,7 @@ export class JsonFunction {
     const result = steps.reduce(runStep, data);
 
     // Never hand the caller's own array back.
-    return result === data ? [...data] : result;
+    return (result === data ? [...data] : result) as T[];
   }
 
   getQuery(): Query {

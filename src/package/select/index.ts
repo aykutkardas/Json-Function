@@ -1,19 +1,15 @@
-import { isArray, isString, isDefined, isObject } from "../../utils/type-check";
+import { isArray, isString, isDefined, isObject, AnyObject } from "../../utils/type-check";
 import getObjDeepProp from "../../utils/get-obj-deep-prop";
 
-type SelectFunction = (
-  data: Object[],
-  columns: string | string[],
-  options?: {
-    deep?: boolean;
-  }
-) => Object[];
+export type SelectOptions = {
+  deep?: boolean;
+};
 
 // Writes value at a dotted path, creating the intermediate objects:
 // setDeep({}, "user.name", "John") -> { user: { name: "John" } }
-const setDeep = (target: Object, path: string, value: any) => {
+const setDeep = (target: AnyObject, path: string, value: unknown) => {
   const keys = path.split(".");
-  const lastKey = keys.pop();
+  const lastKey = keys.pop() as string;
   let current = target;
 
   keys.forEach(key => {
@@ -26,7 +22,20 @@ const setDeep = (target: Object, path: string, value: any) => {
   current[lastKey] = value;
 };
 
-const select: SelectFunction = (data, columns, options) => {
+function select<T extends object, K extends keyof T & string>(
+  data: T[],
+  columns: K | K[]
+): Pick<T, K>[];
+function select(
+  data: object[],
+  columns: string | string[],
+  options?: SelectOptions
+): AnyObject[];
+function select(
+  data: object[],
+  columns: string | string[],
+  options?: SelectOptions
+): AnyObject[] {
   if (!isArray(data)) {
     return [];
   }
@@ -34,9 +43,9 @@ const select: SelectFunction = (data, columns, options) => {
   let columnsArr: string[];
 
   if (isString(columns)) {
-    columnsArr = [<string>columns];
+    columnsArr = [columns];
   } else if (isArray(columns)) {
-    columnsArr = <string[]>columns;
+    columnsArr = columns;
   } else {
     return data;
   }
@@ -54,8 +63,8 @@ const select: SelectFunction = (data, columns, options) => {
     });
   }
 
-  return data.map(item => {
-    const newItem = {};
+  return data.map((item: AnyObject) => {
+    const newItem: AnyObject = {};
     columnsArr.forEach(column => {
       if (isDefined(item[column])) {
         newItem[column] = item[column];
@@ -63,6 +72,6 @@ const select: SelectFunction = (data, columns, options) => {
     });
     return newItem;
   });
-};
+}
 
 export default select;
