@@ -82,3 +82,24 @@ describe("Transform Function for Array", () => {
     });
   });
 });
+
+describe("Transform edge cases", () => {
+  it("Keeps primitives, nested arrays and non-plain objects intact.", () => {
+    const date = new Date(0);
+    const result = transform({
+      tag_list: ["first_tag", "second_tag"],
+      score_list: [1, 2],
+      matrix_data: [[{ cell_value: 1 }], [2]],
+      created_at: date,
+      empty_value: null,
+    });
+    expect(result).to.deep.equal({
+      tagList: ["first_tag", "second_tag"],
+      scoreList: [1, 2],
+      matrixData: [[{ cellValue: 1 }], [2]],
+      createdAt: date,
+      emptyValue: null,
+    });
+    expect((result as any).createdAt).to.equal(date);
+  });
+});

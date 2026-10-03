@@ -1,40 +1,35 @@
-import { isArray, isObject, isArrayOfObject } from "../../utils/type-check";
+import { isArray, isObject } from "../../utils/type-check";
 
 type TransformFunction = (data: Object[] | Object) => Object[] | Object;
 
 const transformKeys = (obj: Object): Object => {
-  const tempObj = Object.entries(obj).map(([key, val]) => [
-    key.replace(/_(.)/g, g => g[1].toUpperCase()),
-    processVal(val)
-  ]);
-
   const newObject = {};
-  tempObj.forEach(([key, val]) => {
-    newObject[key] = val;
+
+  Object.keys(obj).forEach(key => {
+    newObject[key.replace(/_(.)/g, g => g[1].toUpperCase())] = processVal(obj[key]);
   });
 
   return newObject;
 };
 
+// Only plain objects get their keys converted. Arrays are walked so their
+// object elements are converted too, while primitives, nested arrays and
+// other objects (Date, Map, ...) keep their shape.
 const processVal = (val: any): any => {
-  if (!val || typeof val !== "object") {
-    return val;
-  } 
-  
   if (isArray(val)) {
-    return val.map(transformKeys);
+    return val.map(processVal);
   }
-  
-  return transformKeys(val);
+
+  if (isObject(val)) {
+    return transformKeys(val);
+  }
+
+  return val;
 };
 
 const transform: TransformFunction = data => {
-  if (isArrayOfObject(data)) {
-    return (<Object[]>data).map(item => transformKeys(item));
-  } 
-  
-  if (isObject(data)) {
-    return transformKeys(data);
+  if (isArray(data) || isObject(data)) {
+    return processVal(data);
   }
 
   return null;
