@@ -141,7 +141,7 @@ describe("JsonFunction Class", () => {
       { type: "orderBy", args: ["title", "DESC", undefined] },
       { type: "where", args: [{ completed: false }, undefined] },
       { type: "limit", args: [2, 0] },
-      { type: "select", args: [["title", "completed"]] }
+      { type: "select", args: [["title", "completed"], undefined] }
     ]);
     const expected = [
       {

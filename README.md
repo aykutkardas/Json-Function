@@ -208,6 +208,10 @@ select(data, "title");
 
 // Multiple
 select(data, ["title", "completed"]);
+
+// Deep
+// { id: 1, user: { firstname: "John" } }
+select(data, ["id", "user.firstname"], { deep: true });
 ```
 
 ## limit • [documentation](https://worn.gitbook.io/json-function/functions/limit)

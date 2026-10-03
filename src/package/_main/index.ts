@@ -17,7 +17,7 @@ export type Step =
   | { type: "search"; args: [any, string | string[], Object?] }
   | { type: "orderBy"; args: [string, string, Object?] }
   | { type: "limit"; args: [number, number] }
-  | { type: "select"; args: [string | string[]] }
+  | { type: "select"; args: [string | string[], Object?] }
   | { type: "schema"; args: [Object | Function] }
   | { type: "transform"; args: [] }
   | { type: "innerJoin"; args: [Object[], string, string] }
@@ -84,7 +84,7 @@ const runStep = (data: Object[], step: Step): Object[] => {
     case "limit":
       return Limit(data, step.args[0], step.args[1]);
     case "select":
-      return Select(data, step.args[0]);
+      return Select(data, step.args[0], step.args[1]);
     case "schema":
       return <Object[]>Schema(data, step.args[0]);
     case "transform":
@@ -131,8 +131,8 @@ export class JsonFunction {
     return this.add({ type: "limit", args: [limit, start] });
   }
 
-  select(fields: string | string[]) {
-    return this.add({ type: "select", args: [fields] });
+  select(fields: string | string[], option?: Object) {
+    return this.add({ type: "select", args: [fields, option] });
   }
 
   schema(schema: Object | Function) {
