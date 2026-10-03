@@ -67,3 +67,27 @@ describe("cloneDeep", () => {
     expect(cloneDeep(source)).to.deep.equal({ a: 1 });
   });
 });
+
+describe("getObjDeepProp paths", () => {
+  const item = { a: { b: { c: { d: 4 } }, zero: 0 }, flag: false, list: [10, 20] };
+
+  it("Reads paths of any depth.", () => {
+    expect(getObjDeepProp("flag")(item)).to.equal(false);
+    expect(getObjDeepProp("a.zero")(item)).to.equal(0);
+    expect(getObjDeepProp("a.b.c")(item)).to.deep.equal({ d: 4 });
+    expect(getObjDeepProp("a.b.c.d")(item)).to.equal(4);
+    expect(getObjDeepProp("list.1")(item)).to.equal(20);
+  });
+
+  it("Returns undefined for missing segments at any depth.", () => {
+    expect(getObjDeepProp("missing")(item)).to.equal(undefined);
+    expect(getObjDeepProp("missing.x")(item)).to.equal(undefined);
+    expect(getObjDeepProp("a.missing.x.y")(item)).to.equal(undefined);
+    expect(getObjDeepProp("a.b")(null)).to.equal(undefined);
+    expect(getObjDeepProp("a.b.c")(undefined)).to.equal(undefined);
+  });
+
+  it("Returns the same getter for the same path.", () => {
+    expect(getObjDeepProp("a.b")).to.equal(getObjDeepProp("a.b"));
+  });
+});
