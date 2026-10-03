@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0 - Unreleased
+## 2.0.0 - 2026-10-03
 
 See [Migrating from 1.x](README.md#migrating-from-1x) for how to update.
 

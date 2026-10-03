@@ -1,6 +1,6 @@
 {
   "name": "json-function",
-  "version": "1.8.39",
+  "version": "2.0.0",
   "description": "It allows you to use methods such as where, limit, select, orderBy on JSON data.",
   "type": "module",
   "main": "./dist/package/index.js",
