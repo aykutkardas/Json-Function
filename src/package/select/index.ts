@@ -22,6 +22,49 @@ const setDeep = (target: AnyObject, path: string, value: unknown) => {
   current[lastKey] = value;
 };
 
+// Builds the per-item projection once. Returns null when the columns are
+// invalid and the data should be returned as it is.
+export const compileSelect = (
+  columns: string | string[],
+  options?: SelectOptions
+): ((item: any) => AnyObject) | null => {
+  let columnsArr: string[];
+
+  if (isString(columns)) {
+    columnsArr = [columns];
+  } else if (isArray(columns)) {
+    columnsArr = columns;
+  } else {
+    return null;
+  }
+
+  if (options && options.deep) {
+    const getters = columnsArr.map(column => getObjDeepProp(column));
+
+    return item => {
+      const newItem = {};
+      for (let i = 0; i < columnsArr.length; i++) {
+        const value = getters[i](item);
+        if (isDefined(value)) {
+          setDeep(newItem, columnsArr[i], value);
+        }
+      }
+      return newItem;
+    };
+  }
+
+  return (item: AnyObject) => {
+    const newItem: AnyObject = {};
+    for (let i = 0; i < columnsArr.length; i++) {
+      const column = columnsArr[i];
+      if (isDefined(item[column])) {
+        newItem[column] = item[column];
+      }
+    }
+    return newItem;
+  };
+};
+
 function select<T extends object, K extends keyof T & string>(
   data: T[],
   columns: K | K[]
@@ -40,38 +83,9 @@ function select(
     return [];
   }
 
-  let columnsArr: string[];
+  const project = compileSelect(columns, options);
 
-  if (isString(columns)) {
-    columnsArr = [columns];
-  } else if (isArray(columns)) {
-    columnsArr = columns;
-  } else {
-    return data;
-  }
-
-  if (options && options.deep) {
-    return data.map(item => {
-      const newItem = {};
-      columnsArr.forEach(column => {
-        const value = getObjDeepProp(column)(item);
-        if (isDefined(value)) {
-          setDeep(newItem, column, value);
-        }
-      });
-      return newItem;
-    });
-  }
-
-  return data.map((item: AnyObject) => {
-    const newItem: AnyObject = {};
-    columnsArr.forEach(column => {
-      if (isDefined(item[column])) {
-        newItem[column] = item[column];
-      }
-    });
-    return newItem;
-  });
+  return project ? data.map(project) : data;
 }
 
 export default select;

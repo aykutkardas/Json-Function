@@ -1,15 +1,4 @@
-import {
-  orderBy as OrderBy,
-  where as Where,
-  limit as Limit,
-  select as Select,
-  search as Search,
-  schema as Schema,
-  transform as Transform,
-  innerJoin as InnerJoin,
-  leftJoin as LeftJoin,
-} from "..";
-
+import { runQuery } from "./run-query";
 import { isArray, isObject, AnyObject } from "../../utils/type-check";
 import type { WhereQueries, WhereOptions } from "../where";
 import type { SearchOptions } from "../search";
@@ -78,31 +67,6 @@ const normalizeQuery = (query: Query | LegacyQuery): Query => {
   return [];
 };
 
-const runStep = (data: object[], step: Step): object[] => {
-  switch (step.type) {
-    case "where":
-      return Where(data, step.args[0], step.args[1]);
-    case "search":
-      return Search(data, step.args[0], step.args[1], step.args[2]);
-    case "orderBy":
-      return OrderBy(data, step.args[0], step.args[1], step.args[2]);
-    case "limit":
-      return Limit(data, step.args[0], step.args[1]);
-    case "select":
-      return Select(data, step.args[0], step.args[1]);
-    case "schema":
-      return Schema(data, step.args[0]);
-    case "transform":
-      return Transform(data);
-    case "innerJoin":
-      return InnerJoin(data, step.args[0], step.args[1], step.args[2]);
-    case "leftJoin":
-      return LeftJoin(data, step.args[0], step.args[1], step.args[2]);
-    default:
-      return data;
-  }
-};
-
 // Every method returns a new instance, so a query that is built but never
 // run cannot leak into another one, and partial queries can be reused:
 //
@@ -169,7 +133,7 @@ export class JsonFunction {
       ? [...this.steps, ...normalizeQuery(config.query)]
       : this.steps;
 
-    const result = steps.reduce(runStep, data);
+    const result = runQuery(data, steps);
 
     // Never hand the caller's own array back.
     return (result === data ? [...data] : result) as T[];
