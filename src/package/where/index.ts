@@ -39,47 +39,27 @@ const where: WhereFunction = (data, queries, options) => {
     return data;
   }
 
-  let result = [];
+  const matchesQuery = (item: WhereItem, query: Object) =>
+    Object.keys(query).every((fieldName) => {
+      let value = item[fieldName];
+      const activeQuery = query[fieldName];
 
-  queriesArr.forEach((query) => {
-    data.forEach((item) => {
-      const fields = Object.keys(query);
-      const isMultipleWhere = fields.length > 1;
-      let isMatches = [];
-
-      fields.forEach((fieldName) => {
-        let isMatch = false;
-
-        let value = item[fieldName];
-        const activeQuery = query[fieldName];
-
-        if (options && options.deep) {
-          value = getObjDeepProp(fieldName)(item);
-        }
-
-        if (isFunction(activeQuery)) {
-          isMatch = activeQuery(value);
-        }
-
-        if (value === activeQuery) {
-          isMatch = value === activeQuery;
-        }
-
-        if (isMultipleWhere) {
-          isMatches.push(isMatch);
-        } else {
-          isMatches = [isMatch];
-        }
-      });
-
-      if (isMatches.every((i) => i)) {
-        result.push(item);
-        isMatches = [];
+      if (options && options.deep) {
+        value = getObjDeepProp(fieldName)(item);
       }
-    });
-  });
 
-  return result;
+      if (isFunction(activeQuery)) {
+        return Boolean(activeQuery(value));
+      }
+
+      return value === activeQuery;
+    });
+
+  // Multiple queries are OR'ed: an item is kept once, in its original
+  // position, if it matches any of them.
+  return data.filter((item) =>
+    queriesArr.some((query) => matchesQuery(item, query))
+  );
 };
 
 export default where;
