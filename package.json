@@ -2,32 +2,37 @@
   "name": "json-function",
   "version": "1.8.39",
   "description": "It allows you to use methods such as where, limit, select, orderBy on JSON data.",
-  "main": "dist/package/index.js",
-  "types": "dist/package/index.d.ts",
+  "type": "module",
+  "main": "./dist/package/index.js",
+  "types": "./dist/package/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/package/index.d.ts",
+      "default": "./dist/package/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "packageManager": "pnpm@12.8.1",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
   "scripts": {
-    "test": "cross-env TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha -r ts-node/register -r ignore-styles -r jsdom-global/register test/**/*.spec.ts",
-    "build": "tsc && babel --presets es2015 -d dist/ dist"
+    "test": "vitest run --typecheck",
+    "typecheck": "tsc --noEmit",
+    "build": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json",
+    "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build",
+    "bench": "pnpm build && node bench/run.js"
   },
   "author": "Aykut Kardaş",
   "license": "MIT",
-  "directories": {
-    "test": "test"
-  },
   "devDependencies": {
-    "@types/chai": "^4.2.7",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^13.9.1",
-    "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-minify": "^0.5.1",
-    "chai": "^4.2.0",
-    "cross-env": "^7.0.3",
-    "ignore-styles": "^5.0.1",
-    "jsdom": "^20.0.0",
-    "jsdom-global": "^3.0.2",
-    "mocha": "^10.0.0",
-    "ts-node": "^10.9.1",
-    "typescript": "4.7.4"
+    "@types/node": "^24.0.0",
+    "typescript": "~5.9.3",
+    "vite": "^8",
+    "vitest": "^5.0.3"
   },
   "repository": {
     "type": "git",
@@ -43,6 +48,5 @@
   "bugs": {
     "url": "https://github.com/aykutkardas/json-function/issues"
   },
-  "homepage": "https://github.com/aykutkardas/json-function#readme",
-  "dependencies": {}
+  "homepage": "https://github.com/aykutkardas/json-function#readme"
 }

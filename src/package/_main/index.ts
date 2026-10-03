@@ -1,219 +1,146 @@
-import {
-  orderBy as OrderBy,
-  where as Where,
-  limit as Limit,
-  select as Select,
-  search as Search,
-  schema as Schema,
-  transform as Transform,
-  innerJoin as InnerJoin,
-} from "..";
+import { runQuery } from "./run-query.js";
+import { isArray, isObject, AnyObject } from "../../utils/type-check.js";
+import type { WhereQueries, WhereOptions } from "../where/index.js";
+import type { SearchOptions } from "../search/index.js";
+import type { Order, OrderByOptions } from "../orderBy/index.js";
+import type { SelectOptions } from "../select/index.js";
+import type { SchemaInput } from "../schema/index.js";
 
-import { isObject } from "../../utils/type-check";
+export type Step =
+  | { type: "where"; args: [WhereQueries, WhereOptions?] }
+  | { type: "search"; args: [unknown, string | string[], SearchOptions?] }
+  | { type: "orderBy"; args: [string, Order, OrderByOptions?] }
+  | { type: "limit"; args: [number, number] }
+  | { type: "select"; args: [string | string[], SelectOptions?] }
+  | { type: "schema"; args: [SchemaInput] }
+  | { type: "innerJoin"; args: [object[], string, string] }
+  | { type: "leftJoin"; args: [object[], string, string] };
 
-type Option = {
-  orderBy: [string, string, Object?];
-  where: [object | object[], Object?];
-  limit: number[];
-  select: string | string[];
-  search: [string, string | string[], Object?];
-  schema: Object;
-  innerJoin: [Object[], string, string];
+export type Query = Step[];
+
+// Shape returned by getQuery() before 2.0. Still accepted by setQuery() and
+// get(data, { query }); its steps run in this fixed key order.
+export type LegacyQuery = {
+  orderBy?: [string, Order, OrderByOptions?] | null;
+  where?: [WhereQueries, WhereOptions?] | null;
+  limit?: number[] | null;
+  select?: string | string[] | null;
+  search?: [string, string | string[], SearchOptions?] | null;
+  schema?: SchemaInput | null;
+  innerJoin?: [object[], string, string] | null;
 };
 
 type Config = {
-  resetRecord?: boolean;
-  query?: Option;
-  [key: string]: any;
+  query?: Query | LegacyQuery;
 };
 
-class JsonFunction {
-  data: Object[] = [];
-  process: string[] = [];
+const fromLegacyQuery = (query: LegacyQuery): Query => {
+  const steps: Query = [];
 
-  option: Option = {
-    orderBy: null,
-    where: null,
-    limit: null,
-    select: null,
-    search: null,
-    schema: null,
-    innerJoin: null,
-  };
+  Object.keys(query).forEach((type) => {
+    const value = (query as AnyObject)[type];
 
-  config: Config = {
-    resetRecord: true,
-  };
-
-  reset() {
-    this.option = {
-      orderBy: null,
-      where: null,
-      limit: null,
-      select: null,
-      search: null,
-      schema: null,
-      innerJoin: null,
-    };
-
-    this.data = [];
-    this.process = [];
-
-    return this;
-  }
-
-  processManager() {
-    const { option } = this;
-    const { orderBy, where, limit, select, search, schema, innerJoin } = option;
-
-    this.process.forEach((process) => {
-      switch (process) {
-        case "where":
-          const [queries, whereOption] = where;
-          this.data = Where(this.data, queries, whereOption);
-          break;
-
-        case "search":
-          const [key, fields, option] = search;
-          this.data = Search(this.data, key, fields, option);
-          break;
-
-        case "orderBy":
-          const [fieldName, order, orderByOption] = orderBy;
-          this.data = OrderBy(this.data, fieldName, order, orderByOption);
-          break;
-
-        case "limit":
-          const [itemLimit, start] = limit;
-          this.data = Limit(this.data, itemLimit, start);
-          break;
-
-        case "select":
-          this.data = Select(this.data, select);
-          break;
-
-        case "schema":
-          this.data = <Object[]>Schema(this.data, schema);
-          break;
-
-        case "transform":
-          this.data = <Object[]>Transform(this.data);
-          break;
-
-        case "innerJoin":
-          const [otherData, dataFieldName, otherDataFieldName] = innerJoin;
-          this.data = InnerJoin(
-            this.data,
-            otherData,
-            dataFieldName,
-            otherDataFieldName
-          );
-          break;
-      }
-    });
-  }
-
-  orderBy(fieldName: string, order: string = "ASC", orderBy?) {
-    this.option.orderBy = [fieldName, order];
-
-    if (orderBy) {
-      this.option.orderBy.push(orderBy);
+    if (!value) {
+      return;
     }
 
-    this.process.push("orderBy");
-    return this;
+    if (type === "select" || type === "schema") {
+      steps.push(<Step>{ type, args: [value] });
+    } else if (isArray(value)) {
+      steps.push(<Step>{ type, args: [...value] });
+    }
+  });
+
+  return steps;
+};
+
+const normalizeQuery = (query: Query | LegacyQuery): Query => {
+  if (isArray(query)) {
+    return [...(<Query>query)];
   }
 
-  where(queries: Object | Object[], option?) {
-    this.option.where = [queries];
+  if (isObject(query)) {
+    return fromLegacyQuery(<LegacyQuery>query);
+  }
 
-    if (option) {
-      this.option.where.push(option);
-    }
+  return [];
+};
 
-    this.process.push("where");
-    return this;
+// Every method returns a new instance, so a query that is built but never
+// run cannot leak into another one, and partial queries can be reused:
+//
+//   const incomplete = JsonFunction.where({ completed: false });
+//   incomplete.limit(2).get(data);
+//   incomplete.orderBy("title").get(data);
+export class JsonFunction {
+  private readonly steps: Query;
+
+  constructor(steps: Query = []) {
+    this.steps = steps;
+  }
+
+  private add(step: Step) {
+    return new JsonFunction([...this.steps, step]);
+  }
+
+  where(queries: WhereQueries, option?: WhereOptions) {
+    return this.add({ type: "where", args: [queries, option] });
+  }
+
+  search(key: unknown, fields: string | string[], option?: SearchOptions) {
+    return this.add({ type: "search", args: [key, fields, option] });
+  }
+
+  orderBy(fieldName: string, order: Order = "ASC", option?: OrderByOptions) {
+    return this.add({ type: "orderBy", args: [fieldName, order, option] });
   }
 
   limit(limit: number = 10, start: number = 0) {
-    this.option.limit = [limit, start];
-    this.process.push("limit");
-    return this;
+    return this.add({ type: "limit", args: [limit, start] });
   }
 
-  schema(schema: Object) {
-    this.option.schema = schema;
-    this.process.push("schema");
-    return this;
+  select(fields: string | string[], option?: SelectOptions) {
+    return this.add({ type: "select", args: [fields, option] });
   }
 
-  transform() {
-    this.process.push("transform");
-    return this;
+  schema(schema: SchemaInput) {
+    return this.add({ type: "schema", args: [schema] });
   }
 
-  select(fields: string | string[]) {
-    this.option.select = fields;
-    this.process.push("select");
-    return this;
-  }
-
-  search(key, fields: string | string[], option?) {
-    this.option.search = [key, fields, option];
-    this.process.push("search");
-    return this;
-  }
-
-  innerJoin(
-    otherData: Object[],
-    dataFieldName: string,
-    otherFiledName: string
-  ) {
-    this.option.innerJoin = [otherData, dataFieldName, otherFiledName];
-    this.process.push("innerJoin");
-    return this;
-  }
-
-  get(data: Object[], config: Config = {}) {
-    this.data = data;
-
-    const configs = { ...this.config, ...config };
-
-    if (config.query) {
-      this.setQuery(config.query);
-    }
-
-    this.processManager();
-
-    const result = [...this.data];
-
-    if (configs.resetRecord !== false) {
-      this.reset();
-    }
-
-    return result;
-  }
-
-  getQuery() {
-    const option = { ...this.option };
-    this.reset();
-    return option;
-  }
-
-  setQuery(query: Option) {
-    if (!isObject(query)) {
-      return this;
-    }
-
-    this.option = query;
-
-    Object.keys(query).forEach((process) => {
-      if (query[process]) {
-        this.process.push(process);
-      }
+  innerJoin(otherData: object[], dataFieldName: string, otherFieldName: string) {
+    return this.add({
+      type: "innerJoin",
+      args: [otherData, dataFieldName, otherFieldName],
     });
+  }
 
-    return this;
+  leftJoin(otherData: object[], dataFieldName: string, otherFieldName: string) {
+    return this.add({
+      type: "leftJoin",
+      args: [otherData, dataFieldName, otherFieldName],
+    });
+  }
+
+  // Runs the steps in the order they were added. The result type is not
+  // tracked through the chain; pass it as T if you know it.
+  get<T = AnyObject>(data: object[], config: Config = {}): T[] {
+    const steps = config.query
+      ? [...this.steps, ...normalizeQuery(config.query)]
+      : this.steps;
+
+    const result = runQuery(data, steps);
+
+    // Never hand the caller's own array back.
+    return (result === data ? [...data] : result) as T[];
+  }
+
+  getQuery(): Query {
+    return this.steps.map((step) => <Step>{ type: step.type, args: [...step.args] });
+  }
+
+  // Returns a new instance that runs exactly the given query.
+  setQuery(query: Query | LegacyQuery) {
+    return new JsonFunction(normalizeQuery(query));
   }
 }
 

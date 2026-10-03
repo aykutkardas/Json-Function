@@ -1,6 +1,6 @@
-import { isArray, isString } from '../../../utils/type-check';
+import { isArray, isString } from '../../../utils/type-check.js';
 
-interface WhereToolObject {
+export interface WhereToolObject {
   lt: (input: number) => (value: any) => boolean,
   lte: (input: number) => (value: any) => boolean,
   gt: (input: number) => (value: any) => boolean,
@@ -24,7 +24,7 @@ const whereToolObject: WhereToolObject = {
   in: (input) => (value) => (isArray(value) || isString(value)) && value.includes(input),
   nin: (input) => (value) => (isArray(value) || isString(value)) && !value.includes(input),
   between: (min, max) => (value) => value >= min && value <= max,
-  oneOf: (input) => (value) => (isArray(input) || isString(input)) && input.includes(value),
+  oneOf: (input) => (value) => (isArray(input) || isString(input)) && (input as any[]).includes(value),
 };
 
 export default whereToolObject;

@@ -1,6 +1,5 @@
-import { expect } from "chai";
-import { schema } from "../src/package";
-import "mocha";
+import { describe, it, expect } from "vitest";
+import { schema } from "../src/package/index.js";
 
 const data = [
   {
@@ -205,5 +204,35 @@ describe("Schema Unexpected Data for Array", () => {
     }));
 
     expect(result).to.deep.equal(null);
+  });
+});
+
+describe("Schema output objects", () => {
+  it("Builds separate nested objects for every item.", () => {
+    const result = schema(data, { book: { id: "id" } });
+    expect(result[0].book).to.not.equal(result[1].book);
+    result[0].book.id = 99;
+    expect(result[1].book.id).to.equal(1);
+  });
+
+  it("Copies non-path values as they are.", () => {
+    const result = schema(data, { id: "id", version: 2 as any, active: true as any });
+    expect(result).to.deep.equal([
+      { id: 0, version: 2, active: true },
+      { id: 1, version: 2, active: true },
+    ]);
+  });
+
+  it("Does not change the schema definition.", () => {
+    const definition = { id: "id", book: { title: "title" } };
+    schema(data, definition);
+    expect(definition).to.deep.equal({ id: "id", book: { title: "title" } });
+  });
+
+  it("Reads missing paths as undefined.", () => {
+    expect(schema(data, { missing: "user.middle.name" })).to.deep.equal([
+      { missing: undefined },
+      { missing: undefined },
+    ]);
   });
 });

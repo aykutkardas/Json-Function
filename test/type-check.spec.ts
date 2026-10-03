@@ -1,6 +1,5 @@
-import { utils } from "../src/package";
-import { expect } from "chai";
-import "mocha";
+import { utils } from "../src/package/index.js";
+import { describe, it, expect } from "vitest";
 
 describe("TypeCheck isString Test", () => {
   it("Give string value", () => {
@@ -90,6 +89,11 @@ describe("TypeCheck isObject Test", () => {
   it("Give without object value", () => {
     expect(utils.isObject(true)).to.equal(false);
   });
+  it("Returns a boolean for falsy values", () => {
+    expect(utils.isObject(0)).to.equal(false);
+    expect(utils.isObject("")).to.equal(false);
+    expect(utils.isObject(null)).to.equal(false);
+  });
 });
 
 describe("TypeCheck isOneOf Test", () => {
@@ -110,5 +114,21 @@ describe("TypeCheck isSchemeToolsObject Test", () => {
   });
   it("Give without schema object value", () => {
     expect(utils.isSchemeToolsObject(1)).to.equal(false);
+  });
+});
+
+describe("TypeCheck isObject edge cases", () => {
+  it("Matches plain, prototype-less and class instance objects", () => {
+    class Point {
+      x = 1;
+    }
+    expect(utils.isObject(Object.create(null))).to.equal(true);
+    expect(utils.isObject(new Point())).to.equal(true);
+  });
+  it("Rejects arrays, dates, maps and tagged objects", () => {
+    expect(utils.isObject([])).to.equal(false);
+    expect(utils.isObject(new Date())).to.equal(false);
+    expect(utils.isObject(new Map())).to.equal(false);
+    expect(utils.isObject({ [Symbol.toStringTag]: "Custom" })).to.equal(false);
   });
 });

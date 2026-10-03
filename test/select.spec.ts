@@ -1,6 +1,5 @@
-import { select } from "../src/package";
-import { expect } from "chai";
-import "mocha";
+import { select } from "../src/package/index.js";
+import { describe, it, expect } from "vitest";
 
 const data = [
   {
@@ -68,5 +67,24 @@ describe("Select Function", () => {
         completed: true
       }
     ]);
+  });
+});
+
+describe("Select Function with deep paths", () => {
+  const people = [
+    { id: 1, user: { name: "John", address: { city: "Ankara" } }, tags: ["a"] },
+    { id: 2, user: { name: "Mike" } },
+  ];
+
+  it("Builds nested objects for dotted paths.", () => {
+    const result = select(people, ["id", "user.name", "user.address.city"], { deep: true });
+    expect(result).to.deep.equal([
+      { id: 1, user: { name: "John", address: { city: "Ankara" } } },
+      { id: 2, user: { name: "Mike" } },
+    ]);
+  });
+
+  it("Treats dotted paths as plain keys without the deep option.", () => {
+    expect(select([{ "a.b": 1, a: { b: 2 } }], "a.b")).to.deep.equal([{ "a.b": 1 }]);
   });
 });

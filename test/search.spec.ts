@@ -1,8 +1,7 @@
-import { search } from "../src/package";
-import { expect } from "chai";
-import "mocha";
+import { search } from "../src/package/index.js";
+import { describe, it, expect } from "vitest";
 
-const testData = require("./test-data.json");
+import testData from "./test-data.json" with { type: "json" };
 
 describe("Search function", () => {
   it("Search with a string in a field.", () => {
@@ -160,3 +159,31 @@ describe("Search function", () => {
   });
 });
 
+
+describe("Search edge cases", () => {
+  const items = [
+    { id: 1, title: "C++ (advanced)", tags: { a: 1 } },
+    { id: 2, title: "Plain text" },
+    { id: 3 },
+  ];
+
+  it("Treats regex special characters literally.", () => {
+    expect(search(items, "C++ (", "title")).to.deep.equal([items[0]]);
+    expect(search(items, ".*", "title")).to.deep.equal([]);
+  });
+
+  it("Does not match missing fields or nested objects.", () => {
+    expect(search(items, "undefined", "title")).to.deep.equal([]);
+    expect(search(items, "object", "tags")).to.deep.equal([]);
+  });
+
+  it("Matches numeric fields by their string form.", () => {
+    expect(search(items, "3", "id")).to.deep.equal([items[2]]);
+  });
+
+  it("Is case sensitive unless caseSensitive is false.", () => {
+    expect(search(items, "plain", "title")).to.deep.equal([]);
+    expect(search(items, "plain", "title", {})).to.deep.equal([]);
+    expect(search(items, "plain", "title", { caseSensitive: false })).to.deep.equal([items[1]]);
+  });
+});

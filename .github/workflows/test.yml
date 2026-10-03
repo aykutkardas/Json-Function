@@ -1,6 +1,8 @@
 name: Test
 
-on: [push]
+on:
+  push:
+  pull_request:
 
 jobs:
   test:
@@ -8,15 +10,19 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [22.x, 24.x]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
-      - run: yarn install
-      - run: yarn test
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
         env:
           CI: true

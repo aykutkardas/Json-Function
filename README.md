@@ -1,34 +1,30 @@
 # Json Function
 
-[![npm](https://img.shields.io/npm/v/json-function?color=%234fc921)](https://www.npmjs.com/package/json-function)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?color=%234fc921)](https://opensource.org/licenses/MIT)
-[![Build Status](https://github.com/aykutkardas/Json-Function/workflows/Test/badge.svg?color=%234fc921)](https://github.com/aykutkardas/Json-Function/actions)
+[![npm](https://img.shields.io/npm/v/json-function?color=4fc921)](https://www.npmjs.com/package/json-function)
+[![License](https://img.shields.io/npm/l/json-function?color=4fc921)](https://github.com/aykutkardas/Json-Function/blob/main/LICENSE)
+[![Test](https://github.com/aykutkardas/Json-Function/actions/workflows/test.yml/badge.svg)](https://github.com/aykutkardas/Json-Function/actions/workflows/test.yml)
 
-## [Documentation](https://worn.gitbook.io/json-function/) • [Changelog](https://worn.gitbook.io/json-function/changelog)
+Use `where`, `select`, `orderBy`, `limit` and more on arrays of JSON objects. Each function works on its own, or you can chain them into a query. No dependencies, TypeScript types included, and fast on large arrays.
 
-Lets you use where, limit, select, orderBy, and more in JSON data.
+**[Documentation](docs/README.md)** • **[Changelog](CHANGELOG.md)**
 
 ## Install
 
-```
+```bash
 npm install json-function
 ```
 
 or
 
+```bash
+pnpm add json-function
 ```
-yarn add json-function
-```
 
-# Usage
+Requires Node.js 20.19 or later. The package is an ES module; `require("json-function")` also works on these versions.
 
-## JsonFunction • [documentation](https://worn.gitbook.io/json-function/)
+## Usage
 
-Json-Function provides a lot of useful functions especially for your json data. It contains the methods you need too much to eliminate unnecessary code repetition.
-
-You can use the Json-Function methods separately, but it is possible to use them all together. You can also chain it.
-
-Chaining
+Chain methods and run the query with `get`:
 
 ```js
 import JsonFunction from "json-function";
@@ -41,230 +37,55 @@ const result = JsonFunction
   .get(data);
 ```
 
-or Basic
+Or use only the functions you need:
 
 ```js
-import JsonFunction from "json-function";
+import { where, orderBy } from "json-function";
 
-JsonFunction.where({ completed: false });
-JsonFunction.select(["title", "completed"]);
-JsonFunction.orderBy("title", "DESC");
-JsonFunction.limit(2);
-const result = JsonFunction.get(data);
+const incomplete = where(data, { completed: false });
+const sorted = orderBy(incomplete, "title", "DESC");
 ```
 
-or create a query and use it at any time.
-```js
-const queryTwoIncompleteTasks = JsonFunction
-  .where({ completed: false })
-  .select(["title", "completed"])
-  .limit(2)
-  .getQuery();
-  
-```
+Every chain method returns a new query, so partial queries can be reused, and `getQuery()`/`setQuery()` save and restore them. See [Chaining](docs/README.md#chaining).
 
-Query usage
-```js
-JsonFunction.setQuery(queryTwoIncompleteTasks).get(data);
-// or
-JsonFunction.get(data, { query: queryTwoIncompleteTasks });
-```
+## Functions
 
+| Function | What it does |
+|---|---|
+| [`where`](docs/where.md) | Filter by field values, with AND, OR, deep fields and comparison helpers (`wh.gt`, `wh.in`, ...) |
+| [`search`](docs/search.md) | Find items whose fields contain a text |
+| [`select`](docs/select.md) | Keep only some fields, including nested ones |
+| [`orderBy`](docs/order-by.md) | Sort by a field, ascending or descending |
+| [`limit`](docs/limit.md) | Take a number of items from a start index |
+| [`schema`](docs/schema.md) | Rename, nest, join and compute fields |
+| [`innerJoin` / `leftJoin`](docs/joins.md) | Join two arrays on a field |
+| [`toArray`](docs/to-array.md) | Turn an object of objects into an array |
 
-# Methods
+## TypeScript
 
-Instead of an entire "class", you can use only the methods you need.
+Types are included, and standalone functions keep the item type of their input: `where(users, ...)` returns `User[]` and `select(users, ["id", "name"])` returns `Pick<User, "id" | "name">[]`. See [TypeScript](docs/README.md#typescript).
 
-## innerJoin • [documentation](https://worn.gitbook.io/json-function/functions/inner-join)
+# Migrating from 1.x
 
-The "innerJoin" function is used to join two arrays.
+- **Chaining is immutable.** Every method returns a new query instead of changing a shared one. Calling methods one by one without using the return value no longer builds a query:
 
+  ```js
+  // 1.x
+  JsonFunction.where({ completed: false });
+  JsonFunction.limit(2);
+  JsonFunction.get(data);
 
-```js
-import { innerJoin } from "json-function";
+  // 2.x
+  const query = JsonFunction.where({ completed: false }).limit(2);
+  query.get(data);
+  ```
 
-innerJoin(data, data2, "id", "userId");
-```
-
-## schema • [documentation](https://worn.gitbook.io/json-function/functions/schema)
-
-The "Schema" function is a great way to reconfigure your json data and make it your own.
-
-```js
-import { schema } from "json-function";
-
-schema(data, {
-  book: {
-    id: "id",
-    title: "title"
-  },
-  firstname: "user.firstname",
-  lastname: "user.lastname"
-});
-```
-
-Use "callback" for advanced conversions.
-
-```js
-schema(data, (sc) => ({
-  id: "id",
-  fullName: sc.join("user.firstname", "user.lastname")
-}));
-```
-
-Custom separator
-
-```js
-schema(data, (sc) => ({
-  id: "id",
-  fullName: sc.join("user.firstname", "user.lastname", { separator: "_" })
-}));
-```
-
-Use your own special function.
-```js
-schema(data, (sc) => ({
-  id: "id",
-  fullName: sc.custom(
-    (firstname, lastname) => `${firstname.toUpperCase()} ${lastname.toUpperCase()}`,
-    "user.firstname",
-    "user.lastname"
-  ),
-}))
-```
-
-Example
-```js
-schema(data, (sc) => ({
-  id: "id",
-  createdAt: sc.custom(
-    (createdAt) => moment(createdAt).format("DD/MM/YYYY"),
-    "createdAt",
-  ),
-}))
-```
-## where • [documentation](https://worn.gitbook.io/json-function/functions/where) • [samples](https://nj0ql.csb.app/)
-
-The "Where" function provides a comfortable method for filtering a json data.
-
-```js
-import { where } from "json-function";
-
-// Single
-// (completed === false)
-where(data, { completed: false });
-
-// Multiple (or)
-// (completed === false || userId === 2)
-where(data, [{ completed: false }, { userId: 2 }]);
-
-// Deep
-// (address.city === "New York")
-where(data, { "address.city": "New York" }, { deep: true });
-```
-
-Use "callback" for advanced filter.
-
-```js
-// id <= 3
-where(data, (wh) => ({
-  id: wh.lte(3),
-}));
-```
-
-Other **wh** methods.
-```js
-wh.lte(3)             // value <= 3
-wh.lt(3)              // value <  3
-wh.gte(3)             // value >= 3
-wh.gt(3)              // value >  3
-wh.between(3,5)       // value >= 3 && value <= 5
-wh.eq("3")            // value == 3
-wh.ne("3")            // value != 3
-wh.in("test")         // value.includes("test")
-wh.nin("test")        // !value.includes("test")
-wh.oneOf([1, 2, 3])  // [1, 2, 3].includes(value)
-```
-
-## select • [documentation](https://worn.gitbook.io/json-function/functions/select)
-
-The "Select" function is a practical method where you only get the desired fields of a json data.
-
-```js
-import { select } from "json-function";
-
-// Single
-select(data, "title");
-
-// Multiple
-select(data, ["title", "completed"]);
-```
-
-## limit • [documentation](https://worn.gitbook.io/json-function/functions/limit)
-
-"Limit" is used to get a limited number of elements from a json data. Almost javascript works like slice() but it is much easier and clearer.
-
-```js
-import { limit } from "json-function";
-
-// limit
-limit(data, 2);
-
-// limit and Start
-limit(data, 2, 2);
-```
-
-## orderBy • [documentation](https://worn.gitbook.io/json-function/functions/order-by)
-
-With the "orderBy" function you can reorder the data in your json array.
-
-```js
-import { orderBy } from "json-function";
-
-orderBy(data, "title", "DESC");
-
-orderBy(data, "user.firstname", "DESC", { deep: true });
-```
-
-## search • [documentation](https://worn.gitbook.io/json-function/functions/search)
-
-Search over fields of objects.
-
-```js
-import { search } from "json-function";
-
-// Syntax: search(data: Object[], key: any, fields: string | string[], options?);
-
-// single field
-search(data, "key", "description");
-
-// multiple field
-search(data, "key", ["user.firstName", "description"]);
-
-// case sensitive
-search(data, "key", "description", { caseSensitive: false });
-```
-
-## toArray • [documentation](https://worn.gitbook.io/json-function/functions/to-array)
-
-Converts objects into meaningful sequences.
-
-
-```js
-import { toArray } from "json-function";
-
-// default key "uid"
-toArray(data);
-
-// custom key
-toArray(data, { key: "_id_" });
-```
-
-## transform • [documentation](https://worn.gitbook.io/json-function/functions/transform)
-JSON converts the snake_case keys in your data to camelCase.
-
-```js
-import { transform } from "json-function";
-
-transform(data);
-```
+  The `resetRecord` option and the `option`/`data` properties are gone.
+- **`getQuery()` returns an ordered list of steps** and the steps run in that order. Queries saved in the old object format are still accepted by `setQuery()` and `get(data, { query })`.
+- **`innerJoin` is a real inner join.** Items without a match are dropped and an item with several matches appears once per match. Use `leftJoin` to keep unmatched items.
+- **`where` with several queries** returns each matching item once, in input order.
+- **`orderBy` no longer sorts the input array in place.**
+- **`search` matches the key literally** (no regular expressions), skips missing fields, and is case sensitive unless `caseSensitive: false` is passed.
+- **`transform` and `.transform()` are removed.** Converting key casing is outside what this library queries, and the function was the source of a prototype pollution issue. Use a package such as [`camelcase-keys`](https://www.npmjs.com/package/camelcase-keys) (`camelcaseKeys(data, { deep: true })`), or rename specific fields with `schema(data, { userId: "user_id" })`.
+- **ES module only, Node.js 20.19+.** The package no longer ships a separate CommonJS build. `import` works everywhere, and `require("json-function")` keeps working on Node.js 20.19+ and 22.12+, which can load ES modules with `require`. On older Node.js versions `require` fails with `ERR_REQUIRE_ESM`.
+- **TypeScript:** functions are generic, so results keep their item type.

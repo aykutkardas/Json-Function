@@ -1,12 +1,10 @@
-import { isObject, isArrayOfObject } from "../../utils/type-check";
+import { isObject, isArrayOfObject, AnyObject } from "../../utils/type-check.js";
 
-type Config = {
-  key: string;
+export type ToArrayConfig = {
+  key?: string;
 };
 
-type ToArrayFunction = (data: any, config?: Config) => any[];
-
-const toArray: ToArrayFunction = (data, config) => {
+function toArray(data: unknown, config?: ToArrayConfig): AnyObject[] {
   if (isArrayOfObject(data)) {
     return data;
   }
@@ -25,6 +23,6 @@ const toArray: ToArrayFunction = (data, config) => {
     [key]: currentKey,
     ...data[currentKey]
   }));
-};
+}
 
 export default toArray;

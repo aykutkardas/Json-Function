@@ -1,17 +1,14 @@
 {
   "compilerOptions": {
-    "outDir": "dist/",
-    "declaration": true,
-    "declarationDir": "dist/",
-    "target": "es5",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "lib": ["dom", "es6", "es5", "es2017"],
-    "resolveJsonModule": true
+    "target": "es2020",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "lib": ["es2020"],
+    "types": ["node"],
+    "strict": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "noEmit": true
   },
-  "include": ["./src/**/*"],
-  "exclude": ["./test/**/*.spec.ts"],
-  "compileOnSave": false
+  "include": ["./src/**/*", "./test/**/*"]
 }

@@ -1,36 +1,37 @@
-type TypeCheckFunction = (value: any) => boolean;
-type OneOfCheckFunction = (value: any, options: any[]) => boolean;
-type GetTypeFunction = (value: any) => string;
+type AnyObject = Record<string, any>;
 
-const getType: GetTypeFunction = value => Object.prototype.toString.call(value);
+const getType = (value: unknown): string => Object.prototype.toString.call(value);
 
-const isDefined: TypeCheckFunction = value => value !== undefined;
+const isDefined = (value: unknown): boolean => value !== undefined;
 
-const isNumber: TypeCheckFunction = value =>
+const isNumber = (value: unknown): value is number =>
   typeof value === "number" && !isNaN(value);
 
-const isNull: TypeCheckFunction = value => value === null;
+const isNull = (value: unknown): value is null => value === null;
 
-const isString: TypeCheckFunction = value => typeof value === "string";
+const isString = (value: unknown): value is string => typeof value === "string";
 
-const isFunction: TypeCheckFunction = value => typeof value === "function";
+const isFunction = (value: unknown): value is (...args: any[]) => any =>
+  typeof value === "function";
 
-const isArray: TypeCheckFunction = value => Array.isArray(value);
+const isArray = (value: unknown): value is any[] => Array.isArray(value);
 
-const isArrayOfString: TypeCheckFunction = value =>
+const isArrayOfString = (value: unknown): value is string[] =>
   isArray(value) && value.every(isString);
 
-const isArrayOfObject: TypeCheckFunction = value =>
+const isArrayOfObject = (value: unknown): value is AnyObject[] =>
   isArray(value) && value.every(isObject);
 
-const isObject: TypeCheckFunction = value =>
-  value && getType(value) === "[object Object]";
+const isObject = (value: unknown): value is AnyObject =>
+  Boolean(value) && getType(value) === "[object Object]";
 
-const isOneOf: OneOfCheckFunction = (value, options) =>
+const isOneOf = (value: unknown, options: unknown): boolean =>
   isArray(options) ? options.includes(value) : false;
 
-const isSchemeToolsObject: TypeCheckFunction = value =>
+const isSchemeToolsObject = (value: unknown): boolean =>
   isObject(value) && isObject(value.__schema__);
+
+export type { AnyObject };
 
 export {
   isOneOf,

@@ -1,36 +1,42 @@
-import { isFunction, isObject, isArrayOfObject } from "../../utils/type-check";
-import SchemaTools from "./tool/callback";
-import getSchemaValue from "./tool/get-schema-value";
-import { cloneDeep } from "../../utils";
+import { isFunction, isObject, isArrayOfObject, AnyObject } from "../../utils/type-check.js";
+import SchemaTools, { SchemaToolObject, SchemaTools as SchemaToolsType } from "./tool/callback.js";
+import compileSchema from "./tool/compile-schema.js";
 
-type SchemaFunction = (
-  data: Object[] | Object,
-  schema: Object | Function
-) => Object[] | Object;
+// Strings are dotted paths read from each item; nested objects build nested
+// output.
+export type SchemaDefinition = {
+  [key: string]: string | SchemaToolObject | SchemaDefinition;
+};
 
-const schema: SchemaFunction = (data, schema = {}) => {
-  if (!isArrayOfObject(data) && !isObject(data)) {
+export type SchemaInput =
+  | SchemaDefinition
+  | ((sc: SchemaToolsType) => SchemaDefinition);
+
+function schema(data: object[], schema: SchemaInput): AnyObject[];
+function schema(data: object, schema: SchemaInput): AnyObject;
+function schema(data: unknown, schema: SchemaInput): AnyObject[] | AnyObject | null;
+function schema(
+  data: unknown,
+  schema: SchemaInput = {}
+): AnyObject[] | AnyObject | null {
+  const isList = isArrayOfObject(data);
+
+  if (!isList && !isObject(data)) {
     return null;
   }
 
-  let schemaObj: Object;
-  if (isObject(schema)) {
+  let schemaObj: AnyObject;
+  if (isFunction(schema)) {
+    schemaObj = schema(SchemaTools);
+  } else if (isObject(schema)) {
     schemaObj = schema;
-  } else if (isFunction(schema)) {
-    schemaObj = (<Function>schema)(SchemaTools);
   } else {
     return data;
   }
 
-  if (isArrayOfObject(data)) {
-    return (<Object[]>data).map(item => {
-      const temp = cloneDeep(schemaObj);
-      return getSchemaValue(temp, item);
-    });
-  } else if (isObject(data)) {
-    const temp = cloneDeep(schemaObj);
-    return getSchemaValue(temp, data);
-  }
-};
+  const build = compileSchema(schemaObj);
+
+  return isList ? (data as AnyObject[]).map(build) : build(data as AnyObject);
+}
 
 export default schema;

@@ -1,6 +1,5 @@
-import JsonFunction from "../src/package";
-import { expect } from "chai";
-import "mocha";
+import JsonFunction from "../src/package/index.js";
+import { describe, it, expect } from "vitest";
 
 const data = [
   {
@@ -75,15 +74,14 @@ describe("JsonFunction Class", () => {
     ]);
   });
 
-  it("Method Chaining Test with transform.", () => {
+  it("Method Chaining Test with renamed fields.", () => {
     const result = JsonFunction.where({ completed: false })
       .orderBy("title", "DESC")
       .limit(2)
       .innerJoin(data2, "id", "id")
-      .transform() // user_id > userId
-      .select(["userId", "firstName", "title", "completed"])
+      .select(["user_id", "firstName", "title", "completed"])
       .schema({
-        id: "userId",
+        id: "user_id",
         firstName: "firstName",
         todo: {
           title: "title",
@@ -105,54 +103,24 @@ describe("JsonFunction Class", () => {
     ]);
   });
 
-  it("Method Standard Use Test", () => {
-    JsonFunction.where({ completed: false });
-    JsonFunction.select(["title", "completed"]);
-    JsonFunction.orderBy("title", "DESC");
-    JsonFunction.limit(2);
-    JsonFunction.schema({
+  it("Builds a query step by step.", () => {
+    let query = JsonFunction.where({ completed: false });
+    query = query.select(["title", "completed"]);
+    query = query.orderBy("title", "DESC");
+    query = query.limit(2);
+    query = query.schema({
       todo: {
         title: "title",
         completed: "completed"
       }
     });
-    const result = JsonFunction.get(data);
+    const result = query.get(data);
     expect(result).to.deep.equal([
       {
         todo: { title: "quis ut nam facilis et officia qui", completed: false }
       },
       {
         todo: { title: "fugiat veniam minus", completed: false }
-      }
-    ]);
-  });
-
-  it("Config test --resetRecord", () => {
-    JsonFunction.where({ completed: false });
-    JsonFunction.select(["title", "completed"]);
-    JsonFunction.orderBy("title", "DESC");
-    JsonFunction.limit(2);
-    JsonFunction.get(data, { resetRecord: false });
-
-    const option = JsonFunction.option;
-    const classData = JsonFunction.data;
-    expect(option).to.deep.equal({
-      orderBy: ["title", "DESC"],
-      where: [{ completed: false }],
-      limit: [2, 0],
-      select: ["title", "completed"],
-      search: null,
-      schema: null,
-      innerJoin: null
-    });
-    expect(classData).to.deep.equal([
-      {
-        title: "quis ut nam facilis et officia qui",
-        completed: false
-      },
-      {
-        title: "fugiat veniam minus",
-        completed: false
       }
     ]);
   });
@@ -168,7 +136,28 @@ describe("JsonFunction Class", () => {
 
     const result2 = JsonFunction.get(data, { query: unCompleteTodoQuery });
 
-    expect(unCompleteTodoQuery).to.deep.equal({
+    expect(unCompleteTodoQuery).to.deep.equal([
+      { type: "orderBy", args: ["title", "DESC", undefined] },
+      { type: "where", args: [{ completed: false }, undefined] },
+      { type: "limit", args: [2, 0] },
+      { type: "select", args: [["title", "completed"], undefined] }
+    ]);
+    const expected = [
+      {
+        title: "quis ut nam facilis et officia qui",
+        completed: false
+      },
+      {
+        title: "fugiat veniam minus",
+        completed: false
+      }
+    ];
+    expect(result).to.deep.equal(expected);
+    expect(result2).to.deep.equal(expected);
+  });
+
+  it("Still accepts queries in the pre-2.0 object format.", () => {
+    const legacyQuery = {
       orderBy: ["title", "DESC"],
       where: [{ completed: false }],
       limit: [2, 0],
@@ -176,27 +165,49 @@ describe("JsonFunction Class", () => {
       search: null,
       schema: null,
       innerJoin: null
-    });
-    expect(result).to.deep.equal([
-      {
-        title: "quis ut nam facilis et officia qui",
-        completed: false
-      },
-      {
-        title: "fugiat veniam minus",
-        completed: false
-      }
+    };
+    expect(JsonFunction.get(data, { query: legacyQuery as any })).to.deep.equal([
+      { title: "quis ut nam facilis et officia qui", completed: false },
+      { title: "fugiat veniam minus", completed: false }
     ]);
-    expect(result2).to.deep.equal([
-      {
-        title: "quis ut nam facilis et officia qui",
-        completed: false
-      },
-      {
-        title: "fugiat veniam minus",
-        completed: false
-      }
-    ]);
+  });
+
+  it("Keeps the order of steps when a query is saved and reused.", () => {
+    const rows = [{ a: 1 }, { a: 2 }];
+    const query = JsonFunction.limit(1).where({ a: 2 }).getQuery();
+    expect(JsonFunction.setQuery(query).get(rows)).to.deep.equal([]);
+  });
+
+  it("Applies every call when a method is used twice.", () => {
+    const rows = [{ id: 1, a: 1 }, { id: 2, a: 1 }, { id: 2, a: 2 }];
+    const result = JsonFunction.where({ a: 1 }).where({ id: 2 }).get(rows);
+    expect(result).to.deep.equal([{ id: 2, a: 1 }]);
+  });
+
+  it("Does not leak an unfinished chain into other queries.", () => {
+    JsonFunction.where({ a: 1 });
+    expect(JsonFunction.get([{ a: 2 }])).to.deep.equal([{ a: 2 }]);
+  });
+
+  it("Lets a partial query be reused.", () => {
+    const incomplete = JsonFunction.where({ completed: false });
+    expect(incomplete.limit(1).get(data)).to.have.length(1);
+    expect(incomplete.get(data)).to.have.length(3);
+  });
+
+  it("Never returns the input array itself.", () => {
+    const rows = [{ a: 1 }];
+    const result = JsonFunction.get(rows);
+    expect(result).to.deep.equal(rows);
+    expect(result).to.not.equal(rows);
+  });
+
+  it("Supports leftJoin in a chain.", () => {
+    const result = JsonFunction.limit(2)
+      .leftJoin([{ id: 1, firstName: "John" }], "id", "id")
+      .select(["id", "firstName"])
+      .get(data);
+    expect(result).to.deep.equal([{ id: 1, firstName: "John" }, { id: 2 }]);
   });
 
   it("Search method chain test", () => {
@@ -206,14 +217,14 @@ describe("JsonFunction Class", () => {
     expect(result).to.deep.equal([
       {
         user_id: 1,
-        id: 2,
-        title: "quis ut nam facilis et officia qui",
+        id: 1,
+        title: "delectus aut autem",
         completed: false
       },
       {
         user_id: 1,
-        id: 1,
-        title: "delectus aut autem",
+        id: 2,
+        title: "quis ut nam facilis et officia qui",
         completed: false
       },
     ]);
