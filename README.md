@@ -8,6 +8,8 @@
 
 Lets you use where, limit, select, orderBy, and more in JSON data.
 
+> The documentation site still describes 1.x. For what changed in 2.0, see [Migrating from 1.x](#migrating-from-1x).
+
 ## Install
 
 ```
@@ -24,9 +26,9 @@ pnpm add json-function
 
 ## JsonFunction • [documentation](https://worn.gitbook.io/json-function/)
 
-Json-Function provides a lot of useful functions especially for your json data. It contains the methods you need too much to eliminate unnecessary code repetition.
+Json-Function provides query helpers for arrays of JSON objects, so you don't have to rewrite the same filtering, sorting and mapping code.
 
-You can use the Json-Function methods separately, but it is possible to use them all together. You can also chain it.
+You can use each method on its own, or chain them together.
 
 Chaining
 
@@ -60,7 +62,6 @@ const queryTwoIncompleteTasks = JsonFunction
   .select(["title", "completed"])
   .limit(2)
   .getQuery();
-  
 ```
 
 Query usage
@@ -164,7 +165,11 @@ import { where } from "json-function";
 // (completed === false)
 where(data, { completed: false });
 
-// Multiple (or)
+// Multiple fields (and)
+// (completed === false && userId === 2)
+where(data, { completed: false, userId: 2 });
+
+// Multiple queries (or)
 // (completed === false || userId === 2)
 where(data, [{ completed: false }, { userId: 2 }]);
 
@@ -216,7 +221,7 @@ select(data, ["id", "user.firstname"], { deep: true });
 
 ## limit • [documentation](https://worn.gitbook.io/json-function/functions/limit)
 
-"Limit" is used to get a limited number of elements from a json data. Almost javascript works like slice() but it is much easier and clearer.
+"Limit" returns a limited number of items, optionally starting from a given index. It works like `slice()` with a count instead of an end index.
 
 ```js
 import { limit } from "json-function";
@@ -275,13 +280,34 @@ toArray(data, { key: "_id_" });
 ```
 
 ## transform • [documentation](https://worn.gitbook.io/json-function/functions/transform)
-JSON converts the snake_case keys in your data to camelCase.
+
+Converts the snake_case keys in your data to camelCase, including nested objects and arrays.
 
 ```js
 import { transform } from "json-function";
 
 transform(data);
 ```
+
+# TypeScript
+
+Types are included. Standalone functions keep the item type of their input:
+
+```ts
+import { where, select } from "json-function";
+
+type User = { id: number; name: string; city: string };
+
+where(users, { city: "Ankara" }); // User[]
+select(users, ["id", "name"]);    // Pick<User, "id" | "name">[]
+```
+
+Chains don't track the type through every step, so pass the result type to `get` if you know it:
+
+```ts
+JsonFunction.where({ city: "Ankara" }).get<User>(users); // User[]
+```
+
 # Migrating from 1.x
 
 - **Chaining is immutable.** Every method returns a new query instead of changing a shared one. Calling methods one by one without using the return value no longer builds a query:
