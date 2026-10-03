@@ -1,4 +1,4 @@
-import { toArray } from "../src/package";
+import { toArray } from "../src/package/index.js";
 import { describe, it, expect } from "vitest";
 
 const data = {

@@ -1,4 +1,4 @@
-import { isArray, isNumber } from "../../utils/type-check";
+import { isArray, isNumber } from "../../utils/type-check.js";
 
 function limit<T>(data: T[], limit?: number, start?: number): T[] {
   if (!isArray(data)) {

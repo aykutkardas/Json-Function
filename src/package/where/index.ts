@@ -3,9 +3,9 @@ import {
   isObject,
   isFunction,
   isArrayOfObject,
-} from "../../utils/type-check";
-import getObjDeepProp from "../../utils/get-obj-deep-prop";
-import WhereTool, { WhereToolObject } from "./tool/callback";
+} from "../../utils/type-check.js";
+import getObjDeepProp from "../../utils/get-obj-deep-prop.js";
+import WhereTool, { WhereToolObject } from "./tool/callback.js";
 
 // Each field is compared with === unless its value is a predicate, such as
 // the ones returned by the `wh` helpers.

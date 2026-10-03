@@ -1,6 +1,6 @@
-import { isArray, isString, isDefined, isObject, AnyObject } from "../../utils/type-check";
-import getObjDeepProp from "../../utils/get-obj-deep-prop";
-import setOwn from "../../utils/set-own";
+import { isArray, isString, isDefined, isObject, AnyObject } from "../../utils/type-check.js";
+import getObjDeepProp from "../../utils/get-obj-deep-prop.js";
+import setOwn from "../../utils/set-own.js";
 
 export type SelectOptions = {
   deep?: boolean;

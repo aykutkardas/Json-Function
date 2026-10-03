@@ -1,7 +1,7 @@
-import { search } from "../src/package";
+import { search } from "../src/package/index.js";
 import { describe, it, expect } from "vitest";
 
-import testData from "./test-data.json";
+import testData from "./test-data.json" with { type: "json" };
 
 describe("Search function", () => {
   it("Search with a string in a field.", () => {

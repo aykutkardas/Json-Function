@@ -1,4 +1,4 @@
-import { limit } from "../src/package";
+import { limit } from "../src/package/index.js";
 import { describe, it, expect } from "vitest";
 
 const data = [

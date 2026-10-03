@@ -1,5 +1,5 @@
-import { isArray, isString, isOneOf } from "../../utils/type-check";
-import getObjDeepProp from "../../utils/get-obj-deep-prop";
+import { isArray, isString, isOneOf } from "../../utils/type-check.js";
+import getObjDeepProp from "../../utils/get-obj-deep-prop.js";
 
 // The string fallback keeps lower case and runtime values accepted while the
 // literals still show up in autocomplete.

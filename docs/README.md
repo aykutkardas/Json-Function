@@ -17,6 +17,8 @@ Json Function lets you use `where`, `select`, `orderBy`, `limit` and more on arr
 npm install json-function
 ```
 
+Json Function is an ES module and needs Node.js 20.19 or later, where both `import` and `require` work.
+
 ```js
 import JsonFunction, { where, select, orderBy, limit } from "json-function";
 ```

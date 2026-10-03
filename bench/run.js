@@ -1,4 +1,5 @@
 // Usage: pnpm bench [itemCount]
+// Runs against the built package in dist/, the code that is published.
 import JsonFunction, {
   where,
   search,
@@ -6,7 +7,7 @@ import JsonFunction, {
   schema,
   select,
   innerJoin,
-} from "../src/package";
+} from "../dist/package/index.js";
 
 const count = Number(process.argv[2]) || 200_000;
 
@@ -19,7 +20,7 @@ const data = Array.from({ length: count }, (_, i) => ({
 }));
 const owners = Array.from({ length: 500 }, (_, i) => ({ ownerName: "user" + i, team: i % 7 }));
 
-const cases: [string, () => unknown][] = [
+const cases = [
   ["where", () => where(data, { completed: true })],
   ["where deep", () => where(data, { "user.city": "Ankara" }, { deep: true })],
   ["where wh.gt", () => where(data, (wh) => ({ score: wh.gt(500) }))],
@@ -40,13 +41,13 @@ const cases: [string, () => unknown][] = [
   ["chain where→select→limit(10)", () => JsonFunction.where({ completed: true }).select(["id"]).limit(10).get(data)],
 ];
 
-const median = (values: number[]) => [...values].sort((a, b) => a - b)[values.length >> 1];
+const median = (values) => [...values].sort((a, b) => a - b)[values.length >> 1];
 
 console.log(`${count.toLocaleString("en")} items, median of 7 runs\n`);
 
 for (const [name, fn] of cases) {
   fn(); // warm up
-  const times: number[] = [];
+  const times = [];
   for (let run = 0; run < 7; run++) {
     const start = performance.now();
     fn();

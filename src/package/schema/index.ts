@@ -1,6 +1,6 @@
-import { isFunction, isObject, isArrayOfObject, AnyObject } from "../../utils/type-check";
-import SchemaTools, { SchemaToolObject, SchemaTools as SchemaToolsType } from "./tool/callback";
-import compileSchema from "./tool/compile-schema";
+import { isFunction, isObject, isArrayOfObject, AnyObject } from "../../utils/type-check.js";
+import SchemaTools, { SchemaToolObject, SchemaTools as SchemaToolsType } from "./tool/callback.js";
+import compileSchema from "./tool/compile-schema.js";
 
 // Strings are dotted paths read from each item; nested objects build nested
 // output.

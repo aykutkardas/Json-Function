@@ -1,10 +1,10 @@
-import { runQuery } from "./run-query";
-import { isArray, isObject, AnyObject } from "../../utils/type-check";
-import type { WhereQueries, WhereOptions } from "../where";
-import type { SearchOptions } from "../search";
-import type { Order, OrderByOptions } from "../orderBy";
-import type { SelectOptions } from "../select";
-import type { SchemaInput } from "../schema";
+import { runQuery } from "./run-query.js";
+import { isArray, isObject, AnyObject } from "../../utils/type-check.js";
+import type { WhereQueries, WhereOptions } from "../where/index.js";
+import type { SearchOptions } from "../search/index.js";
+import type { Order, OrderByOptions } from "../orderBy/index.js";
+import type { SelectOptions } from "../select/index.js";
+import type { SchemaInput } from "../schema/index.js";
 
 export type Step =
   | { type: "where"; args: [WhereQueries, WhereOptions?] }

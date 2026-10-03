@@ -1,4 +1,4 @@
-import { orderBy } from "../src/package";
+import { orderBy } from "../src/package/index.js";
 import { describe, it, expect } from "vitest";
 
 const data = [

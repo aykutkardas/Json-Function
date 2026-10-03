@@ -12,7 +12,7 @@ See [Migrating from 1.x](README.md#migrating-from-1x) for how to update.
 * `where` with several queries returns each matching item once, in input order.
 * `search` matches the key literally instead of as a regular expression, skips missing fields, and is case sensitive unless `caseSensitive: false` is passed.
 * Stricter, generic TypeScript types.
-* The package is built with tsup and ships CommonJS, ES modules and type declarations.
+* The package is an ES module and requires Node.js 20.19 or later. `require("json-function")` still works on those versions; on older ones it fails with `ERR_REQUIRE_ESM`.
 
 ### Removed
 

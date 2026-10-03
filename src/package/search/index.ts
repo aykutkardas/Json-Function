@@ -1,5 +1,5 @@
-import { isArray, isString, isArrayOfString } from "../../utils/type-check";
-import getObjDeepProp from "../../utils/get-obj-deep-prop";
+import { isArray, isString, isArrayOfString } from "../../utils/type-check.js";
+import getObjDeepProp from "../../utils/get-obj-deep-prop.js";
 
 export type SearchOptions = {
   caseSensitive?: boolean;

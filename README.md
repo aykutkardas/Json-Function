@@ -20,6 +20,8 @@ or
 pnpm add json-function
 ```
 
+Requires Node.js 20.19 or later. The package is an ES module; `require("json-function")` also works on these versions.
+
 ## Usage
 
 Chain methods and run the query with `get`:
@@ -85,4 +87,5 @@ Types are included, and standalone functions keep the item type of their input: 
 - **`orderBy` no longer sorts the input array in place.**
 - **`search` matches the key literally** (no regular expressions), skips missing fields, and is case sensitive unless `caseSensitive: false` is passed.
 - **`transform` and `.transform()` are removed.** Converting key casing is outside what this library queries, and the function was the source of a prototype pollution issue. Use a package such as [`camelcase-keys`](https://www.npmjs.com/package/camelcase-keys) (`camelcaseKeys(data, { deep: true })`), or rename specific fields with `schema(data, { userId: "user_id" })`.
+- **ES module only, Node.js 20.19+.** The package no longer ships a separate CommonJS build. `import` works everywhere, and `require("json-function")` keeps working on Node.js 20.19+ and 22.12+, which can load ES modules with `require`. On older Node.js versions `require` fails with `ERR_REQUIRE_ESM`.
 - **TypeScript:** functions are generic, so results keep their item type.

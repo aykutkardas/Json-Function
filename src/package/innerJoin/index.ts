@@ -1,5 +1,5 @@
-import { isArrayOfObject, isString, AnyObject } from "../../utils/type-check";
-import getObjDeepProp from "../../utils/get-obj-deep-prop";
+import { isArrayOfObject, isString, AnyObject } from "../../utils/type-check.js";
+import getObjDeepProp from "../../utils/get-obj-deep-prop.js";
 
 const join = (
   keepUnmatched: boolean,

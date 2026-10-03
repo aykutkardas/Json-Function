@@ -1,4 +1,4 @@
-import { utils } from "../src/package";
+import { utils } from "../src/package/index.js";
 import { describe, it, expect } from "vitest";
 
 describe("TypeCheck isString Test", () => {

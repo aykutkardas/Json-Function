@@ -1,4 +1,4 @@
-import { innerJoin, leftJoin } from "../src/package";
+import { innerJoin, leftJoin } from "../src/package/index.js";
 import { describe, it, expect } from "vitest";
 
 const data = [

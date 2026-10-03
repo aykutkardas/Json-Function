@@ -8,7 +8,7 @@ import JsonFunction, {
   innerJoin,
   leftJoin,
   schema,
-} from "../src/package";
+} from "../src/package/index.js";
 
 type User = { id: number; name: string; city: string };
 const users: User[] = [{ id: 1, name: "John", city: "Ankara" }];

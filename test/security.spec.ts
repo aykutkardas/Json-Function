@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import JsonFunction, { select, schema } from "../src/package";
+import JsonFunction, { select, schema } from "../src/package/index.js";
 
 // Keys that come from data or user input must never change Object.prototype
 // or the prototype of returned objects.

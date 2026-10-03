@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { runQuery, runStep } from "../src/package/_main/run-query";
-import type { Step } from "../src/package";
+import { runQuery, runStep } from "../src/package/_main/run-query.js";
+import type { Step } from "../src/package/index.js";
 
 // runQuery fuses, reorders and short-circuits steps. Its result must always
 // equal running the steps one by one with the standalone functions.

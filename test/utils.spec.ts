@@ -1,4 +1,4 @@
-import getObjDeepProp from "../src/utils/get-obj-deep-prop";
+import getObjDeepProp from "../src/utils/get-obj-deep-prop.js";
 import { describe, it, expect } from "vitest";
 
 const data = [

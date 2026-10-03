@@ -1,4 +1,4 @@
-import { isObject, isArrayOfObject, AnyObject } from "../../utils/type-check";
+import { isObject, isArrayOfObject, AnyObject } from "../../utils/type-check.js";
 
 export type ToArrayConfig = {
   key?: string;

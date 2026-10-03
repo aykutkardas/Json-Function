@@ -1,4 +1,4 @@
-import { select } from "../src/package";
+import { select } from "../src/package/index.js";
 import { describe, it, expect } from "vitest";
 
 const data = [

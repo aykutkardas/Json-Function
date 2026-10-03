@@ -1,12 +1,12 @@
-import Where, { compileWhere } from "../where";
-import Search, { compileSearch } from "../search";
-import OrderBy, { compileOrderBy, sortBySpec, topKBySpec, hasTotalOrder, SortSpec } from "../orderBy";
-import Limit from "../limit";
-import Select, { compileSelect } from "../select";
-import Schema from "../schema";
-import { innerJoin as InnerJoin, leftJoin as LeftJoin } from "../innerJoin";
-import { isArray } from "../../utils/type-check";
-import type { Step } from "./index";
+import Where, { compileWhere } from "../where/index.js";
+import Search, { compileSearch } from "../search/index.js";
+import OrderBy, { compileOrderBy, sortBySpec, topKBySpec, hasTotalOrder, SortSpec } from "../orderBy/index.js";
+import Limit from "../limit/index.js";
+import Select, { compileSelect } from "../select/index.js";
+import Schema from "../schema/index.js";
+import { innerJoin as InnerJoin, leftJoin as LeftJoin } from "../innerJoin/index.js";
+import { isArray } from "../../utils/type-check.js";
+import type { Step } from "./index.js";
 
 // Runs one step on the whole array with the standalone function.
 export const runStep = (data: object[], step: Step): object[] => {

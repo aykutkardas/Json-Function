@@ -1,7 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { readdirSync, readFileSync } from "fs";
 import { join } from "path";
-import * as library from "../src/package";
+import { fileURLToPath } from "url";
+import * as library from "../src/package/index.js";
 
 // Runs the examples in docs/*.md so the documented outputs can't drift from
 // the code. On each page, in order:
@@ -12,7 +13,7 @@ import * as library from "../src/package";
 //   the output block
 // Other blocks (```ts signatures, imports, install commands) are not run.
 
-const docsDir = join(__dirname, "..", "docs");
+const docsDir = fileURLToPath(new URL("../docs", import.meta.url));
 
 const { default: JsonFunction, ...namedExports } = library;
 const scopeFromLibrary: Record<string, unknown> = { ...namedExports, JsonFunction };

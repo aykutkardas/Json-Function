@@ -1,7 +1,7 @@
-import { isString, isObject, isFunction, isSchemeToolsObject, AnyObject } from "../../../utils/type-check";
-import getObjDeepProp from "../../../utils/get-obj-deep-prop";
-import setOwn from "../../../utils/set-own";
-import { SchemaToolObject } from "./callback";
+import { isString, isObject, isFunction, isSchemeToolsObject, AnyObject } from "../../../utils/type-check.js";
+import getObjDeepProp from "../../../utils/get-obj-deep-prop.js";
+import setOwn from "../../../utils/set-own.js";
+import { SchemaToolObject } from "./callback.js";
 
 type FieldBuilder = (item: AnyObject) => unknown;
 

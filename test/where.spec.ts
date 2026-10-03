@@ -1,7 +1,7 @@
-import { where } from "../src/package";
+import { where } from "../src/package/index.js";
 import { describe, it, expect } from "vitest";
 
-import testData from "./test-data.json";
+import testData from "./test-data.json" with { type: "json" };
 const data = [
   {
     userId: 1,

@@ -1,4 +1,4 @@
-import JsonFunction from "../src/package";
+import JsonFunction from "../src/package/index.js";
 import { describe, it, expect } from "vitest";
 
 const data = [

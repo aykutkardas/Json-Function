@@ -1,4 +1,4 @@
-import { isArray, isString } from '../../../utils/type-check';
+import { isArray, isString } from '../../../utils/type-check.js';
 
 export interface WhereToolObject {
   lt: (input: number) => (value: any) => boolean,

@@ -2,19 +2,13 @@
   "name": "json-function",
   "version": "1.8.39",
   "description": "It allows you to use methods such as where, limit, select, orderBy on JSON data.",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "main": "./dist/package/index.js",
+  "types": "./dist/package/index.d.ts",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      },
-      "require": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      }
+      "types": "./dist/package/index.d.ts",
+      "default": "./dist/package/index.js"
     }
   },
   "files": [
@@ -22,18 +16,20 @@
   ],
   "sideEffects": false,
   "packageManager": "pnpm@12.8.1",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
   "scripts": {
     "test": "vitest run --typecheck",
     "typecheck": "tsc --noEmit",
-    "build": "tsup",
-    "bench": "tsx bench/run.ts"
+    "build": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json",
+    "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build",
+    "bench": "pnpm build && node bench/run.js"
   },
   "author": "Aykut Kardaş",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^24.0.0",
-    "tsup": "^8.5.1",
-    "tsx": "^4",
     "typescript": "~5.9.3",
     "vite": "^8",
     "vitest": "^5.0.3"
