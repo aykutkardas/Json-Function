@@ -83,3 +83,12 @@ describe("Transform Function for Array", () => {
     });
   });
 });
+
+describe("Transform prototype safety", () => {
+  it("Keeps a key that becomes __proto__ as a plain key.", () => {
+    const result: any = transform(JSON.parse('{"name":"a","____proto____":{"is_admin":true}}'));
+    expect(result.isAdmin).to.equal(undefined);
+    expect(Object.getPrototypeOf(result)).to.equal(Object.prototype);
+    expect(Object.prototype.hasOwnProperty.call(result, "__proto__")).to.equal(true);
+  });
+});

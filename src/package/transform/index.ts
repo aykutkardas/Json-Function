@@ -10,7 +10,18 @@ const transformKeys = (obj: Object): Object => {
 
   const newObject = {};
   tempObj.forEach(([key, val]) => {
-    newObject[key] = val;
+    // A key like "____proto____" becomes "__proto__", and assigning that
+    // would replace the prototype of newObject with data from the input.
+    if (key === "__proto__") {
+      Object.defineProperty(newObject, key, {
+        value: val,
+        writable: true,
+        enumerable: true,
+        configurable: true
+      });
+    } else {
+      newObject[key] = val;
+    }
   });
 
   return newObject;
