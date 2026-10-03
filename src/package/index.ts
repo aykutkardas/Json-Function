@@ -7,7 +7,8 @@ import search from "./search";
 import transform from "./transform";
 import innerJoin, { leftJoin } from "./innerJoin";
 import toArray from "./toArray";
-import jsonFunction from "./_main";
+import jsonFunction, { JsonFunction } from "./_main";
+import type { Query, Step } from "./_main";
 
 import * as utils from "../utils/type-check";
 
@@ -23,6 +24,9 @@ export {
   leftJoin,
   toArray,
   utils,
+  JsonFunction,
 };
+
+export type { Query, Step };
 
 export default jsonFunction;

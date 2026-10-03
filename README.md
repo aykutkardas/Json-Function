@@ -41,16 +41,16 @@ const result = JsonFunction
   .get(data);
 ```
 
-or Basic
+Every method returns a new query, so you can also build one step by step or reuse a partial query. Steps run in the order they were added.
 
 ```js
 import JsonFunction from "json-function";
 
-JsonFunction.where({ completed: false });
-JsonFunction.select(["title", "completed"]);
-JsonFunction.orderBy("title", "DESC");
-JsonFunction.limit(2);
-const result = JsonFunction.get(data);
+let query = JsonFunction.where({ completed: false });
+query = query.select(["title", "completed"]);
+
+const firstTwo = query.limit(2).get(data);
+const sorted = query.orderBy("title", "DESC").get(data);
 ```
 
 or create a query and use it at any time.
