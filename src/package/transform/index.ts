@@ -1,11 +1,32 @@
 import { isArray, isObject, AnyObject } from "../../utils/type-check";
 
+const MAX_CACHE_SIZE = 5000;
+const keyCache = new Map<string, string>();
+
+// Records usually share the same keys, so each key is converted once.
+const toCamelCase = (key: string): string => {
+  let converted = keyCache.get(key);
+
+  if (converted === undefined) {
+    converted = key.indexOf("_") === -1 ? key : key.replace(/_(.)/g, g => g[1].toUpperCase());
+    // Data with unbounded key sets (ids as keys) must not grow the cache forever.
+    if (keyCache.size >= MAX_CACHE_SIZE) {
+      keyCache.clear();
+    }
+    keyCache.set(key, converted);
+  }
+
+  return converted;
+};
+
 const transformKeys = (obj: AnyObject): AnyObject => {
   const newObject: AnyObject = {};
 
-  Object.keys(obj).forEach(key => {
-    newObject[key.replace(/_(.)/g, g => g[1].toUpperCase())] = processVal(obj[key]);
-  });
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      newObject[toCamelCase(key)] = processVal(obj[key]);
+    }
+  }
 
   return newObject;
 };
