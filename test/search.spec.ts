@@ -160,3 +160,16 @@ describe("Search function", () => {
   });
 });
 
+
+describe("Search key is plain text", () => {
+  it("Does not throw for regex special characters.", () => {
+    expect(search([{ t: "f(x)" }, { t: "x" }], "(", "t")).to.deep.equal([{ t: "f(x)" }]);
+  });
+
+  it("Does not treat the key as a pattern (ReDoS).", () => {
+    const start = Date.now();
+    const result = search([{ t: "a".repeat(40) + "!" }], "(a+)+$", "t");
+    expect(result).to.deep.equal([]);
+    expect(Date.now() - start).to.be.below(100);
+  });
+});

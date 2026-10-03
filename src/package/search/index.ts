@@ -10,6 +10,11 @@ type SearchFunction = (
   }
 ) => Object[];
 
+// The key is matched as plain text. Passing it to RegExp unescaped let input
+// such as "(" throw and patterns such as "(a+)+$" hang the process (ReDoS).
+const escapeRegExp = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 const search: SearchFunction = (data, key, fields, options) => {
   if (!isArray(data)) {
     return [];
@@ -39,7 +44,7 @@ const search: SearchFunction = (data, key, fields, options) => {
           flag += "i";
         }
 
-        const regex = new RegExp(key, flag);
+        const regex = new RegExp(escapeRegExp(key), flag);
 
         if (regex.exec(value)) {
           result.push(item);
